@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?><!--<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent">--><!-- The navigation drawer -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/left_drawer"
+    android:layout_width="240dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="@color/list_background"
+    android:clickable="true">
+
+    <RelativeLayout
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:background="@color/list_background">
+
+
+        <LinearLayout
+            android:id="@+id/ly1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/drawer_list_item_press"
+            android:baselineAligned="true"
+            android:orientation="horizontal"
+            android:paddingBottom="30dp"
+            android:paddingTop="20dp">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|left"
+                android:orientation="vertical"
+                android:paddingLeft="16dip">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <org.undp_iwomen.iwomen.ui.widget.ProfilePictureView
+                        android:id="@+id/profilePicture"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:padding="2dip"
+                        android:paddingLeft="16dip"
+
+
+                        android:visibility="visible"
+                        facebook:preset_size="small">
+
+                    </org.undp_iwomen.iwomen.ui.widget.ProfilePictureView>
+                    <!--
+                                        <com.mmplus.myanmadeals.model.RoundedImageView
+                                            android:id="@+id/img_profile"
+                                            android:layout_width="100dp"
+                                            android:layout_height="100dp"
+                                            android:scaleType="centerCrop"
+                                            android:layout_gravity="center"
+                                            android:background="@drawable/circle_frame"
+                                             />
+                    -->
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|left"
+                    android:orientation="horizontal">
+
+                    <!--<com.facebook.login.widget.LoginButton
+                        android:id="@+id/login_button2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="16dip"
+                        android:layout_marginTop="5dp"
+
+                        android:gravity="center_horizontal"
+
+
+                        android:textSize="10sp"
+                        android:visibility="gone"
+                         />-->
+
+
+                    <TextView
+                        android:id="@+id/txt_user_name"
+                        style="?attr/spinnerDropDownItemStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginTop="5dp"
+                        android:ellipsize="end"
+                        android:padding="2dip"
+                        android:paddingLeft="16dip"
+
+                        android:singleLine="true"
+                        android:text="Log in with Facebook"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|left"
+                android:orientation="horizontal">
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ly2"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/ly1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtline"
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="@color/drawer_list_div"
+                android:text="TextView"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/ly2"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ListView
+                    android:id="@+id/left_drawer_lv"
+                    android:layout_width="240dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:background="@color/list_background"
+                    android:choiceMode="singleChoice"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="0dp" />
+
+                <!-- <RelativeLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:minHeight="150dp"
+                     android:padding="16dp">
+
+                     <LinearLayout
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_alignParentBottom="true"
+                         android:orientation="vertical">
+
+                         <TextView
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:text="Rate our app"
+                             android:id="@+id/ratebutton"
+                             android:textColor="@color/red"
+                             android:textSize="16sp"
+                             android:gravity="center"
+                             android:background="@drawable/rounded_border"
+                             android:padding="7dp"
+                             android:layout_marginBottom="10dp"/>
+
+                         <TextView
+                             android:id="@+id/ratedescription"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:text="If you like our app, please give us a good rating to take part in a monthly lucky draw."
+                             android:layout_margin="5dp"/>
+
+                         <TextView
+                             android:id="@+id/txt_cp_main"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:textSize="16sp"
+                             android:paddingTop="10dp"
+
+                             android:layout_margin="5dp"
+                             android:text="\u00A9 2015 Myanma Deals. All rights reserved." />
+
+                         </LinearLayout>
+
+
+                 </RelativeLayout>-->
+
+            </LinearLayout>
+
+        </ScrollView>
+    </RelativeLayout>
+
+
+</LinearLayout>
+
+
