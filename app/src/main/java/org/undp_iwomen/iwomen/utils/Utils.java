@@ -1,5 +1,8 @@
 package org.undp_iwomen.iwomen.utils;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -32,4 +35,8 @@ public class Utils {
         }
         catch(Exception ex){}
     }
+    public static void doToast(Context context, String toast){
+        Toast.makeText(context, toast, Toast.LENGTH_SHORT).show();
+    }
+
 }

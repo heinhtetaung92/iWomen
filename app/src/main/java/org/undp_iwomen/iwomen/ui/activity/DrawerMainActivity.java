@@ -24,6 +24,7 @@ import com.facebook.FacebookSdk;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.ui.adapter.DrawerListViewAdapter;
+import org.undp_iwomen.iwomen.ui.fragment.ResourcesFragment;
 import org.undp_iwomen.iwomen.ui.fragment.StoriesFragment;
 
 import java.security.MessageDigest;
@@ -95,9 +96,9 @@ public class DrawerMainActivity extends AppCompatActivity {
     public void LoadDrawerCustomData() {
 
         DrawerListName = new String[]
-                {"Stories", "Community", "Setting"};
+                {"Stories", "Community", "Resources","News","Setting"};
         DrawerListIcon = new int[]
-                {R.drawable.ic_action_ic_location_red_24dp, R.drawable.icon_b, R.drawable.icon_c};
+                {R.drawable.ic_stories, R.drawable.ic_community, R.drawable.ic_resources,R.drawable.ic_news,R.drawable.ic_setting};
 
 
         DrawerListViewAdapter drawer_adapter = new DrawerListViewAdapter(getApplicationContext(), DrawerListName, DrawerListIcon);//mCategoriesTitles
@@ -149,6 +150,9 @@ public class DrawerMainActivity extends AppCompatActivity {
         args.putInt(StoriesFragment.ARG_MENU_INDEX, position);
         storiesFragment.setArguments(args);
 
+
+        ResourcesFragment resourcesFragment = new ResourcesFragment();
+
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 
 
@@ -158,11 +162,11 @@ public class DrawerMainActivity extends AppCompatActivity {
                 setTitle(DrawerListName[position]);
                 break;
             case 1:
-                fragmentManager.beginTransaction().replace(R.id.content_frame, storiesFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.content_frame, resourcesFragment).commit();
                 setTitle(DrawerListName[position]);
                 break;
             case 2:
-                fragmentManager.beginTransaction().replace(R.id.content_frame, storiesFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.content_frame, resourcesFragment).commit();
 
                 //materialTab.setRetainInstance(true);
 

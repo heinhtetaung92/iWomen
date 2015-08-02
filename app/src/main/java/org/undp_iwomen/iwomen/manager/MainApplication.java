@@ -1,14 +1,19 @@
 package org.undp_iwomen.iwomen.manager;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.parse.Parse;
 import com.parse.ParseACL;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.PushService;
+import com.parse.SaveCallback;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.parse.AppVersion;
+import org.undp_iwomen.iwomen.model.parse.Post;
 import org.undp_iwomen.iwomen.ui.activity.DrawerMainActivity;
 
 
@@ -29,8 +34,28 @@ public class MainApplication extends Application {
         Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);
 
         ParseObject.registerSubclass(AppVersion.class);
+        ParseObject.registerSubclass(Post.class);
         ParseACL defaultACL = new ParseACL();
         ParseACL.setDefaultACL(defaultACL, true);
+
+
+
+        // Associate the device with a user
+        /*ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("user", ParseUser.getCurrentUser());
+        installation.saveInBackground();*/
+
+
+        ParsePush.subscribeInBackground("", new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d("com.parse.push", "successfully subscribed to the broadcast channel.");
+                } else {
+                    Log.e("com.parse.push", "failed to subscribe for push", e);
+                }
+            }
+        });
     }
 
 

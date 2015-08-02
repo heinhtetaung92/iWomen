@@ -4,7 +4,9 @@ package org.undp_iwomen.iwomen;
  * Created by khinsandar on 3/23/15.
  */
 public class CommonConfig {
-    public static final String SHARE_PREFERENCE_NAME = "com.questmyanmar.myticketmanager";
+    public static final String AUTHORITY = "org.undp_iwomen.iwomen";
+
+    public static final String SHARE_PREFERENCE_NAME = "org.undp_iwomen.iwomen.myticketmanager";
 
 
     //https://api.parse.com/1/classes/City?X-Parse-Application-Id=OUN2VvuU6SN6DcRIDq3bT0ovJPXAk630qHVNJ9Gk&X-Parse-REST-API-Key=wxZB1WZBLzHEwfkUMToL0ykTLaiWY7Z1NuzfADLO

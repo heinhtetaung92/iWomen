@@ -34,6 +34,13 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
+        <!-- replace @drawable/push_icon with your push icon identifier -->
+        <meta-data android:name="com.parse.push.notification_icon" android:resource="@drawable/ic_launcher"/>
+
+        <provider
+            android:authorities="org.undp_iwomen.iwomen"
+            android:name=".provider.IwomenProvider"></provider>
+
         <!-- Google Analytics -->
         <meta-data
             android:name="com.google.android.gms.version"
@@ -46,6 +53,17 @@
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:label="@string/app_name" />
+
+        <activity
+            android:name=".ui.activity.DrawerMainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.activity.MainActivity"></activity>
 
         <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background
         dispatching on non-Google Play devices -->
@@ -60,7 +78,34 @@
             android:name="com.google.android.gms.analytics.AnalyticsService"
             android:enabled="true"
             android:exported="false"/>
+        <!-- PARSE PUSH NOTRIFICATION -->
+        <service android:name="com.parse.PushService" />
+        <receiver android:name="com.parse.ParseBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.parse.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
+                <!--
+                  IMPORTANT: Change "com.parse.tutorials.pushnotifications" to match your app's package name.
+                -->
+                <category android:name="org.undp_iwomen.iwomen.pushnotifications" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.parse.ParsePushBroadcastReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="com.parse.push.intent.RECEIVE" />
+                <action android:name="com.parse.push.intent.DELETE" />
+                <action android:name="com.parse.push.intent.OPEN" />
+            </intent-filter>
+        </receiver>
+        <!-- PARSE PUSH NOTRIFICATION END-->
         <!-- Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
              installation campaign reporting -->
         <receiver
@@ -71,15 +116,7 @@
             </intent-filter>
         </receiver>
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService"/>
-        <activity
-            android:name=".ui.activity.DrawerMainActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <!-- FB LOGIN -->
         <provider android:authorities="com.facebook.app.FacebookContentProvider909633732437583"
             android:name="com.facebook.FacebookContentProvider"
             android:exported="true" />
