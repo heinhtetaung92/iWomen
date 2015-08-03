@@ -20,17 +20,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.data.FeedItem;
 import org.undp_iwomen.iwomen.database.TableAndColumnsName;
+import org.undp_iwomen.iwomen.model.parse.Post;
 import org.undp_iwomen.iwomen.provider.IwomenProviderData;
 import org.undp_iwomen.iwomen.ui.adapter.PostListRecyclerViewAdapter;
 import org.undp_iwomen.iwomen.utils.Connection;
 import org.undp_iwomen.iwomen.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -216,6 +221,7 @@ public class StoriesFragment extends Fragment {
             //storageUtil.SaveArrayListToSD("lost_data_list", lost_data_list);
             mPostListRecyclerViewAdapter = new PostListRecyclerViewAdapter(getActivity().getApplicationContext(), feedItems);
             mRecyclerView.setAdapter(mPostListRecyclerViewAdapter);
+            mProgressDialog.dismiss();
             progress.setVisibility(View.INVISIBLE);
         } else {
             Log.e("LostListFragment", "Activity Null Case");
@@ -244,7 +250,8 @@ public class StoriesFragment extends Fragment {
                 //mProgressDialog.show();
 
 
-                SetPostData();
+                //SetPostData();
+                getPostDataOrderByLikesDate();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -276,7 +283,7 @@ public class StoriesFragment extends Fragment {
         Utils.doToast(mContext, "Post Save");
 
         ContentValues cv = new ContentValues();
-        cv.put(TableAndColumnsName.PostUtil.POST_OBJ_ID, "POO1");
+        cv.put(TableAndColumnsName.PostUtil.POST_OBJ_ID, "POO4");
         cv.put(TableAndColumnsName.PostUtil.POST_TITLE, "TITLE1");
         cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, "POST CONTENT");
         cv.put(TableAndColumnsName.PostUtil.POST_LIKES, "1");
@@ -288,13 +295,112 @@ public class StoriesFragment extends Fragment {
         cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "http://www.windowsegis.com/wp-content/uploads/2013/08/100-superb-windows-phone-wallpapers-to-mark-you-niftier-01.jpg");
 
         cv.put(TableAndColumnsName.UserUtil.STATUS, "0");
-        cv.put(TableAndColumnsName.UserUtil.CREATED_DATE, "22 July, 2015");
-        cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, "01-06-2015");
+        cv.put(TableAndColumnsName.UserUtil.CREATED_DATE, "Sun Aug 02 18:07:00 GMT+06:30 2015");
+        cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, "Sun Aug 02 18:07:00 GMT+06:30 2015");
 
         Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
 
         getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);
 
+    }
+
+    private void getPostDataOrderByLikesDate(){
+        if(Connection.isOnline(mContext)){
+
+            mProgressDialog.show();
+            Cursor cursor = getActivity().getContentResolver().query(IwomenProviderData.PostProvider.CONTETN_URI, null, null, null, BaseColumns._ID + " DESC");
+
+            if(cursor.getCount() > 0){
+
+                Date date =  null;
+                if (cursor != null && cursor.moveToFirst()) {
+
+                    date = new Date(cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREATED_DATE)));
+                    /*First Row Id﹕ ==>5
+                    08-02 18:11:11.175  10088-10088/org.undp_iwomen.iwomen E/Date﹕ ==>Sun Aug 02 18:07:00 GMT+06:30 2015
+                    08-02 18:11:11.175  10088-10088/org.undp_iwomen.iwomen E/First Row Data﹕ ==>Sun Aug 02 18:07:00 GMT+06:30 2015*/
+                    Log.e("First Row Id","==>" + cursor.getString(cursor.getColumnIndex("_id")));
+                    Log.e("Date","==>" + date.toString());
+                    Log.e("First Row Data","==>" + cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREATED_DATE)));
+
+
+
+
+                }
+
+
+
+            }else{
+
+                ParseQuery<Post> query = Post.getQuery();
+                query.orderByDescending("createdAt"); //Latest date is first
+                query.orderByDescending("likes");
+
+                query.findInBackground(new FindCallback<Post>() {
+                    @Override
+                    public void done(List<Post> postList, ParseException e) {
+
+                        if (e == null) {
+                            Log.e("Post sizes", "==>" + postList.size() + "/" + postList.get(0).toString());
+
+                            for (Post post : postList) {
+
+                                final ContentValues cv = new ContentValues();
+                                cv.put(TableAndColumnsName.PostUtil.POST_OBJ_ID, post.getObjectId());
+                                cv.put(TableAndColumnsName.PostUtil.POST_TITLE, post.getString("title"));
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, post.getString("content"));
+                                cv.put(TableAndColumnsName.PostUtil.POST_LIKES, post.getNumber("likes").toString());
+                                cv.put(TableAndColumnsName.PostUtil.POST_IMG_PATH, post.getParseFile("image").getUrl());
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TYPES, post.getString("contentType"));//
+
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, post.getParseObject("userId").getObjectId());
+
+
+                                Log.e("Post Date ", "1==>" + post.getParseObject("userId").getObjectId() + "/==>" + post.getParseFile("image").getUrl());
+                                // getting the user  who created the post
+                               /* post.getParseObject("userId").fetchIfNeededInBackground(new GetCallback<ParseObject>() {
+                                    @Override
+                                    public void done(ParseObject parseUserObject, ParseException e) {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_NAME, parseUserObject.getString("username"));
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, parseUserObject.getParseFile("profileimage").getUrl());
+
+
+                                    }
+                                });
+                            */
+
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_NAME, "Ms.Artrid Tuminez");
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "http://files.parsetfss.com/a7e7daa5-3bd6-46a6-b715-5c9ac02237ee/tfss-be397891-4633-401d-b974-4bb608efd705-kentucky-derby-hats-10.jpg");
+
+
+
+
+                                cv.put(TableAndColumnsName.UserUtil.STATUS, "0");
+                                cv.put(TableAndColumnsName.UserUtil.CREATED_DATE, post.get("postUploadedDate").toString());
+                                cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, post.get("postUploadedDate").toString());
+
+                                Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
+
+
+                                getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);
+
+
+
+                            }
+                            setupAdapter();
+
+
+
+                        } else {
+                            Log.e("Post Get Err", "===>" + e.toString());
+                        }
+                    }
+                });
+            }
+
+        }else{
+            Utils.doToast(mContext, "Internet Connection need!");
+        }
     }
 }
 
