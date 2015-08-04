@@ -65,6 +65,7 @@
         </activity>
         <activity android:name=".ui.activity.MainActivity"></activity>
 
+        <activity android:name=".ui.activity.ResourceDetailActivity"></activity>
         <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background
         dispatching on non-Google Play devices -->
         <receiver
