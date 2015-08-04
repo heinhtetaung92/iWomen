@@ -27,7 +27,7 @@ public class ResourcesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_fragment, container, false);
 
 
-        int index = getArguments().getInt(ARG_MENU_INDEX);
+        //int index = getArguments().getInt(ARG_MENU_INDEX);
         //String text = String.format("Menu at index %s", index);
         /*((TextView) rootView.findViewById(R.id.textView)).setText(text);
         getActivity().setTitle(text);*/

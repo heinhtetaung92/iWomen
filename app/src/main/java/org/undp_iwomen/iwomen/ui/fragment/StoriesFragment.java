@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.BaseColumns;
@@ -26,7 +27,9 @@ import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.data.FeedItem;
 import org.undp_iwomen.iwomen.database.TableAndColumnsName;
 import org.undp_iwomen.iwomen.provider.IwomenProviderData;
+import org.undp_iwomen.iwomen.ui.activity.PostDetailActivity;
 import org.undp_iwomen.iwomen.ui.adapter.PostListRecyclerViewAdapter;
+import org.undp_iwomen.iwomen.ui.widget.RecyclerOnItemClickListener;
 import org.undp_iwomen.iwomen.utils.Connection;
 import org.undp_iwomen.iwomen.utils.Utils;
 
@@ -63,14 +66,12 @@ public class StoriesFragment extends Fragment {
 
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_stories, container, false);
         mContext = getActivity().getApplicationContext();
 
         //int index = getArguments().getInt(ARG_MENU_INDEX);
-
         //SetUserData();
         //SetPostData();
         init(rootView);
@@ -106,6 +107,21 @@ public class StoriesFragment extends Fragment {
                     Toast.LENGTH_LONG).show();
         }
 
+        mRecyclerView.addOnItemTouchListener(new RecyclerOnItemClickListener(getActivity(), new RecyclerOnItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Utils.doToast(getActivity(), String.valueOf(position));
+                Intent intent = new Intent(mContext, PostDetailActivity.class);
+
+                intent.putExtra("user_id", feedItems.get(position).getPost_obj_id());
+
+                //intent.putExtra("ImgUrl", mImgurl.get(getPosition()));
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent);
+            }
+        }));
+
         //Avoid SwipeReresh Loading when it is not at the top item
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -125,6 +141,7 @@ public class StoriesFragment extends Fragment {
 
             }
         });
+
 
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.primary_dark, R.color.accent);

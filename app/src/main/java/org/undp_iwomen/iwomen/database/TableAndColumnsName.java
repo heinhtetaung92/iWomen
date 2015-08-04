@@ -17,12 +17,8 @@ public class TableAndColumnsName {
 
         String PROJECT_USER = "project_user";
         String FORM = "form";
-
-
-
-
-
     }
+
     public interface UserUtil{
         String USER_OBJ_ID ="user_obj_id";
         String USER_ROLE ="role";
