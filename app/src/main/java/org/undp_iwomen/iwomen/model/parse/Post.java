@@ -3,6 +3,7 @@ package org.undp_iwomen.iwomen.model.parse;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.Date;
 
@@ -70,6 +71,9 @@ public class Post extends ParseObject {
 
     public String getUserId() {
         return getString("userId");
+    }
+    public ParseUser getUser() {
+        return getParseUser("userId");
     }
 
     public void setUserId(String userId) {

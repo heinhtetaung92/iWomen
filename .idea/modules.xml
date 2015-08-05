@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/facebookLikeFeedView/facebookLikeFeedView.iml" filepath="$PROJECT_DIR$/facebookLikeFeedView/facebookLikeFeedView.iml" />
-      <module fileurl="file://$PROJECT_DIR$/iwomen.iml" filepath="$PROJECT_DIR$/iwomen.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iWomen.iml" filepath="$PROJECT_DIR$/iWomen.iml" />
     </modules>
   </component>
 </project>

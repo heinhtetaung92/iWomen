@@ -48,6 +48,7 @@ public class DrawerMainActivity extends AppCompatActivity {
     private CharSequence mTitle;
     private TextView textViewTitle;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +57,7 @@ public class DrawerMainActivity extends AppCompatActivity {
         // especially, if you're using Facebook UI elements.
 
         setContentView(R.layout.main_drawer_material);
+
 
         //getFacebookHashKey();
         toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.data.FeedItem;
+import org.undp_iwomen.iwomen.model.MyTypeFace;
 import org.undp_iwomen.iwomen.ui.activity.MainActivity;
 import org.undp_iwomen.iwomen.ui.activity.PostDetailActivity;
 import org.undp_iwomen.iwomen.ui.widget.ResizableImageView;
@@ -100,6 +101,8 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
         viewHolder.post_content_user_name.setText(item.getPost_content_user_name());
         viewHolder.post_timestamp.setText(item.getCreated_at());
 
+        viewHolder.post_content.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+
         //viewHolder.mCatNameTextView.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
         //viewHolder.profilePictureView.setProfileId(item.get());
         try {
@@ -125,9 +128,11 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
         }
 
         // Feed image
-        if (item.getPost_img_path() != null) {
+        if (item.getPost_img_path() != null  && !item.getPost_img_path().isEmpty() ) {
             try {
                 viewHolder.postIMg.setVisibility(View.VISIBLE);
+                viewHolder.feed_item_progressBar.setVisibility(View.VISIBLE);
+
                 Picasso.with(mContext)
                         .load(item.getPost_img_path()) //"http://cheapandcheerfulshopper.com/wp-content/uploads/2013/08/shopping1257549438_1370386595.jpg" //deal.photo1
                         .placeholder(R.drawable.place_holder)
@@ -148,6 +153,7 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
             }
         } else {
             viewHolder.postIMg.setVisibility(View.GONE);
+            viewHolder.feed_item_progressBar.setVisibility(View.GONE);
         }
 
 

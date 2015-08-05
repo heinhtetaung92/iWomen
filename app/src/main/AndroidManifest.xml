@@ -66,7 +66,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.MainActivity" />
-
+        <activity android:name=".ui.activity.ResourceDetailActivity" />
         <!--
         Optionally, register AnalyticsReceiver and AnalyticsService to support background
         dispatching on non-Google Play devices
@@ -99,7 +99,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-<!--                   IMPORTANT: Change "com.parse.tutorials.pushnotifications" to match your app's package name. -->
+                <!-- IMPORTANT: Change "com.parse.tutorials.pushnotifications" to match your app's package name. -->
                 <category android:name="org.undp_iwomen.iwomen.pushnotifications" />
             </intent-filter>
         </receiver>
@@ -135,6 +135,10 @@
         <activity
             android:name=".ui.activity.PostDetailActivity"
             android:label="@string/title_activity_post_detail" >
+        </activity>
+        <activity
+            android:name=".ui.activity.PostNewsActivity"
+            android:label="@string/title_activity_post_news" >
         </activity>
     </application>
 

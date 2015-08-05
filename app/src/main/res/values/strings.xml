@@ -9,5 +9,6 @@
     <string name="login_fb_appid">909633732437583</string>
     <string name="action_refresh">Refresh</string>
     <string name="title_activity_post_detail">PostDetailActivity</string>
+    <string name="title_activity_post_news">PostNewsActivity</string>
 
 </resources>

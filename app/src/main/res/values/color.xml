@@ -33,6 +33,8 @@
     <color name="feed_item_border">#c2c3c8</color>
     <color name="link">#0a80d1</color>
     <color name="timestamp">#a0a3a7</color>
+    <color name="btn_bg_colorPrimary">#3F51B5</color>
+    <color name="btn_bg_tranprimary">#B39BBD</color>
 
 
     <color name="red_500">#f44336</color>
