@@ -17,11 +17,13 @@ import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.data.FeedItem;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
 import org.undp_iwomen.iwomen.ui.activity.MainActivity;
+import org.undp_iwomen.iwomen.ui.activity.PostDetailActivity;
 import org.undp_iwomen.iwomen.ui.widget.ResizableImageView;
+import org.undp_iwomen.iwomen.utils.Utils;
 
 import java.util.List;
 
-public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRecyclerViewAdapter.NamesViewHolder>  {
+public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRecyclerViewAdapter.NamesViewHolder>   {
 
     private Context mContext;
     private List<FeedItem> feedItems;
@@ -38,7 +40,7 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
     }
     */
 
-    public class NamesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class NamesViewHolder extends RecyclerView.ViewHolder{
         TextView mPostTile;
 
         TextView post_content;
@@ -57,7 +59,6 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
 
         public NamesViewHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
             mPostTile = (TextView) itemView.findViewById(R.id.txtPostTitle);
             post_content = (TextView) itemView.findViewById(R.id.txtContent);
 
@@ -73,18 +74,7 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
             profilePictureView = (org.undp_iwomen.iwomen.ui.widget.ProfilePictureView) itemView.findViewById(R.id.profilePic);
         }
 
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(mContext, MainActivity.class);
 
-
-            //intent.putExtra("ImgUrl", mImgurl.get(getPosition()));
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            mContext.startActivity(intent);
-            //Toast.makeText(view.getContext(), "position = " + getPosition(), Toast.LENGTH_SHORT).show();
-
-        }
     }
 
     /*private String[] getCatNamesResource() {
@@ -101,6 +91,7 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
     public void onBindViewHolder(NamesViewHolder viewHolder, int i) {
 
         FeedItem item = feedItems.get(i);
+
 
         viewHolder.profile.setAdjustViewBounds(true);
         viewHolder.profile.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -167,6 +158,24 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
 
 
     }
+
+
+
+    /*@Override
+    public void onClick(View v) {
+        Intent intent = new Intent(mContext, PostDetailActivity.class);
+
+        int pos = (int) v.getTag();
+        intent.putExtra("user_id", feedItems.get(pos).getPost_obj_id());
+
+        //intent.putExtra("ImgUrl", mImgurl.get(getPosition()));
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(intent);
+        //Toast.makeText(view.getContext(), "position = " + getPosition(), Toast.LENGTH_SHORT).show();
+
+    }*/
+
 
     public Object getItem(int location) {
         return feedItems.get(location);

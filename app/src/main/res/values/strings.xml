@@ -1,10 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">iwomen</string>
     <string name="parse_app_id">WyU802fB70eNhyF9uSoj1SgKVKGLYYAZ0kX96xhr</string>
     <string name="parse_client_key">qnaqxGzfOLEgFAWXUTUJpTkgbOgn3CVxTqtTD6pn</string>
-
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="login_fb_appid">909633732437583</string>
     <string name="action_refresh">Refresh</string>
+    <string name="title_activity_post_detail">PostDetailActivity</string>
+    <string name="title_activity_post_news">PostNewsActivity</string>
+
 </resources>

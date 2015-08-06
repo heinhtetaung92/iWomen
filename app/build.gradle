@@ -67,6 +67,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:21.0.0'
     compile 'com.pnikosis:materialish-progress:1.2'
 
+    //compile 'com.getbase:floatingactionbutton:1.7.0'
     compile 'com.makeramen:roundedimageview:1.5.0'
     //https://github.com/traex/RippleEffect
     compile 'com.github.traex.rippleeffect:library:1.3'

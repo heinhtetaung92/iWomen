@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.BaseColumns;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,7 +32,10 @@ import org.undp_iwomen.iwomen.data.FeedItem;
 import org.undp_iwomen.iwomen.database.TableAndColumnsName;
 import org.undp_iwomen.iwomen.model.parse.Post;
 import org.undp_iwomen.iwomen.provider.IwomenProviderData;
+import org.undp_iwomen.iwomen.ui.activity.PostDetailActivity;
+import org.undp_iwomen.iwomen.ui.activity.PostNewsActivity;
 import org.undp_iwomen.iwomen.ui.adapter.PostListRecyclerViewAdapter;
+import org.undp_iwomen.iwomen.ui.widget.RecyclerOnItemClickListener;
 import org.undp_iwomen.iwomen.utils.Connection;
 import org.undp_iwomen.iwomen.utils.Utils;
 
@@ -41,7 +46,7 @@ import java.util.List;
 /**
  * Created by khinsandar on 7/29/15.
  */
-public class StoriesFragment extends Fragment {
+public class StoriesFragment extends Fragment implements View.OnClickListener {
     public static final String ARG_MENU_INDEX = "index";
 
     private Context mContext;
@@ -52,6 +57,8 @@ public class StoriesFragment extends Fragment {
     private List<FeedItem> feedItems;
 
     private ProgressDialog mProgressDialog;
+
+    FloatingActionButton fab;
 
     public StoriesFragment() {
         // Empty constructor required for fragment subclasses
@@ -71,14 +78,12 @@ public class StoriesFragment extends Fragment {
 
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_stories, container, false);
         mContext = getActivity().getApplicationContext();
 
         //int index = getArguments().getInt(ARG_MENU_INDEX);
-
         //SetUserData();
         //SetPostData();
         init(rootView);
@@ -96,6 +101,8 @@ public class StoriesFragment extends Fragment {
         //final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         //mRecyclerView.setLayoutManager(layoutManager);
         progress = (ProgressWheel) rootView.findViewById(R.id.progress_wheel);
+        fab = (FloatingActionButton) rootView.findViewById(R.id.post_news);
+        fab.setOnClickListener(this);
 
         progress.setVisibility(View.VISIBLE);
 
@@ -113,6 +120,21 @@ public class StoriesFragment extends Fragment {
                     "Please Open Internet Connection!",
                     Toast.LENGTH_LONG).show();
         }
+
+        mRecyclerView.addOnItemTouchListener(new RecyclerOnItemClickListener(getActivity(), new RecyclerOnItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Utils.doToast(getActivity(), String.valueOf(position));
+                Intent intent = new Intent(mContext, PostDetailActivity.class);
+
+                intent.putExtra("post_id", feedItems.get(position).getPost_obj_id());
+
+                //intent.putExtra("ImgUrl", mImgurl.get(getPosition()));
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent);
+            }
+        }));
 
         //Avoid SwipeReresh Loading when it is not at the top item
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -133,6 +155,7 @@ public class StoriesFragment extends Fragment {
 
             }
         });
+
 
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.primary_dark, R.color.accent);
@@ -156,7 +179,7 @@ public class StoriesFragment extends Fragment {
 
             /*String selections = TableAndColumnsName.ParseUtil.PARSE_ID + "!=?";
             String[] selectionargs = {cityID};*/
-            Cursor cursor = getActivity().getContentResolver().query(IwomenProviderData.PostProvider.CONTETN_URI, null, null, null, BaseColumns._ID + " ASC");
+            Cursor cursor = getActivity().getContentResolver().query(IwomenProviderData.PostProvider.CONTETN_URI, null, null, null, BaseColumns._ID + " DESC");
 
 
             ArrayList<FeedItem> feedItemArrayList = new ArrayList<>();
@@ -220,12 +243,15 @@ public class StoriesFragment extends Fragment {
                 } while (cursor.moveToNext());
             }
 
+            cursor.close();
+
             //lost_data_list, lost_data_id_list, lost_data_obj_id_list ,lost_data_img_url_list
             //storageUtil.SaveArrayListToSD("lost_data_list", lost_data_list);
             mPostListRecyclerViewAdapter = new PostListRecyclerViewAdapter(getActivity().getApplicationContext(), feedItems);
             mRecyclerView.setAdapter(mPostListRecyclerViewAdapter);
             mProgressDialog.dismiss();
             progress.setVisibility(View.INVISIBLE);
+            Utils.doToast(getActivity(), String.valueOf(feedItems.size()));
         } else {
             Log.e("LostListFragment", "Activity Null Case");
         }
@@ -310,92 +336,103 @@ public class StoriesFragment extends Fragment {
     private void getPostDataOrderByLikesDate() {
         if (Connection.isOnline(mContext)) {
 
-            Cursor cursor = getActivity().getContentResolver().query(IwomenProviderData.PostProvider.CONTETN_URI, null, null, null, BaseColumns._ID + " ASC");
+            Cursor cursorMain = getActivity().getContentResolver().query(IwomenProviderData.PostProvider.CONTETN_URI, null, null, null, BaseColumns._ID + " DESC");
 
-            if (cursor.getCount() > 0) {
 
-                Date date = null;
-                if (cursor != null && cursor.moveToFirst()) {
+            if (cursorMain.getCount() > 0) {
 
-                    date = new Date(cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREATED_DATE)));
+
+                cursorMain.close();
+
+
+                Cursor cursor = getActivity().getContentResolver().query(IwomenProviderData.PostProvider.CONTETN_URI, null, null,null, BaseColumns._ID +  " DESC LIMIT 1");
+
+
+                if(cursor.getCount() > 0 ) {
+
+
+                    Date date = null;
+                    if (cursor != null && cursor.moveToFirst()) {
+
+                        date = new Date(cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREATED_DATE)));
                     /*First Row Id﹕ ==>5
                     08-02 18:11:11.175  10088-10088/org.undp_iwomen.iwomen E/Date﹕ ==>Sun Aug 02 18:07:00 GMT+06:30 2015
                     08-02 18:11:11.175  10088-10088/org.undp_iwomen.iwomen E/First Row Data﹕ ==>Sun Aug 02 18:07:00 GMT+06:30 2015*/
-                    Log.e("First Row Id", "==>" + cursor.getString(cursor.getColumnIndex("_id")));
-                    Log.e("Date", "==>" + date.toString());
-                    Log.e("First Row Data", "==>" + cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREATED_DATE)));
+                        Log.e("First Row Id", "==>" + cursor.getString(cursor.getColumnIndex("_id")));
+                        Log.e("Date", "==>" + date.toString());
+                        Log.e("First Row Data", "==>" + cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREATED_DATE)));
 
 
-                    mProgressDialog.show();
+                        mProgressDialog.show();
 
-                    ParseQuery<Post> query = Post.getQuery();
-
-
-                    query.whereGreaterThan("createdAt", date);
-                    //query.whereLessThan("likes",)
-                    query.setLimit(3);
-
-                    query.orderByDescending("createdAt"); //Latest date is first
-                    //query.orderByDescending("likes");
-                    query.findInBackground(new FindCallback<Post>() {
-                        @Override
-                        public void done(List<Post> postList, ParseException e) {
-                            if (e == null) {
-
-                                for (Post post : postList) {
-                                    Log.e("Second time Data", "==>" + post.getObjectId());
-                                    final ContentValues cv = new ContentValues();
-                                    cv.put(TableAndColumnsName.PostUtil.POST_OBJ_ID, post.getObjectId());
-                                    cv.put(TableAndColumnsName.PostUtil.POST_TITLE, post.getString("title"));
-                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, post.getString("content"));
-                                    cv.put(TableAndColumnsName.PostUtil.POST_LIKES, post.getNumber("likes").toString());
-                                    if(post.get("image") != null){
-
-                                        cv.put(TableAndColumnsName.PostUtil.POST_IMG_PATH, post.getParseFile("image").getUrl());
-                                    }else{
-                                        cv.put(TableAndColumnsName.PostUtil.POST_IMG_PATH, "");
-
-                                    }                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TYPES, post.getString("contentType"));//
-
-                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, post.getParseObject("userId").getObjectId());
+                        ParseQuery<Post> query = Post.getQuery();
 
 
-                                    //Log.e("Post Date ", "1==>" + post.getParseObject("userId").getObjectId() + "/==>" + post.getParseFile("image").getUrl());
-                                    // getting the user  who created the post
-                                    /*post.getParseObject("userId").fetchIfNeededInBackground(new GetCallback<ParseObject>() {
-                                    @Override
-                                    public void done(ParseObject parseUserObject, ParseException e) {
-                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_NAME, parseUserObject.getString("username"));
-                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, parseUserObject.getParseFile("profileimage").getUrl());
+                        query.whereGreaterThan("postUploadedDate", date);
+                        //query.whereLessThan("likes",)
+                        query.setLimit(3);
 
+                        query.orderByDescending("postUploadedDate"); //Latest date is first
+                        //query.orderByDescending("likes");
+                        query.findInBackground(new FindCallback<Post>() {
+                            @Override
+                            public void done(List<Post> postList, ParseException e) {
+                                if (e == null) {
+
+                                    for (Post post : postList) {
+                                        Log.e("Second time Data", "==>" + post.getObjectId());
+                                        final ContentValues cv = new ContentValues();
+                                        cv.put(TableAndColumnsName.PostUtil.POST_OBJ_ID, post.getObjectId());
+                                        cv.put(TableAndColumnsName.PostUtil.POST_TITLE, post.getString("title"));
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, post.getString("content"));
+                                        cv.put(TableAndColumnsName.PostUtil.POST_LIKES, post.getNumber("likes").toString());
+                                        if (post.get("image") != null) {
+
+                                            cv.put(TableAndColumnsName.PostUtil.POST_IMG_PATH, post.getParseFile("image").getUrl());
+                                        } else {
+                                            cv.put(TableAndColumnsName.PostUtil.POST_IMG_PATH, "");
+
+                                        }
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TYPES, post.getString("contentType"));//
+
+                                        if (post.get("image") != null) {
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, post.getParseObject("userId").getObjectId());
+                                        }else {
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, "");
+                                        }
+
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_NAME, post.getString("postUploadName"));
+
+                                        if (post.get("postUploadPersonImg") != null) {
+
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, post.getParseFile("postUploadPersonImg").getUrl());
+
+                                        } else {
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                        }
+
+
+                                        cv.put(TableAndColumnsName.UserUtil.STATUS, "0");
+                                        cv.put(TableAndColumnsName.UserUtil.CREATED_DATE,post.get("postUploadedDate").toString() );// post.get("postUploadedDate").toString() //post.getCreatedAt().toString()
+                                        cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, post.get("postUploadedDate").toString() );
+
+                                        Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
+
+                                        getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);
 
                                     }
-                                    });*/
+                                    setupAdapter();
 
-
-                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_NAME, "Ms.Artrid Tuminez");
-                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "http://files.parsetfss.com/a7e7daa5-3bd6-46a6-b715-5c9ac02237ee/tfss-be397891-4633-401d-b974-4bb608efd705-kentucky-derby-hats-10.jpg");
-
-
-                                    cv.put(TableAndColumnsName.UserUtil.STATUS, "0");
-                                    cv.put(TableAndColumnsName.UserUtil.CREATED_DATE, post.get("postUploadedDate").toString());
-                                    cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, post.get("postUploadedDate").toString());
-
-                                    Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
-
-                                    getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);
+                                } else {
+                                    Log.e("Post Get Err", "===>" + e.toString());
 
                                 }
-                                setupAdapter();
-
-                            } else {
-                                Log.e("Post Get Err", "===>" + e.toString());
-
                             }
-                        }
-                    });
+                        });
 
 
+                    }
                 }
 
 
@@ -405,7 +442,7 @@ public class StoriesFragment extends Fragment {
 
                 ParseQuery<Post> query = Post.getQuery();
                 //query.orderByDescending("createdAt"); //Latest date is first
-                query.orderByAscending("createdAt");//Very first row Date is first
+                query.orderByAscending("postUploadedDate");//Very first row Date is first
                 //query.orderByDescending("likes");//Most likes is first
 
                 query.setLimit(3);
@@ -424,36 +461,36 @@ public class StoriesFragment extends Fragment {
                                 cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, post.getString("content"));
                                 cv.put(TableAndColumnsName.PostUtil.POST_LIKES, post.getNumber("likes").toString());
 
-                                if(post.get("image") != null){
+                                if (post.get("image") != null) {
 
                                     cv.put(TableAndColumnsName.PostUtil.POST_IMG_PATH, post.getParseFile("image").getUrl());
-                                }else{
+                                } else {
                                     cv.put(TableAndColumnsName.PostUtil.POST_IMG_PATH, "");
 
                                 }
                                 cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TYPES, post.getString("contentType"));//
 
-                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, post.getParseObject("userId").getObjectId());
+                                if (post.get("image") != null) {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, post.getParseObject("userId").getObjectId());
+                                }else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, "");
+                                }
 
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_NAME, post.getString("postUploadName"));
 
-                                Log.e("Post Date ", "1==>" + post.get("postUploadedDate").toString()  + "/" +post.getCreatedAt());
-                                // getting the user  who created the post
-                                /*post.getParseObject("userId").fetchIfNeededInBackground(new GetCallback<ParseObject>() {
-                                    @Override
-                                    public void done(ParseObject parseUserObject, ParseException e) {
-                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_NAME, parseUserObject.getString("username"));
-                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, parseUserObject.getParseFile("profileimage").getUrl());
+                                if (post.get("postUploadPersonImg") != null) {
 
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, post.getParseFile("postUploadPersonImg").getUrl());
 
-                                    }
-                                });*/
-                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_NAME, "Ms.Artrid Tuminez");
-                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "http://files.parsetfss.com/a7e7daa5-3bd6-46a6-b715-5c9ac02237ee/tfss-be397891-4633-401d-b974-4bb608efd705-kentucky-derby-hats-10.jpg");
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
 
+                                }
 
                                 cv.put(TableAndColumnsName.UserUtil.STATUS, "0");
-                                cv.put(TableAndColumnsName.UserUtil.CREATED_DATE, post.get("postUploadedDate").toString());
-                                cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, post.get("postUploadedDate").toString());
+                                cv.put(TableAndColumnsName.UserUtil.CREATED_DATE,post.get("postUploadedDate").toString() );// post.get("postUploadedDate").toString() //post.getCreatedAt().toString()
+                                cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, post.get("postUploadedDate").toString() );
+
 
                                 Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
 
@@ -475,6 +512,19 @@ public class StoriesFragment extends Fragment {
         } else {
             Utils.doToast(mContext, "Internet Connection need!");
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch(v.getId()){
+            case R.id.post_news:
+
+                startActivity(new Intent(getActivity(), PostNewsActivity.class));
+
+                break;
+        }
+
     }
 }
 

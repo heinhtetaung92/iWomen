@@ -23,6 +23,8 @@ public class IwomenProvider extends ContentProvider {
 
     private final int USER = 1000;
     private final int POST = 2000;
+    private final int POST_BYID = 2001;
+
     private final int COMMENT = 3000;
 
     private UriMatcher matcher = buildMatcher();
@@ -46,6 +48,7 @@ public class IwomenProvider extends ContentProvider {
 
             case POST:
                 return IwomenProviderData.PostProvider.CONTENT_TYPE;
+
             case COMMENT:
                 return IwomenProviderData.CommentProvider.CONTENT_TYPE;
 
@@ -67,6 +70,7 @@ public class IwomenProvider extends ContentProvider {
         SelectionBuilder sb = buildSelection(uri, matcher);
         Cursor cursor = sb.where(selection, selectionargs).query(db, projections, sortorder);
         checkCursor(cursor);
+
         return cursor;
 
     }
@@ -125,6 +129,8 @@ public class IwomenProvider extends ContentProvider {
 
     }
 
+
+
     @Override
     public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
         return 0;
@@ -140,7 +146,10 @@ public class IwomenProvider extends ContentProvider {
         UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 
         matcher.addURI(CommonConfig.AUTHORITY, "user", USER);
+
         matcher.addURI(CommonConfig.AUTHORITY, "post", POST);
+        matcher.addURI(CommonConfig.AUTHORITY, "post/#", POST_BYID);
+
         matcher.addURI(CommonConfig.AUTHORITY, "comment", COMMENT);
 
         return matcher;

@@ -17,12 +17,8 @@ public class TableAndColumnsName {
 
         String PROJECT_USER = "project_user";
         String FORM = "form";
-
-
-
-
-
     }
+
     public interface UserUtil{
         String USER_OBJ_ID ="user_obj_id";
         String USER_ROLE ="role";
@@ -42,8 +38,8 @@ public class TableAndColumnsName {
                 USER_PH + " Text Not Null," +
 
                 STATUS + " Text Not Null," +
-                CREATED_DATE + " Text Not Null," +
-                UPDATED_DATE + " Text Not Null);";
+                CREATED_DATE + " Date Not Null," +
+                UPDATED_DATE + " Date Not Null);";
 
     }
 
@@ -81,8 +77,8 @@ public class TableAndColumnsName {
 
 
                 STATUS + " Text Not Null," +
-                CREATED_DATE + " Text Not Null," +
-                UPDATED_DATE + " Text Not Null);";
+                CREATED_DATE + " DateTime Not Null," +
+                UPDATED_DATE + " DateTime Not Null);";
 
     }
     public interface CommentUtil{

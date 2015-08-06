@@ -4,7 +4,13 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ParseLoginUI/ParseLoginUI.iml" filepath="$PROJECT_DIR$/ParseLoginUI/ParseLoginUI.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/iwomen.iml" filepath="$PROJECT_DIR$/iwomen.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/facebookLikeFeedView/facebookLikeFeedView.iml" filepath="$PROJECT_DIR$/facebookLikeFeedView/facebookLikeFeedView.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iWomen.iml" filepath="$PROJECT_DIR$/iWomen.iml" />
+>>>>>>> eee996746e5d398969b3a92dce8fd8f6a5a19590
     </modules>
   </component>
 </project>
+
