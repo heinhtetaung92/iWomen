@@ -1,5 +1,7 @@
 package org.undp_iwomen.iwomen.ui.activity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -19,9 +21,13 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
+import com.parse.ParseUser;
+import com.parse.ui.ParseLoginBuilder;
 
+import org.undp_iwomen.iwomen.CommonConfig;
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.ui.adapter.DrawerListViewAdapter;
 import org.undp_iwomen.iwomen.ui.fragment.ResourcesFragment;
@@ -48,6 +54,24 @@ public class DrawerMainActivity extends AppCompatActivity {
     private CharSequence mTitle;
     private TextView textViewTitle;
 
+    private static final int LOGIN_REQUEST = 0;
+    private ParseUser currentUser;
+
+    private SharedPreferences mSharedPreferencesUserInfo;
+    private SharedPreferences.Editor mEditorUserInfo;
+    private String user_name, user_obj_id, user_ph;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        currentUser = ParseUser.getCurrentUser();
+        /*if (currentUser != null) {
+            showProfileLoggedIn();
+        } else {
+            showProfileLoggedOut();
+        }*/
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,17 +114,89 @@ public class DrawerMainActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
 
-        if (savedInstanceState == null) {
-            selectItem(0);
+        mSharedPreferencesUserInfo = getSharedPreferences(CommonConfig.SHARE_PREFERENCE_USER_INFO, Context.MODE_PRIVATE);
+
+
+
+       /* if (user_obj_id == null) {
+
+            if (savedInstanceState == null) {
+                selectItem(0);
+            }
+        } else {
+            // User clicked to log in.
+            ParseLoginBuilder loginBuilder = new ParseLoginBuilder(
+                    DrawerMainActivity.this);
+            startActivityForResult(loginBuilder.build(), LOGIN_REQUEST);
+
+        }*/
+
+         currentUser = ParseUser.getCurrentUser();
+
+        if (currentUser != null) {
+            // User clicked to log out.
+            //showProfileLoggedOut();
+            if (savedInstanceState == null) {
+                selectItem(0);
+
+                if (!mSharedPreferencesUserInfo.getBoolean(CommonConfig.IS_LOGIN, false)) {
+
+                    Bundle bundle = getIntent().getExtras();
+                    String objectId = bundle.getString(CommonConfig.USER_OBJ_ID);
+                    String userName = bundle.getString(CommonConfig.USER_NAME);
+                    String userPH = bundle.getString(CommonConfig.USER_PH);
+
+
+                    if (objectId.length() != 0) {
+                        mEditorUserInfo = mSharedPreferencesUserInfo.edit();
+                        mEditorUserInfo.putBoolean(CommonConfig.IS_LOGIN, true);
+                        mEditorUserInfo.putString(CommonConfig.USER_OBJ_ID, objectId);
+                        mEditorUserInfo.putString(CommonConfig.USER_NAME, userName);
+
+                /*if(userNrc != null) {
+                    mEditorUserInfo.putString(CommonConfig.USER_NRC, userNrc);
+                }else if(passport != null){
+                    mEditorUserInfo.putString(CommonConfig.USER_NRC, passport); // For rare register with Passport case
+                }*/
+                        mEditorUserInfo.putString(CommonConfig.USER_PH, userPH);
+
+                        mEditorUserInfo.commit();
+                    }
+
+                    user_name = mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null);
+                    user_obj_id = mSharedPreferencesUserInfo.getString(CommonConfig.USER_OBJ_ID, null);
+
+
+                    //Toast.makeText(this, "You are login as at Payment \n " + objectId + "\n" + userName + userEmail, Toast.LENGTH_LONG).show();
+                    Log.e("==== > user Info parse", objectId + "Parse :" + userName + ":session >>" + user_obj_id);
+                } else {
+                    user_name = mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null);
+                    user_obj_id = mSharedPreferencesUserInfo.getString(CommonConfig.USER_OBJ_ID, null);
+                    Toast.makeText(this, "2ndTime(PaymentActivity) You are login as \n " + mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null) + "\n" + mSharedPreferencesUserInfo.getString(CommonConfig.USER_OBJ_ID, null), Toast.LENGTH_LONG).show();
+
+
+                }
+
+            }
+        } else {
+
+            // User clicked to log in.
+            ParseLoginBuilder loginBuilder = new ParseLoginBuilder(
+                    DrawerMainActivity.this);
+            startActivityForResult(loginBuilder.build(), LOGIN_REQUEST);
+
+
         }
+
+
     }
 
     public void LoadDrawerCustomData() {
 
         DrawerListName = new String[]
-                {"Stories", "Community", "Resources","News","Setting"};
+                {"Stories", "Community", "Resources", "News", "Setting"};
         DrawerListIcon = new int[]
-                {R.drawable.ic_stories, R.drawable.ic_community, R.drawable.ic_resources,R.drawable.ic_news,R.drawable.ic_setting};
+                {R.drawable.ic_stories, R.drawable.ic_community, R.drawable.ic_resources, R.drawable.ic_news, R.drawable.ic_setting};
 
 
         DrawerListViewAdapter drawer_adapter = new DrawerListViewAdapter(getApplicationContext(), DrawerListName, DrawerListIcon);//mCategoriesTitles
@@ -112,7 +208,10 @@ public class DrawerMainActivity extends AppCompatActivity {
         setListViewHeightBasedOnChildren(mDrawerList);
 
     }
-    /******************* ListView WIthin ScrollView Step1 *********************/
+
+    /**
+     * **************** ListView WIthin ScrollView Step1 ********************
+     */
     public void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
@@ -176,7 +275,7 @@ public class DrawerMainActivity extends AppCompatActivity {
                 break;
         }
 
-                // update selected item and title, then close the drawer
+        // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
 
         drawerLayoutt.closeDrawer(mDrawerLinearLayout);
@@ -211,10 +310,10 @@ public class DrawerMainActivity extends AppCompatActivity {
         actionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    private  void getFacebookHashKey(){
+    private void getFacebookHashKey() {
         // Add code to print out the key hash
         try {
-            PackageInfo info = getPackageManager().getPackageInfo("org.undp_iwomen.iwomen",PackageManager.GET_SIGNATURES);
+            PackageInfo info = getPackageManager().getPackageInfo("org.undp_iwomen.iwomen", PackageManager.GET_SIGNATURES);
             for (android.content.pm.Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
@@ -227,7 +326,6 @@ public class DrawerMainActivity extends AppCompatActivity {
 
         }
     }
-
 
 
 }

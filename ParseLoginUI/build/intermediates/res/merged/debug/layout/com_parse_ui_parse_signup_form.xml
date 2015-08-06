@@ -1,0 +1,217 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar_actionbar"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        tools:context="com.questmyanmar.gobus.ui.fragment.LoginFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/com_parse_ui_vertical_margin"
+            android:paddingLeft="@dimen/com_parse_ui_horizontal_margin"
+            android:paddingRight="@dimen/com_parse_ui_horizontal_margin"
+            android:paddingTop="@dimen/com_parse_ui_vertical_margin">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_signup_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/signup_username_input"
+                    style="@style/ParseLoginUI.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/com_parse_ui_username_input_hint"/>
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_signup_email_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/signup_email_input"
+                    style="@style/ParseLoginUI.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/com_parse_ui_small_vertical_spacing"
+                    android:hint="@string/com_parse_ui_email_input_hint"
+                    android:inputType="textEmailAddress"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_signup_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/signup_password_input"
+                    style="@style/ParseLoginUI.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/com_parse_ui_small_vertical_spacing"
+                    android:fontFamily="sans-serif"
+                    android:hint="@string/com_parse_ui_password_input_hint"
+                    android:inputType="textPassword"
+                    android:nextFocusForward="@+id/signup_confirm_password_input"
+                    android:selectAllOnFocus="true"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_signup_confirm_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/signup_confirm_password_input"
+                    style="@style/ParseLoginUI.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/com_parse_ui_small_vertical_spacing"
+                    android:fontFamily="sans-serif"
+                    android:hint="@string/com_parse_ui_confirm_password_input_hint"
+                    android:inputType="textPassword"
+                    android:selectAllOnFocus="true"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Document Type"
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"/>
+
+            <RadioGroup
+                android:id="@+id/signup_doc_type_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checkedButton="@+id/signup_doc_type_nrc_radio_button">
+
+                <RadioButton
+                    android:id="@+id/signup_doc_type_nrc_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NRC"/>
+
+                <RadioButton
+                    android:id="@+id/signup_doc_type_other_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="..."/>
+
+            </RadioGroup>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_signup_nrc_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/signup_nrc_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:gravity="bottom"
+                    android:hint="NRC Number"
+                    android:inputType="text"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_signup_passport_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/signup_passport_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:gravity="bottom"
+                    android:hint="Passport Number"
+                    android:inputType="text"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_signup_mobile_number_for_nrc_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.questmyanmar.gobus.ui.widget.PhoneNumberEdit
+                    android:id="@+id/signup_mobile_number_for_nrc_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/abc_edit_text_material"
+                    android:hint="Mobile Number"
+                    android:inputType="phone"
+                    android:nextFocusDown="@+id/signup_nrc_input"
+                    android:nextFocusForward="@+id/signup_nrc_input"
+                    android:selectAllOnFocus="true"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_signup_mobile_number_for_passport_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.questmyanmar.gobus.ui.widget.MobileNumberForPassportEditText
+                    android:id="@+id/signup_mobile_number_for_passport_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/abc_edit_text_material"
+                    android:hint="Mobile Number"
+                    android:inputType="phone"
+                    android:nextFocusDown="@+id/signup_nrc_input"
+                    android:nextFocusForward="@+id/signup_nrc_input"
+                    android:selectAllOnFocus="true"
+                    android:text=" "/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/i_agree_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/terms_and_conditions_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:text="@string/i_agree"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/create_account"
+                style="@style/ParseLoginUI.Button"
+                android:enabled="false"
+                android:layout_marginTop="@dimen/com_parse_ui_small_vertical_spacing"
+                android:text="@string/com_parse_ui_create_account_button_label"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout><!-- From: file:/Users/khinsandar/Documents/VipPro/QuestMyanmar/MyTickets/ParseLoginUI/res/layout/com_parse_ui_parse_signup_form.xml -->

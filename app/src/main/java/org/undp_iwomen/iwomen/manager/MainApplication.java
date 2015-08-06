@@ -10,6 +10,7 @@ import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.PushService;
 import com.parse.SaveCallback;
+import com.parse.ui.ParseLoginBuilder;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.parse.AppVersion;
@@ -37,6 +38,7 @@ public class MainApplication extends Application {
         ParseObject.registerSubclass(Post.class);
         ParseACL defaultACL = new ParseACL();
         ParseACL.setDefaultACL(defaultACL, true);
+
 
 
 

@@ -1,0 +1,65 @@
+<LinearLayout
+    android:id="@+id/parse_login"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/login_username_input"
+            style="@style/ParseLoginUI.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:nextFocusDown="@+id/login_password_input"
+            android:nextFocusForward="@+id/login_password_input"
+            android:textColor="@color/body_text_1"/>
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/com_parse_ui_small_vertical_spacing">
+
+        <EditText
+            android:id="@+id/login_password_input"
+            style="@style/ParseLoginUI.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:hint="@string/com_parse_ui_password_input_hint"
+            android:inputType="textPassword"
+            android:nextFocusDown="@+id/parse_login_button"
+            android:nextFocusForward="@+id/parse_login_button"
+            android:selectAllOnFocus="true"
+            android:textColor="@color/body_text_1"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/parse_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/com_parse_ui_large_vertical_spacing">
+
+        <Button
+            android:id="@+id/parse_login_button"
+            style="@style/ParseLoginUI.Button"
+            android:text="@string/com_parse_ui_parse_login_button_label"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/parse_login_help"
+        style="@style/ParseLoginUI.HelpButton"
+        android:layout_marginBottom="@dimen/com_parse_ui_small_vertical_spacing"
+        android:layout_marginTop="@dimen/com_parse_ui_small_vertical_spacing"
+        android:text="@string/com_parse_ui_forgot_password_button_label"/>
+</LinearLayout>

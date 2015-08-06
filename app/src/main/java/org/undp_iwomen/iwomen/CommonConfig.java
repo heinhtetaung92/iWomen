@@ -6,7 +6,14 @@ package org.undp_iwomen.iwomen;
 public class CommonConfig {
     public static final String AUTHORITY = "org.undp_iwomen.iwomen";
 
-    public static final String SHARE_PREFERENCE_NAME = "org.undp_iwomen.iwomen.myticketmanager";
+    public static final String SHARE_PREFERENCE_USER_INFO = "org.undp_iwomen.iwomen.user.info";
+    public static final String IS_LOGIN = "hasLogin";
+    public static final String USER_OBJ_ID = "objectId";
+    public static final String USER_NAME = "username";
+    public static final String USER_PH = "ph";
+    public static final String USER_EMAIL= "email";
+
+
 
 
     //https://api.parse.com/1/classes/City?X-Parse-Application-Id=OUN2VvuU6SN6DcRIDq3bT0ovJPXAk630qHVNJ9Gk&X-Parse-REST-API-Key=wxZB1WZBLzHEwfkUMToL0ykTLaiWY7Z1NuzfADLO

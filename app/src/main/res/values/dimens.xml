@@ -3,6 +3,14 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+
+    <dimen name="keyline_1_minus_8dp">8dp</dimen>
+    <dimen name="keyline_1_plus_8dp">24dp</dimen>
+    <dimen name="keyline_2">72dp</dimen>
+    <dimen name="keyline_2_minus_16dp">56dp</dimen>
+
+    <dimen name="button_stroke_width">1dp</dimen>
+
     <dimen name="keyline_1">16dp</dimen>
     <dimen name="feed_item_margin">10dp</dimen>
     <dimen name="feed_item_post_pic_height">250dp</dimen>
