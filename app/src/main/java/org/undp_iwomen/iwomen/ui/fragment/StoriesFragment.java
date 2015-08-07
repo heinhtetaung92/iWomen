@@ -6,6 +6,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +15,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +26,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -46,7 +53,7 @@ import java.util.List;
 /**
  * Created by khinsandar on 7/29/15.
  */
-public class StoriesFragment extends Fragment implements View.OnClickListener {
+public class StoriesFragment extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener {
     public static final String ARG_MENU_INDEX = "index";
 
     private Context mContext;
@@ -157,7 +164,6 @@ public class StoriesFragment extends Fragment implements View.OnClickListener {
         });
 
 
-
         mSwipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.primary_dark, R.color.accent);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -251,7 +257,7 @@ public class StoriesFragment extends Fragment implements View.OnClickListener {
             mRecyclerView.setAdapter(mPostListRecyclerViewAdapter);
             mProgressDialog.dismiss();
             progress.setVisibility(View.INVISIBLE);
-            Utils.doToast(getActivity(), String.valueOf(feedItems.size()));
+            //Utils.doToast(getActivity(), String.valueOf(feedItems.size()));
         } else {
             Log.e("LostListFragment", "Activity Null Case");
         }
@@ -265,6 +271,75 @@ public class StoriesFragment extends Fragment implements View.OnClickListener {
 
 
         inflater.inflate(R.menu.refresh_menu, menu);
+
+        final MenuItem item = menu.add(0, 12, 0, "Search");
+        //menu.removeItem(12);
+        item.setIcon(R.drawable.ic_action_search);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW
+                | MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+
+        final android.support.v7.widget.SearchView sv = new android.support.v7.widget.SearchView(getActivity());//.getActionBar().getThemedContext()
+
+        item.setActionView(sv);
+
+        SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) sv.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+
+
+        //int searchPlateId = sv.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
+        // Getting the 'search_plate' LinearLayout.
+        View searchPlate = sv.findViewById(android.support.v7.appcompat.R.id.search_plate);
+        // Setting background of 'search_plate' to earlier defined drawable.
+        searchPlate.setBackgroundResource(R.drawable.searchviewbackground);
+
+
+        sv.setSubmitButtonEnabled(false);
+        sv.setOnQueryTextListener(this);
+        /*EditText et_search = (EditText) sv.findViewById(R.id.search_src_text);
+        et_search.setTextColor(Color.WHITE);*/
+
+        /*ImageView clearBtn = (ImageView) sv.findViewById(R.id.search_close_btn);
+        clearBtn.setImageResource(R.drawable.ic_action_cancel);*/
+
+        ImageView close = (ImageView) sv.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
+        close.setImageResource(R.drawable.ic_action_cancel);
+        close.setAlpha(192);
+
+        searchAutoComplete.setHintTextColor(Color.WHITE);
+        searchAutoComplete.setTextColor(Color.WHITE);
+
+        ImageView search_btn = (ImageView) sv.findViewById(R.id.search_button);
+        search_btn.setBackgroundResource(R.drawable.ic_action_search);
+
+        SpannableStringBuilder ssb = new SpannableStringBuilder("   ");
+        ssb.append("Search");
+        Drawable searchIcon = getActivity().getResources().getDrawable(R.drawable.ic_action_search);
+        int textSize = (int) (searchAutoComplete.getTextSize() * 1.25);
+        searchIcon.setBounds(0, 0, textSize, textSize);
+        ssb.setSpan(new ImageSpan(searchIcon), 1, 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        searchAutoComplete.setHint(ssb);
+
+        /*sv.setQueryHint(Html.fromHtml("<font color = #ffffff>" + getResources().getString(R.string.search_hint) + "</font>"));*/
+
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //index = 1;
+                setupAdapter();
+                sv.setIconified(true);
+                sv.setQuery("", false);
+            }
+        });
+
+        sv.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean queryTextFocused) {
+                if (!queryTextFocused) {
+                    item.collapseActionView();
+                }
+            }
+        });
     }
 
     @Override
@@ -345,10 +420,10 @@ public class StoriesFragment extends Fragment implements View.OnClickListener {
                 cursorMain.close();
 
 
-                Cursor cursor = getActivity().getContentResolver().query(IwomenProviderData.PostProvider.CONTETN_URI, null, null,null, BaseColumns._ID +  " DESC LIMIT 1");
+                Cursor cursor = getActivity().getContentResolver().query(IwomenProviderData.PostProvider.CONTETN_URI, null, null, null, BaseColumns._ID + " DESC LIMIT 1");
 
 
-                if(cursor.getCount() > 0 ) {
+                if (cursor.getCount() > 0) {
 
 
                     Date date = null;
@@ -397,7 +472,7 @@ public class StoriesFragment extends Fragment implements View.OnClickListener {
 
                                         if (post.get("image") != null) {
                                             cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, post.getParseObject("userId").getObjectId());
-                                        }else {
+                                        } else {
                                             cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, "");
                                         }
 
@@ -414,8 +489,8 @@ public class StoriesFragment extends Fragment implements View.OnClickListener {
 
 
                                         cv.put(TableAndColumnsName.UserUtil.STATUS, "0");
-                                        cv.put(TableAndColumnsName.UserUtil.CREATED_DATE,post.get("postUploadedDate").toString() );// post.get("postUploadedDate").toString() //post.getCreatedAt().toString()
-                                        cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, post.get("postUploadedDate").toString() );
+                                        cv.put(TableAndColumnsName.UserUtil.CREATED_DATE, post.get("postUploadedDate").toString());// post.get("postUploadedDate").toString() //post.getCreatedAt().toString()
+                                        cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, post.get("postUploadedDate").toString());
 
                                         Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
 
@@ -472,7 +547,7 @@ public class StoriesFragment extends Fragment implements View.OnClickListener {
 
                                 if (post.get("image") != null) {
                                     cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, post.getParseObject("userId").getObjectId());
-                                }else {
+                                } else {
                                     cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, "");
                                 }
 
@@ -488,8 +563,8 @@ public class StoriesFragment extends Fragment implements View.OnClickListener {
                                 }
 
                                 cv.put(TableAndColumnsName.UserUtil.STATUS, "0");
-                                cv.put(TableAndColumnsName.UserUtil.CREATED_DATE,post.get("postUploadedDate").toString() );// post.get("postUploadedDate").toString() //post.getCreatedAt().toString()
-                                cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, post.get("postUploadedDate").toString() );
+                                cv.put(TableAndColumnsName.UserUtil.CREATED_DATE, post.get("postUploadedDate").toString());// post.get("postUploadedDate").toString() //post.getCreatedAt().toString()
+                                cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, post.get("postUploadedDate").toString());
 
 
                                 Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
@@ -517,7 +592,7 @@ public class StoriesFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.post_news:
 
                 startActivity(new Intent(getActivity(), PostNewsActivity.class));
@@ -525,6 +600,23 @@ public class StoriesFragment extends Fragment implements View.OnClickListener {
                 break;
         }
 
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+
+        mPostListRecyclerViewAdapter.filter(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        if (s.equals("")) {
+            //index = 1;
+            setupAdapter();
+
+        }
+        return false;
     }
 }
 

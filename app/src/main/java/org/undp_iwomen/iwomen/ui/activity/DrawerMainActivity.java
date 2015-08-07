@@ -21,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.parse.ParseUser;
@@ -53,6 +52,7 @@ public class DrawerMainActivity extends AppCompatActivity {
     private int[] DrawerListIcon;
     private CharSequence mTitle;
     private TextView textViewTitle;
+    private TextView txt_user_name;
 
     private static final int LOGIN_REQUEST = 0;
     private ParseUser currentUser;
@@ -90,6 +90,7 @@ public class DrawerMainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //toolbar.setLogo(R.drawable.ic_action_myanmadeals_app_icon);
         textViewTitle = (TextView) toolbar.findViewById(R.id.title_action2);
+
         //textViewTitle.setText("Myanma\u0020Deals");//"MYANMARDEALS"
         textViewTitle.setText(R.string.app_name);
         //textViewTitle.setTypeface(faceBold);
@@ -99,6 +100,7 @@ public class DrawerMainActivity extends AppCompatActivity {
         mDrawerLinearLayout = (LinearLayout) findViewById(R.id.left_drawer);
 
         mDrawerList = (ListView) findViewById(R.id.left_drawer_lv);
+        txt_user_name = (TextView)findViewById(R.id.txt_user_name);
 
         // set a custom shadow that overlays the main content when the drawer opens
         drawerLayoutt.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -166,15 +168,16 @@ public class DrawerMainActivity extends AppCompatActivity {
                     user_name = mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null);
                     user_obj_id = mSharedPreferencesUserInfo.getString(CommonConfig.USER_OBJ_ID, null);
 
-
+                    txt_user_name.setText(user_name);
                     //Toast.makeText(this, "You are login as at Payment \n " + objectId + "\n" + userName + userEmail, Toast.LENGTH_LONG).show();
                     Log.e("==== > user Info parse", objectId + "Parse :" + userName + ":session >>" + user_obj_id);
                 } else {
                     user_name = mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null);
                     user_obj_id = mSharedPreferencesUserInfo.getString(CommonConfig.USER_OBJ_ID, null);
-                    Toast.makeText(this, "2ndTime(PaymentActivity) You are login as \n " + mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null) + "\n" + mSharedPreferencesUserInfo.getString(CommonConfig.USER_OBJ_ID, null), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(this, "2ndTime(PaymentActivity) You are login as \n " + mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null) + "\n" + mSharedPreferencesUserInfo.getString(CommonConfig.USER_OBJ_ID, null), Toast.LENGTH_LONG).show();
 
 
+                    txt_user_name.setText(user_name);
                 }
 
             }

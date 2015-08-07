@@ -1,7 +1,6 @@
 package org.undp_iwomen.iwomen.ui.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,21 +15,27 @@ import com.squareup.picasso.Picasso;
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.data.FeedItem;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
-import org.undp_iwomen.iwomen.ui.activity.MainActivity;
-import org.undp_iwomen.iwomen.ui.activity.PostDetailActivity;
 import org.undp_iwomen.iwomen.ui.widget.ResizableImageView;
-import org.undp_iwomen.iwomen.utils.Utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRecyclerViewAdapter.NamesViewHolder>   {
 
     private Context mContext;
     private List<FeedItem> feedItems;
+    private ArrayList<FeedItem> arraylist;
 
     public PostListRecyclerViewAdapter(Context context, List<FeedItem> feedItems) {
         mContext = context;
         this.feedItems = feedItems;
+
+        this.arraylist = new ArrayList<FeedItem>();
+        this.arraylist.addAll(feedItems);
         //randomizeCatNames();
     }
 
@@ -99,7 +104,18 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
         viewHolder.mPostTile.setText(item.getPost_title());
         viewHolder.post_content.setText(item.getPost_content());
         viewHolder.post_content_user_name.setText(item.getPost_content_user_name());
-        viewHolder.post_timestamp.setText(item.getCreated_at());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+        SimpleDateFormat simpleDateFormatForDb = new SimpleDateFormat("dd-MM-yyyy");
+
+
+        try {
+            Date timedate  = sdf.parse(item.getCreated_at());
+            viewHolder.post_timestamp.setText(sdf.format(timedate));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         viewHolder.post_content.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
 
@@ -202,6 +218,23 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
         public void onError() {
 
         }
+    }
+
+    // Filter Class
+    public void filter(String charText) {
+        charText = charText.toLowerCase(Locale.getDefault());
+        feedItems.clear();
+        if (charText.length() == 0) {
+            feedItems.addAll(arraylist);
+        } else {
+            for (FeedItem fi : arraylist) {
+                if (fi.getPost_title().toLowerCase(Locale.getDefault())
+                        .contains(charText)) {
+                    feedItems.add(fi);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
 }

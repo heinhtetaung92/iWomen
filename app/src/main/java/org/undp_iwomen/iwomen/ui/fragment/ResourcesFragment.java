@@ -58,7 +58,14 @@ public class ResourcesFragment extends Fragment {
         ResourceItems = new ArrayList<ResourceItem>();
         lvResouces =(ListView)rootView.findViewById(R.id.resource_list);
 
-        String name[] =new String[]{
+        String name[] = new String[]{"Tips from Astrid Tuminez I","Tips from Astrid Tuminez II","Tips from Astrid Tuminez III",
+                                "Tips from Astrid Tuminez IV","'Tips from Astrid Tuminez V"
+        };
+
+        String text[] = new String[]{"Leadership","Leadership","Leadership",
+                                    "Leadership","Leadership"};
+
+        /*String name[] =new String[]{
                 "ေရေဘးအတ\u103Cက္\u1080ကိ\u1033တင္\u103Bပင္ဆင္\u103Bခင္း\n","Important Flood Clean-Up Tips",
                 "DIY Home Decoration Tip"," Building-D"};
         String text[] = new String[]{"ေရေဘးအတ\u103Cက္\u1080ကိ\u1033တင္\u103Bပင္ဆင္\u103Bခင္း\n" +
@@ -80,7 +87,7 @@ public class ResourcesFragment extends Fragment {
                 "( ဃ)ေရေဘးအ\u108Fရာယ္သတိေပးခ\u103Aက္ ရရ\u103Dိပ\u102Bက ပင္လယ္ကမ္းေ\u103Bခေဒသမ\u103Aား၊ အနိမ့္ပိုုင္းေဒသမ\u103Aား၊ လယ္က\u103Cင္း\u103Bပင္မ\u103Aားတ\u103Cင္ ေနထုုိင္\u103Bခင္းမ\u103D ေရ\u103Dာင္ရ\u103Dားပ\u102B။\n" +
                 "(င)\u103Bမစ္ေခ\u103Aာင္း၊ ကမ္းပ\u102Bး ေ\u103Bမ\u103Bပိ\u1033နိုုင္သည့္ေဒသမ\u103Aားသိုု\u1095 သ\u103Cားလာ\u103Bခင္းမ\u103D ေရ\u103Dာင္ရ\u103Dားပ\u102B၊"," If you have experienced any water accumulation in your home, it is important to remember that not all water damage is visible. Since flood water may contain bacteria that can cause serious illnesses, it is vital to clean and disinfect everything that may have been contaminated."
                 ,"Address C"," Address D"
-        };
+        };*/
 
 
         ResourceItems.clear();

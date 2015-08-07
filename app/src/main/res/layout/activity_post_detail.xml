@@ -106,6 +106,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
+                android:textStyle="bold"
+                android:textSize="18sp"
                 android:layout_marginLeft="8dp"/>
 
         </LinearLayout>
