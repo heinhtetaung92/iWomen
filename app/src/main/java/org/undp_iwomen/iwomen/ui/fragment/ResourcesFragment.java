@@ -14,8 +14,9 @@ import android.widget.ListView;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.data.ResourceItem;
-import org.undp_iwomen.iwomen.ui.activity.ResourceDetailActivity;
+import org.undp_iwomen.iwomen.ui.activity.SubResourceListActivity;
 import org.undp_iwomen.iwomen.ui.adapter.ResourcesListViewAdapter;
+import org.undp_iwomen.iwomen.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -32,7 +33,8 @@ public class ResourcesFragment extends Fragment {
 
     private ResourcesListViewAdapter adapter;
 
-    int[] randomImgMain = new int[]{R.drawable.health,R.drawable.health,R.drawable.beauty,R.drawable.idea};
+    int[] randomImgMain = new int[]{R.drawable.idea
+            ,R.drawable.donors,R.drawable.law};
 
     public ResourcesFragment() {
         // Empty constructor required for fragment subclasses
@@ -58,12 +60,13 @@ public class ResourcesFragment extends Fragment {
         ResourceItems = new ArrayList<ResourceItem>();
         lvResouces =(ListView)rootView.findViewById(R.id.resource_list);
 
-        String name[] = new String[]{"Tips from Astrid Tuminez I","Tips from Astrid Tuminez II","Tips from Astrid Tuminez III",
-                                "Tips from Astrid Tuminez IV","'Tips from Astrid Tuminez V"
+        String name[] = new String[]{"ေခ\u102Bင္းေဆာင္မ\u103Dုုသင္ခန္းစာ မ\u103Aား ","အလ\u103D\u1034 ရ\u103Dင္ မ\u103Aား",
+                "ဥပေဒ မ\u103Aား"
+
         };
 
         String text[] = new String[]{"Leadership","Leadership","Leadership",
-                                    "Leadership","Leadership"};
+                                    };
 
         /*String name[] =new String[]{
                 "ေရေဘးအတ\u103Cက္\u1080ကိ\u1033တင္\u103Bပင္ဆင္\u103Bခင္း\n","Important Flood Clean-Up Tips",
@@ -101,14 +104,21 @@ public class ResourcesFragment extends Fragment {
         lvResouces.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(mContext, ResourceDetailActivity.class);
-                intent.putExtra("Name", ResourceItems.get(i).getResourceName());
+
+                if(i == 0) {
+                    Intent intent = new Intent(mContext, SubResourceListActivity.class);
+                /*intent.putExtra("Name", ResourceItems.get(i).getResourceName());
                 intent.putExtra("Text", ResourceItems.get(i).getResourceText());//mCatNames.get((Integer)view.getTag()).toString()
 
                 //intent.putExtra("ImgUrl", mImgurl.get(getPosition()));
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(intent);
+                */
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(intent);
+                }else {
+                    Utils.doToastEng(mContext,"Coming soon!");
+                }
+
             }
         });
         //new LoadData().execute();
@@ -125,7 +135,8 @@ public class ResourcesFragment extends Fragment {
         ProgressDialog pDialog;
 
 
-        int[] randomImg =new int[]{R.drawable.health,R.drawable.health,R.drawable.beauty,R.drawable.idea};
+        int[] randomImg =new int[]{R.drawable.idea
+                ,R.drawable.donors,R.drawable.law};
 
         private Random randomGenerator;
 

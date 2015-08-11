@@ -1,31 +1,75 @@
 package org.undp_iwomen.iwomen.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.makeramen.RoundedImageView;
+
 import org.undp_iwomen.iwomen.R;
+import org.undp_iwomen.iwomen.model.MyTypeFace;
 
 
 public class ResourceDetailActivity extends AppCompatActivity {
 
 
-    TextView txtBody;
+    private TextView textViewTitle;
+    private TextView txtName;
+    private TextView txtBody;
+    private RoundedImageView profileImg;
+    private ProgressBar profileProgressbar;
+    private TextView profileName;
 
-    String bodyText;
+    private String title;
+    private String bodyText;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_resource);
+        setContentView(R.layout.activity_detail_sub_resource);
+
+        mContext = getApplicationContext();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        textViewTitle = (TextView) toolbar.findViewById(R.id.title_action2);
+
+        textViewTitle.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+        textViewTitle.setText(R.string.leadership_mm);
+        if(toolbar != null){
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         Intent i  =getIntent();
         bodyText = i.getStringExtra("Text");
-        txtBody = (TextView)findViewById(R.id.txt_share_data);
+        title = i.getStringExtra("Name");
+
+        txtName = (TextView)findViewById(R.id.tipdetail_title_name);
+        txtBody = (TextView)findViewById(R.id.tipdetail_body);
+        profileImg = (RoundedImageView)findViewById(R.id.tipdetail_profilePic_rounded);
+        profileName = (TextView)findViewById(R.id.tipdetail_content_username);
+        profileProgressbar = (ProgressBar)findViewById(R.id.tipdetail_progressBar_profile_item);
         txtBody.setText(bodyText);
+        txtName.setText(title);
+
+        txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+        txtBody.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+
+        profileProgressbar.setVisibility(View.GONE);
+
+        profileImg.setAdjustViewBounds(true);
+        profileImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        profileImg.setImageResource(R.drawable.astrid);
+        profileName.setText("Dr Astrid Tuminez ");
 
 
     }

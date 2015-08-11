@@ -57,7 +57,7 @@ public class ResourcesListViewAdapter extends BaseAdapter
     {
 
         public TextView txtName;
-        public TextView txtBodyText;
+        //public TextView txtBodyText;
         public RoundedImageView imgIcon;
         //public TextView txtViewTitle;
     }
@@ -74,7 +74,7 @@ public class ResourcesListViewAdapter extends BaseAdapter
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.resources_list_item_view, null);//gridview_row //fra_browse_gridview_item
             holder.txtName= (TextView)view.findViewById(R.id.resource_item_name);
-            holder.txtBodyText= (TextView)view.findViewById(R.id.resource_item_text);
+            //holder.txtBodyText= (TextView)view.findViewById(R.id.resource_item_text);
             holder.imgIcon = (RoundedImageView) view.findViewById(R.id.resouce_list_item_img);
 
 
@@ -90,10 +90,10 @@ public class ResourcesListViewAdapter extends BaseAdapter
         holder.imgIcon.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         holder.txtName.setText(ResourceItems.get(position).getResourceName());
-        holder.txtBodyText.setText(ResourceItems.get(position).getResourceText());
+        //holder.txtBodyText.setText(ResourceItems.get(position).getResourceText());
 
         holder.txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
-        holder.txtBodyText.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+        //holder.txtBodyText.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
         //holder.txtName.setTypeface(DrawerMainActivity.faceNormal);
 
         holder.imgIcon.setImageResource(ResourceItems.get(position).getResourceImg());

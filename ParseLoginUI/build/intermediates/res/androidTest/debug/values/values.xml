@@ -387,13 +387,17 @@
     <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/bundles/debug/res/values/values.xml -->
     <eat-comment/>
     <string name="com_parse_ui_confirm_password_input_hint">Re-enter password</string>
+    <string name="com_parse_ui_confirm_password_input_hint_mm">လွ်ိဳ ့၀ွက္ စာလံုုးေနာက္တစ္ၾကိမ္ၿပန္ရိုုက္ပါ</string>
     <string name="com_parse_ui_create_account_button_label">Create account</string>
+    <string name="com_parse_ui_create_account_button_label_mm">၀င္မည္</string>
     <string name="com_parse_ui_edit_account_button_label">Edit account</string>
+    <string name="com_parse_ui_edit_account_button_label_mm">ၿပင္ဆင္မည္</string>
     <string name="com_parse_ui_email_input_hint">Email</string>
     <string name="com_parse_ui_email_taken_toast">Email is already taken, please reset your password instead</string>
     <string name="com_parse_ui_facebook_login_button_label">Log in with Facebook</string>
     <string name="com_parse_ui_facebook_login_failed_toast">Facebook login failed</string>
     <string name="com_parse_ui_forgot_password_button_label"><u>Forgot password</u></string>
+    <string name="com_parse_ui_forgot_password_button_mm"><u>လွ်ိဳ ့၀ွက္ စာလံုုးေမ ့ေနပါသလား</u></string>
     <string name="com_parse_ui_invalid_email_toast">Email is invalid, please correct it and try again</string>
     <string name="com_parse_ui_invalid_mobile_number">Mobile number is invalid, please correct it and try again</string>
     <string name="com_parse_ui_invalid_nrc_number">NRC number is invalid, please correct it and try again</string>
@@ -434,21 +438,28 @@
     <string name="com_parse_ui_no_username_toast">Please enter your username</string>
     <string name="com_parse_ui_nrc_number">Please enter nrc number</string>
     <string name="com_parse_ui_parse_login_button_label">LOG IN</string>
+    <string name="com_parse_ui_parse_login_button_label_mm">၀င္ရန္</string>
     <string name="com_parse_ui_parse_login_failed_unknown_toast">Could not log in, please try again later</string>
     <string name="com_parse_ui_parse_login_invalid_credentials_toast">The username and password you entered don\'t match</string>
     <string name="com_parse_ui_parse_signup_button_label">CREATE ACCOUNT</string>
+    <string name="com_parse_ui_parse_signup_button_label_mm">အေကာင့္ အသစ္ၿပဳလုုပ္ရန္</string>
     <string name="com_parse_ui_passport_number">Please enter passport number</string>
     <string name="com_parse_ui_password_input_hint">Password</string>
+    <string name="com_parse_ui_password_input_hint_mm">လွ်ိဳ ့၀ွက္ စာလံုုး</string>
+    <string name="com_parse_ui_ph_input_hint">Phone</string>
+    <string name="com_parse_ui_ph_input_hint_mm">ဖုုန္းနံပါတ္</string>
     <string name="com_parse_ui_progress_dialog_text">Loading...</string>
     <string name="com_parse_ui_reenter_password_toast">Please re-enter your password</string>
     <string name="com_parse_ui_signup_failed_unknown_toast">Could not sign up, please try again later</string>
     <string name="com_parse_ui_twitter_login_button_label">Log in with Twitter</string>
     <string name="com_parse_ui_twitter_login_failed_toast">Twitter login failed</string>
     <string name="com_parse_ui_username_input_hint">Username</string>
+    <string name="com_parse_ui_username_input_hint_mm">အမည္</string>
     <string name="com_parse_ui_username_taken_toast">Username is already taken, please choose a different one</string>
     <string name="confirm_password_error">Confirm password is required</string>
     <string name="email_address_error">Email address is required</string>
     <string name="i_agree">I agree to all the <a href="http://gobus.asia/terms-and-conditions/">Terms and Conditions</a></string>
+    <string name="i_agree_mm">မွတ္ပံုုတင္အခ်က္ အလက္မ်ားကိုုသေဘာတူပါသည္ <a href="http://gobus.asia/terms-and-conditions/"/></string>
     <string name="invalid_mobile_number">Mobile number is invalid</string>
     <string name="invalid_nrc_number_error">NRC number is invalid. ##/###(N)######</string>
     <string name="invalid_passport_error">Passport number is invalid</string>
@@ -1495,7 +1506,7 @@
     </style>
     <style name="ParseLoginUI.HelpButton" parent="@android:style/Widget.Button">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_height">48dp</item>
         <item name="android:paddingTop">8dp</item>
         <item name="android:paddingBottom">16dp</item>
         <item name="android:background">@android:color/transparent</item>

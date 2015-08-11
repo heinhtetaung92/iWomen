@@ -1,11 +1,9 @@
 package org.undp_iwomen.iwomen.ui.activity;
 
 import android.content.ContentValues;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -53,7 +51,7 @@ public class PostNewsActivity extends ActionBarActivity implements View.OnClickL
 
     private void SetPostData() {
 
-        Utils.doToast(PostNewsActivity.this, "Post Save");
+        Utils.doToastEng(PostNewsActivity.this, "Post Save");
 
         ContentValues cv = new ContentValues();
         cv.put(TableAndColumnsName.PostUtil.POST_OBJ_ID, et_postid.getText().toString());

@@ -22,6 +22,8 @@
 package com.parse.ui;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -29,20 +31,25 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
+import com.parse.utils.Utils;
 
 
 /**
  * Fragment for the user login screen.
  */
-public class ParseLoginFragment extends ParseLoginFragmentBase {
+public class ParseLoginFragment extends ParseLoginFragmentBase implements CompoundButton.OnCheckedChangeListener{
+
+
 
   public interface ParseLoginFragmentListener {
     public void onSignUpClicked(String username, String password);
@@ -69,6 +76,11 @@ public class ParseLoginFragment extends ParseLoginFragmentBase {
   private ParseOnLoginSuccessListener onLoginSuccessListener;
 
   private ParseLoginConfig config;
+
+  /*
+   * ****Font Setting*********/
+  RadioButton rd_lang_en, rd_lang_mm;
+  SharedPreferences sharePref;
 
   public static ParseLoginFragment newInstance(Bundle configOptions) {
     ParseLoginFragment loginFragment = new ParseLoginFragment();
@@ -98,6 +110,26 @@ public class ParseLoginFragment extends ParseLoginFragmentBase {
     parseSignupButton = (Button) v.findViewById(R.id.parse_signup_button);
     facebookLoginButton = (Button) v.findViewById(R.id.facebook_login);
     twitterLoginButton = (Button) v.findViewById(R.id.twitter_login);
+
+    /******Font Setting*********/
+    sharePref = getActivity().getSharedPreferences(Utils.PREF_SETTING, Context.MODE_PRIVATE);
+    rd_lang_en = (RadioButton) v.findViewById(R.id.settings_english_language);
+    rd_lang_mm = (RadioButton) v.findViewById(R.id.settings_myanmar_language);
+
+    String lang = sharePref.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
+    rd_lang_en.setOnCheckedChangeListener(this);
+    rd_lang_mm.setOnCheckedChangeListener(this);
+    if(lang.equals(Utils.ENG_LANG)){
+      rd_lang_en.setChecked(true);
+      setEnglishFont();
+    }
+    else if(lang.equals(Utils.MM_LANG)){
+      rd_lang_mm.setChecked(true);
+      setMyanmarFont();
+    }
+    /******Font Setting*********/
+
+
 
     if (appLogo != null && config.getAppLogo() != null) {
       appLogo.setImageResource(config.getAppLogo());
@@ -427,6 +459,41 @@ public class ParseLoginFragment extends ParseLoginFragmentBase {
 
   private void loginSuccess(ParseUser user) {
     onLoginSuccessListener.onLoginSuccess(user);
+  }
+
+  @Override
+  public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+    SharedPreferences.Editor editor = sharePref.edit();
+
+
+    if(isChecked) {
+      if (buttonView.getId() == R.id.settings_english_language) {
+
+        editor.putString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
+
+        setEnglishFont();
+
+
+      } else if (buttonView.getId() == R.id.settings_myanmar_language) {
+        editor.putString(Utils.PREF_SETTING_LANG, Utils.MM_LANG);
+
+        setMyanmarFont();
+
+      }
+
+    }
+    editor.commit();
+
+  }
+
+  public void setEnglishFont(){
+
+
+
+  }
+  public void setMyanmarFont(){
+
   }
 
 }

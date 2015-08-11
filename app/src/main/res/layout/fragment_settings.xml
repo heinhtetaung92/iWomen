@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/settings_language_setting_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Change Language"/>
+
+    <RadioGroup
+        android:id="@+id/settings_language"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/settings_english_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="English"
+            android:checked="true"/>
+
+        <RadioButton
+            android:id="@+id/settings_myanmar_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Myanmar"/>
+
+    </RadioGroup>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000"
+        android:layout_margin="16dp"/>
+
+    <CheckBox
+        android:id="@+id/settings_getnotification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get Notification"
+        android:layout_margin="16dp"/>
+
+
+    <TextView
+        android:id="@+id/settings_changeTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change Theme"
+        android:layout_margin="16dp"/>
+
+    </LinearLayout>
+
+</ScrollView>

@@ -10,7 +10,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -38,6 +42,7 @@ public class PostDetailActivity extends AppCompatActivity {
     TextView post_content_user_img_path ;
     TextView post_timestamp;
     TextView postdetail_username;
+    TextView post_suggest_text;
     private ProgressBar feed_item_progressBar;
     private ProgressBar profile_item_progressBar;
     private org.undp_iwomen.iwomen.ui.widget.ProfilePictureView profilePictureView;
@@ -62,7 +67,7 @@ public class PostDetailActivity extends AppCompatActivity {
             setItem(item);
         }
         else{
-            Utils.doToast(this, "Nothing to show!");
+            Utils.doToastEng(this, "Nothing to show!");
         }
 
 
@@ -88,6 +93,8 @@ public class PostDetailActivity extends AppCompatActivity {
         post_content = (TextView) findViewById(R.id.postdetail_content);
         post_content_user_name = (TextView) findViewById(R.id.postdetail_content_username);
         postdetail_username = (TextView) findViewById(R.id.postdetail_username);
+        post_suggest_text = (TextView) findViewById(R.id.postdetail_suggest_title);
+
         profilePictureView = (org.undp_iwomen.iwomen.ui.widget.ProfilePictureView) findViewById(R.id.postdetail_profilePic);
         postIMg = (org.undp_iwomen.iwomen.ui.widget.ResizableImageView) findViewById(R.id.postdetail_content_img);
         feed_item_progressBar = (ProgressBar) findViewById(R.id.postdetail_feed_item_progressBar);
@@ -98,15 +105,23 @@ public class PostDetailActivity extends AppCompatActivity {
         profile.setAdjustViewBounds(true);
         profile.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        mPostTile.setText(item.getPost_title());
+        mPostTile.setText(item.getPost_title_mm());
         post_content.setText(item.getPost_content());
+
+        if(item.getPost_content_suggest_text() != null && !item.getPost_content_suggest_text().isEmpty()){
+            post_suggest_text.setText(item.getPost_content_suggest_text());
+
+        }
         post_content_user_name.setText(item.getPost_content_user_name());
 
         user_name = mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null);
+
+        postdetail_username.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
         postdetail_username.setText(" ခ်စ္လွစြာေသာ " + user_name);
         //post_timestamp.setText(item.getCreated_at());
 
         post_content.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
+        post_suggest_text.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
 
         //viewHolder.mCatNameTextView.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
         //viewHolder.profilePictureView.setProfileId(item.get());
@@ -268,6 +283,32 @@ public class PostDetailActivity extends AppCompatActivity {
         public void onError() {
 
         }
+    }
+
+
+    /**** Method for Setting the Height of the ListView dynamically.
+     **** Hack to fix the issue of not showing all the items of the ListView
+     **** when placed inside a ScrollView  ****/
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 
 }

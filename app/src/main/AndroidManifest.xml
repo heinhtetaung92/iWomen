@@ -90,7 +90,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.MainActivity" />
-        <activity android:name=".ui.activity.ResourceDetailActivity" />
         <!--
         Optionally, register AnalyticsReceiver and AnalyticsService to support background
         dispatching on non-Google Play devices
@@ -165,6 +164,34 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activity.DrawerMainActivity"/>
         </activity>
+
+        <activity android:name=".ui.activity.AboutUsmmActivity"
+            android:label="@string/title_activity_post_detail"
+            android:parentActivityName=".ui.activity.DrawerMainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activity.DrawerMainActivity"/>
+        </activity>
+
+        <activity
+            android:name=".ui.activity.SubResourceListActivity"
+            android:label="@string/title_activity_post_detail"
+            android:parentActivityName=".ui.activity.DrawerMainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activity.DrawerMainActivity"/>
+        </activity>
+        <activity android:name=".ui.activity.ResourceDetailActivity"
+            android:label="@string/leadership_eng"
+            android:parentActivityName=".ui.activity.SubResourceListActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activity.SubResourceListActivity"/>
+        </activity>
+
         <activity
             android:name=".ui.activity.PostNewsActivity"
             android:label="@string/title_activity_post_news" >

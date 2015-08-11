@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.undp_iwomen.iwomen.R;
+import org.undp_iwomen.iwomen.model.MyTypeFace;
 
 /**
  * Created by khinsandar on 7/29/15.
@@ -84,7 +85,8 @@ public class DrawerListViewAdapter extends BaseAdapter
         }
 
         holder.txtName.setText(listName[position]);
-        //holder.txtName.setTypeface(DrawerMainActivity.faceNormal);
+        holder.txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+
 
         holder.imgIcon.setImageResource(listicon[position]);
 

@@ -32,7 +32,7 @@
                     style="@style/ParseLoginUI.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/com_parse_ui_username_input_hint" />
+                    android:hint="@string/com_parse_ui_username_input_hint_mm" />
             </android.support.design.widget.TextInputLayout>
 
 
@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/com_parse_ui_small_vertical_spacing"
                     android:fontFamily="sans-serif"
-                    android:hint="@string/com_parse_ui_password_input_hint"
+                    android:hint="@string/com_parse_ui_password_input_hint_mm"
                     android:inputType="textPassword"
                     android:nextFocusForward="@+id/signup_confirm_password_input"
                     android:selectAllOnFocus="true" />
@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/com_parse_ui_small_vertical_spacing"
                     android:fontFamily="sans-serif"
-                    android:hint="@string/com_parse_ui_confirm_password_input_hint"
+                    android:hint="@string/com_parse_ui_confirm_password_input_hint_mm"
                     android:inputType="textPassword"
                     android:selectAllOnFocus="true" />
 
@@ -85,7 +85,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/abc_edit_text_material"
-                    android:hint="Mobile Number"
+                    android:hint="@string/com_parse_ui_ph_input_hint_mm"
                     android:inputType="phone"
                     android:nextFocusDown="@+id/signup_nrc_input"
                     android:nextFocusForward="@+id/signup_nrc_input"
@@ -108,7 +108,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:text="@string/i_agree" />
+                    android:text="@string/i_agree_mm" />
 
             </LinearLayout>
 
@@ -130,7 +130,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:enabled="false"
-                        android:text="@string/com_parse_ui_create_account_button_label"
+                        android:text="@string/com_parse_ui_create_account_button_label_mm"
                         android:textSize="20dp" />
                 </LinearLayout>
 
@@ -147,7 +147,7 @@
                         android:layout_gravity="left"
                         android:layout_marginLeft="20dp"
                         android:enabled="false"
-                        android:text="@string/com_parse_ui_edit_account_button_label"
+                        android:text="@string/com_parse_ui_edit_account_button_label_mm"
                         android:textSize="20dp" />
                 </LinearLayout>
 

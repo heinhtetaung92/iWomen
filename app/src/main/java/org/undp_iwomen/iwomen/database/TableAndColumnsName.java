@@ -48,6 +48,7 @@ public class TableAndColumnsName {
         String POST_OBJ_ID ="post_obj_id";
         String POST_TITLE ="post_title";
         String POST_CONTENT ="content";
+        String POST_CONTENT_MM ="content_mm";
         String POST_LIKES = "post_likes";
         String POST_IMG_PATH = "post_img_path";
         String POST_CONTENT_TYPES = "post_content_type";
@@ -56,6 +57,10 @@ public class TableAndColumnsName {
         String POST_CONTENT_USER_NAME = "post_content_user_name";
         String POST_CONTENT_USER_IMG_PATH = "post_content_user_img_path";
 
+
+        String POST_CONTENT_VIDEO_ID = "video_id";
+        String POST_CONTENT_SUGGEST_TEXT= "post_content_suggest_text";
+        String POST_CONTENT_TITLE_MM = "post_title_mm";
 
         String STATUS = "status";
         String CREATED_DATE ="created_at";
@@ -74,6 +79,10 @@ public class TableAndColumnsName {
                 POST_CONTENT_USER_ID + " Text Not Null," +
                 POST_CONTENT_USER_NAME + " Text Not Null," +
                 POST_CONTENT_USER_IMG_PATH + " Text Not Null," +
+
+                POST_CONTENT_VIDEO_ID + " Text Not Null," +
+                POST_CONTENT_SUGGEST_TEXT + " Text Not Null," +
+                POST_CONTENT_TITLE_MM + " Text Not Null," +
 
 
                 STATUS + " Text Not Null," +

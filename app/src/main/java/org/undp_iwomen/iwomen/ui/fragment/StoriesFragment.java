@@ -27,7 +27,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -40,7 +39,6 @@ import org.undp_iwomen.iwomen.database.TableAndColumnsName;
 import org.undp_iwomen.iwomen.model.parse.Post;
 import org.undp_iwomen.iwomen.provider.IwomenProviderData;
 import org.undp_iwomen.iwomen.ui.activity.PostDetailActivity;
-import org.undp_iwomen.iwomen.ui.activity.PostNewsActivity;
 import org.undp_iwomen.iwomen.ui.adapter.PostListRecyclerViewAdapter;
 import org.undp_iwomen.iwomen.ui.widget.RecyclerOnItemClickListener;
 import org.undp_iwomen.iwomen.utils.Connection;
@@ -113,25 +111,40 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
 
         progress.setVisibility(View.VISIBLE);
 
-        if (Connection.isOnline(getActivity())) {
 
+        //When very start this fragment open , need to check db data
+        Cursor cursorMain = getActivity().getContentResolver().query(IwomenProviderData.PostProvider.CONTETN_URI, null, null, null, BaseColumns._ID + " DESC");
+
+        if (cursorMain.getCount() > 0) {
             setupAdapter();
 
-        } else {
-            //scrollview.setVisibility(View.INVISIBLE);
-            //connectionerrorview.setVisibility(View.VISIBLE);
-            //            product_arrayList = (ArrayList<ProductsModel>) storageUtil.ReadArrayListFromSD("HomeProductsList");
 
-            progress.setVisibility(View.INVISIBLE);
-            Toast.makeText(getActivity().getApplicationContext(),
+        } else {
+
+            if (Connection.isOnline(getActivity())) {
+                getPostDataOrderByLikesDate();
+            } else {
+                //scrollview.setVisibility(View.INVISIBLE);
+                //connectionerrorview.setVisibility(View.VISIBLE);
+                //            product_arrayList = (ArrayList<ProductsModel>) storageUtil.ReadArrayListFromSD("HomeProductsList");
+
+                progress.setVisibility(View.INVISIBLE);
+                    /* Toast.makeText(getActivity().getApplicationContext(),
                     "Please Open Internet Connection!",
-                    Toast.LENGTH_LONG).show();
+                    Toast.LENGTH_LONG).show();*/
+                Utils.doToastMM(mContext,getActivity().getResources().getString(R.string.open_internet_warning_mm));
+
+
+            }
         }
+
+
+        //setupAdapter();
+
 
         mRecyclerView.addOnItemTouchListener(new RecyclerOnItemClickListener(getActivity(), new RecyclerOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Utils.doToast(getActivity(), String.valueOf(position));
                 Intent intent = new Intent(mContext, PostDetailActivity.class);
 
                 intent.putExtra("post_id", feedItems.get(position).getPost_obj_id());
@@ -199,6 +212,10 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
             String post_content_user_name = "";
             String post_content_user_img_path = "";
 
+            String video_id = "";
+            String post_content_suggest_text = "";
+            String post_content_title_mm = "";
+
             String status = "";
             String created_at = "";
             String updated_at = "";
@@ -216,6 +233,12 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
                     post_content_user_id = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID));
                     post_content_user_name = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_USER_NAME));
                     post_content_user_img_path = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH));
+
+                    video_id = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID));
+                    post_content_suggest_text = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_SUGGEST_TEXT));
+                    post_content_title_mm = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_TITLE_MM));
+
+
                     status = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.STATUS));
                     created_at = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREATED_DATE));
                     updated_at = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.UPDATED_DATE));
@@ -232,6 +255,10 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
                     item.setPost_content_user_id(post_content_user_id);
                     item.setPost_content_user_name(post_content_user_name);
                     item.setPost_content_user_img_path(post_content_user_img_path);
+
+                    item.setPost_content_video_id(video_id);
+                    item.setPost_content_suggest_text(post_content_suggest_text);
+                    item.setPost_title_mm(post_content_title_mm);
                     item.setStatus(status);
                     item.setCreated_at(created_at);
                     item.setUpdated_at(updated_at);
@@ -365,7 +392,7 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
 
     private void SetUserData() {
 
-        Utils.doToast(mContext, "User Save");
+        Utils.doToastEng(mContext, "User Save");
 
         ContentValues cv = new ContentValues();
         cv.put(TableAndColumnsName.UserUtil.USER_OBJ_ID, "U001");
@@ -384,7 +411,7 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
 
     private void SetPostData() {
 
-        Utils.doToast(mContext, "Post Save");
+        Utils.doToastEng(mContext, "Post Save");
 
         ContentValues cv = new ContentValues();
         cv.put(TableAndColumnsName.PostUtil.POST_OBJ_ID, "POO4");
@@ -486,6 +513,30 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
                                             cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
 
                                         }
+                                        if (post.get("videoId") != null) {
+
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID, post.getString("videoId"));
+
+                                        } else {
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID, "");
+
+                                        }
+                                        if (post.get("suggest_section") != null) {
+
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_SUGGEST_TEXT, post.getString("suggest_section"));
+
+                                        } else {
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_SUGGEST_TEXT, "");
+
+                                        }
+                                        if (post.get("titleMm") != null) {
+
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TITLE_MM, post.getString("titleMm"));
+
+                                        } else {
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TITLE_MM, "");
+
+                                        }
 
 
                                         cv.put(TableAndColumnsName.UserUtil.STATUS, "0");
@@ -562,6 +613,39 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
 
                                 }
 
+                                if (post.get("videoId") != null) {
+
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID, post.getString("videoId"));
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID, "");
+
+                                }
+                                if (post.get("videoId") != null) {
+
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID, post.getString("videoId"));
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID, "");
+
+                                }
+                                if (post.get("suggest_section") != null) {
+
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_SUGGEST_TEXT, post.getString("suggest_section"));
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_SUGGEST_TEXT, "");
+
+                                }
+                                if (post.get("titleMm") != null) {
+
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TITLE_MM, post.getString("titleMm"));
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TITLE_MM, "");
+
+                                }
+
                                 cv.put(TableAndColumnsName.UserUtil.STATUS, "0");
                                 cv.put(TableAndColumnsName.UserUtil.CREATED_DATE, post.get("postUploadedDate").toString());// post.get("postUploadedDate").toString() //post.getCreatedAt().toString()
                                 cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, post.get("postUploadedDate").toString());
@@ -585,7 +669,9 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
             }
 
         } else {
-            Utils.doToast(mContext, "Internet Connection need!");
+            //Utils.doToast(mContext, "Internet Connection need!");
+
+            Utils.doToastMM(mContext,getActivity().getResources().getString(R.string.open_internet_warning_mm));
         }
     }
 
@@ -595,7 +681,8 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
         switch (v.getId()) {
             case R.id.post_news:
 
-                startActivity(new Intent(getActivity(), PostNewsActivity.class));
+                //startActivity(new Intent(getActivity(), PostNewsActivity.class));
+                Utils.doToastEng(mContext,"Coming Soon!");
 
                 break;
         }

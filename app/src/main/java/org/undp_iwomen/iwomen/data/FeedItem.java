@@ -15,6 +15,10 @@ public class FeedItem {
 	String post_content_user_name;
 	String post_content_user_img_path ;
 
+	String post_content_video_id;
+	String post_content_suggest_text;
+	String post_title_mm ;
+
 	String status;
 	String created_at ;
 	String updated_at;
@@ -26,6 +30,7 @@ public class FeedItem {
 	public FeedItem(String post_obj_id, String post_title, String post_content, String post_like,
 					String post_img_path, String post_content_type, String post_content_user_id,
 					String post_content_user_name , String post_content_user_img_path ,
+					String post_video_id,String post_suggest_text,String post_title_mm,
 					String status , String created_at , String updated_at) {
 		super();
 		this.post_obj_id = post_obj_id;
@@ -37,6 +42,10 @@ public class FeedItem {
 		this.post_content_user_id = post_content_user_id;
 		this.post_content_user_name = post_content_user_name;
 		this.post_content_user_img_path = post_content_user_img_path;
+
+		this.post_content_video_id = post_video_id;
+		this.post_content_suggest_text = post_suggest_text;
+		this.post_title_mm = post_title_mm;
 		this.status = status;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
@@ -113,6 +122,30 @@ public class FeedItem {
 
 	public void setPost_content_user_img_path(String post_content_user_img_path) {
 		this.post_content_user_img_path = post_content_user_img_path;
+	}
+
+	public String getPost_content_video_id() {
+		return post_content_video_id;
+	}
+
+	public void setPost_content_video_id(String post_content_video_id) {
+		this.post_content_video_id = post_content_video_id;
+	}
+
+	public String getPost_content_suggest_text() {
+		return post_content_suggest_text;
+	}
+
+	public void setPost_content_suggest_text(String post_content_suggest_text) {
+		this.post_content_suggest_text = post_content_suggest_text;
+	}
+
+	public String getPost_title_mm() {
+		return post_title_mm;
+	}
+
+	public void setPost_title_mm(String post_title_mm) {
+		this.post_title_mm = post_title_mm;
 	}
 
 	public String getStatus() {

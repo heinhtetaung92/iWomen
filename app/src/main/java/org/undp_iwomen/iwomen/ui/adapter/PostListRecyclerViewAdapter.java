@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRecyclerViewAdapter.NamesViewHolder>   {
+public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRecyclerViewAdapter.NamesViewHolder> {
 
     private Context mContext;
     private List<FeedItem> feedItems;
@@ -45,16 +45,16 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
     }
     */
 
-    public class NamesViewHolder extends RecyclerView.ViewHolder{
+    public class NamesViewHolder extends RecyclerView.ViewHolder {
         TextView mPostTile;
 
         TextView post_content;
-        TextView post_like ;
-        TextView post_img_path ;
+        TextView post_like;
+        TextView post_img_path;
         TextView post_content_type;
-        TextView post_content_user_id ;
+        TextView post_content_user_id;
         TextView post_content_user_name;
-        TextView post_content_user_img_path ;
+        TextView post_content_user_img_path;
         TextView post_timestamp;
         private ProgressBar feed_item_progressBar;
         private ProgressBar profile_item_progressBar;
@@ -69,11 +69,11 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
 
             post_content_user_name = (TextView) itemView.findViewById(R.id.name);
 
-            post_timestamp = (TextView)itemView.findViewById(R.id.timestamp);
+            post_timestamp = (TextView) itemView.findViewById(R.id.timestamp);
 
             profile = (RoundedImageView) itemView.findViewById(R.id.profilePic_rounded);
-            feed_item_progressBar =(ProgressBar)itemView.findViewById(R.id.feed_item_progressBar);
-            profile_item_progressBar =(ProgressBar)itemView.findViewById(R.id.progressBar_profile_item);
+            feed_item_progressBar = (ProgressBar) itemView.findViewById(R.id.feed_item_progressBar);
+            profile_item_progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar_profile_item);
 
             postIMg = (ResizableImageView) itemView.findViewById(R.id.postImg);
             profilePictureView = (org.undp_iwomen.iwomen.ui.widget.ProfilePictureView) itemView.findViewById(R.id.profilePic);
@@ -101,7 +101,8 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
         viewHolder.profile.setAdjustViewBounds(true);
         viewHolder.profile.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        viewHolder.mPostTile.setText(item.getPost_title());
+        //viewHolder.mPostTile.setText(item.getPost_title());
+        viewHolder.mPostTile.setText(item.getPost_title_mm());
         viewHolder.post_content.setText(item.getPost_content());
         viewHolder.post_content_user_name.setText(item.getPost_content_user_name());
 
@@ -110,7 +111,7 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
 
 
         try {
-            Date timedate  = sdf.parse(item.getCreated_at());
+            Date timedate = sdf.parse(item.getCreated_at());
             viewHolder.post_timestamp.setText(sdf.format(timedate));
 
         } catch (ParseException e) {
@@ -144,7 +145,7 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
         }
 
         // Feed image
-        if (item.getPost_img_path() != null  && !item.getPost_img_path().isEmpty() ) {
+        if (item.getPost_img_path() != null && !item.getPost_img_path().isEmpty()) {
             try {
                 viewHolder.postIMg.setVisibility(View.VISIBLE);
                 viewHolder.feed_item_progressBar.setVisibility(View.VISIBLE);
@@ -202,6 +203,7 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
     public int getItemCount() {
         return feedItems.size();
     }
+
     private class ImageLoadedCallback implements com.squareup.picasso.Callback {
         ProgressBar progressBar;
 
@@ -228,8 +230,7 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
             feedItems.addAll(arraylist);
         } else {
             for (FeedItem fi : arraylist) {
-                if (fi.getPost_title().toLowerCase(Locale.getDefault())
-                        .contains(charText)) {
+                if (fi.getPost_title().toLowerCase(Locale.getDefault()).contains(charText) ||fi.getPost_title_mm().toLowerCase(Locale.getDefault()).contains(charText) ) {
                     feedItems.add(fi);
                 }
             }

@@ -32,6 +32,6 @@
     <Button
         android:id="@+id/parse_signup_button"
         style="@style/ParseLoginUI.Button.SignUp"
-        android:text="@string/com_parse_ui_parse_signup_button_label"/>
+        android:text="@string/com_parse_ui_parse_signup_button_label_mm"/>
 
 </LinearLayout>

@@ -1,7 +1,11 @@
 package org.undp_iwomen.iwomen.utils;
 
 import android.content.Context;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.undp_iwomen.iwomen.model.MyTypeFace;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -35,8 +39,17 @@ public class Utils {
         }
         catch(Exception ex){}
     }
-    public static void doToast(Context context, String toast){
+    public static void doToastEng(Context context, String toast){
         Toast.makeText(context, toast, Toast.LENGTH_SHORT).show();
+    }
+    public static void doToastMM(Context context, String toast){
+        //Toast.makeText(context, toast, Toast.LENGTH_SHORT).show();
+        Toast toast_mm = Toast.makeText(context, toast, Toast.LENGTH_LONG);
+        LinearLayout toastLayout = (LinearLayout) toast_mm.getView();
+        TextView toastTV = (TextView) toastLayout.getChildAt(0);
+        toastTV.setTextSize(15);
+        toastTV.setTypeface(MyTypeFace.get(context, MyTypeFace.ZAWGYI));
+        toast_mm.show();
     }
 
 }

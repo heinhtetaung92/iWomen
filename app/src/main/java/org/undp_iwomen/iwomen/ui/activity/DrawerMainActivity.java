@@ -1,6 +1,7 @@
 package org.undp_iwomen.iwomen.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -28,8 +29,10 @@ import com.parse.ui.ParseLoginBuilder;
 
 import org.undp_iwomen.iwomen.CommonConfig;
 import org.undp_iwomen.iwomen.R;
+import org.undp_iwomen.iwomen.model.MyTypeFace;
 import org.undp_iwomen.iwomen.ui.adapter.DrawerListViewAdapter;
 import org.undp_iwomen.iwomen.ui.fragment.ResourcesFragment;
+import org.undp_iwomen.iwomen.ui.fragment.SettingsFragment;
 import org.undp_iwomen.iwomen.ui.fragment.StoriesFragment;
 
 import java.security.MessageDigest;
@@ -90,7 +93,7 @@ public class DrawerMainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //toolbar.setLogo(R.drawable.ic_action_myanmadeals_app_icon);
         textViewTitle = (TextView) toolbar.findViewById(R.id.title_action2);
-
+        textViewTitle.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
         //textViewTitle.setText("Myanma\u0020Deals");//"MYANMARDEALS"
         textViewTitle.setText(R.string.app_name);
         //textViewTitle.setTypeface(faceBold);
@@ -139,7 +142,10 @@ public class DrawerMainActivity extends AppCompatActivity {
             // User clicked to log out.
             //showProfileLoggedOut();
             if (savedInstanceState == null) {
+
                 selectItem(0);
+                drawerLayoutt.openDrawer(mDrawerLinearLayout);
+
 
                 if (!mSharedPreferencesUserInfo.getBoolean(CommonConfig.IS_LOGIN, false)) {
 
@@ -196,11 +202,15 @@ public class DrawerMainActivity extends AppCompatActivity {
 
     public void LoadDrawerCustomData() {
 
-        DrawerListName = new String[]
-                {"Stories", "Community", "Resources", "News", "Setting"};
-        DrawerListIcon = new int[]
-                {R.drawable.ic_stories, R.drawable.ic_community, R.drawable.ic_resources, R.drawable.ic_news, R.drawable.ic_setting};
+        /*DrawerListName = new String[]
+                {"Stories",  "Resources", "Setting","AboutUs"};*/
 
+        DrawerListName = new String[]
+                {"စာလ\u103Cာမ\u103Aား",  "နည္းလမ္းမ\u103Aား", "\u107Fပင္ဆင္ရန္","က\u103C\u103A\u108Fုုပ္တိုု ့အေ\u107Eကာင္း"};
+        DrawerListIcon = new int[]
+                {R.drawable.ic_stories, R.drawable.ic_resources, R.drawable.ic_setting,R.drawable.about_us};
+
+        // R.drawable.ic_community, R.drawable.ic_news
 
         DrawerListViewAdapter drawer_adapter = new DrawerListViewAdapter(getApplicationContext(), DrawerListName, DrawerListIcon);//mCategoriesTitles
                     /*mDrawerList.setAdapter(new ArrayAdapter<String>(this,
@@ -259,6 +269,7 @@ public class DrawerMainActivity extends AppCompatActivity {
 
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 
+        SettingsFragment settingsFragment = new SettingsFragment();
 
         switch (position) {
             case 0://Categories 1
@@ -270,17 +281,22 @@ public class DrawerMainActivity extends AppCompatActivity {
                 setTitle(DrawerListName[position]);
                 break;
             case 2:
-                fragmentManager.beginTransaction().replace(R.id.content_frame, resourcesFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.content_frame, settingsFragment).commit();
 
                 //materialTab.setRetainInstance(true);
 
                 setTitle(DrawerListName[position]);
+                break;
+            case 3:
+                Intent intent = new Intent(this, AboutUsmmActivity.class);
+                startActivity(intent);
                 break;
         }
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
 
+        //TODO close drawer
         drawerLayoutt.closeDrawer(mDrawerLinearLayout);
     }
 

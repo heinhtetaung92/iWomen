@@ -21,26 +21,63 @@
             android:id="@+id/facebook_login"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_gravity="center"
+            android:layout_gravity="center_horizontal"
             android:textColor="#fff"
             android:textSize="12sp"
             android:textStyle="bold"
             />
 
+
+
+            <org.undp_iwomen.iwomen.ui.widget.ProfilePictureView
+                android:id="@+id/register_profilePic"
+                android:layout_width="@dimen/feed_item_profile_pic"
+                android:layout_height="@dimen/feed_item_profile_pic"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:scaleType="fitCenter"
+
+                android:src="@drawable/bonsai"
+                android:visibility="gone"></org.undp_iwomen.iwomen.ui.widget.ProfilePictureView>
+
+
     </FrameLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/register_ly"
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/facebook_login_container">
+        <org.undp_iwomen.iwomen.ui.widget.ResizableImageView
+            android:id="@+id/register_profilePic_resizable"
+            android:layout_width="@dimen/feed_item_profile_pic"
+            android:layout_height="@dimen/feed_item_profile_pic"
+            android:scaleType="fitCenter"
+            android:layout_marginBottom="@dimen/abc_list_item_padding_horizontal_material"
+            android:layout_marginTop="@dimen/abc_list_item_padding_horizontal_material"
+            android:gravity="center"
+            android:src="@drawable/camera_icon"
+            android:visibility="visible"
+            ></org.undp_iwomen.iwomen.ui.widget.ResizableImageView>
+    </LinearLayout>
+
+
 
     <TextView
         android:id="@+id/or_textview"
         style="@style/Caption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/facebook_login_container"
+        android:layout_below="@+id/register_ly"
         android:layout_marginBottom="@dimen/abc_list_item_padding_horizontal_material"
         android:layout_marginTop="@dimen/abc_list_item_padding_horizontal_material"
         android:gravity="center"
-        android:text="OR"
+        android:text="Image Upload"
         android:textColor="@color/body_text_3"
-        android:visibility="invisible"/>
+        android:visibility="visible"
+        android:textSize="15sp" />
 
     <ScrollView
         android:id="@+id/input_container"
@@ -66,7 +103,7 @@
                     android:id="@+id/signup_username_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Your Name"
+                    android:hint="@string/com_parse_ui_username_input_hint_mm"
                     android:inputType="textCapWords"
                     android:nextFocusDown="@+id/signup_email_input"
                     android:nextFocusForward="@+id/signup_email_input"/>
@@ -83,7 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
-                    android:hint="@string/com_parse_ui_password_input_hint"
+                    android:hint="@string/com_parse_ui_password_input_hint_mm"
                     android:inputType="textPassword"
                     android:nextFocusDown="@+id/signup_confirm_password_input"
                     android:nextFocusForward="@+id/signup_confirm_password_input"
@@ -101,7 +138,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
-                    android:hint="@string/com_parse_ui_confirm_password_input_hint"
+                    android:hint="@string/com_parse_ui_confirm_password_input_hint_mm"
                     android:inputType="textPassword"
                     android:nextFocusDown="@+id/signup_ph_input"
                     android:nextFocusForward="@+id/signup_ph_input"
@@ -119,7 +156,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/abc_edit_text_material"
-                    android:hint="Mobile Number"
+                    android:hint="@string/com_parse_ui_ph_input_hint_mm"
                     android:inputType="phone"
                     android:selectAllOnFocus="true"
                     android:text=" "/>
@@ -141,7 +178,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:text="@string/i_agree"/>
+                    android:text="@string/i_agree_mm"/>
 
             </LinearLayout>
 
@@ -181,7 +218,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:text="@string/com_parse_ui_create_account_button_label"
+                android:text="@string/com_parse_ui_create_account_button_label_mm"
                 android:textSize="20dp" />
         </LinearLayout>
 
@@ -198,7 +235,8 @@
                 android:layout_gravity="left"
                 android:layout_marginLeft="20dp"
                 android:enabled="false"
-                android:text="@string/com_parse_ui_edit_account_button_label"
+                android:text="@string/com_parse_ui_edit_account_button_label_mm"
+
                 android:textSize="20dp" />
         </LinearLayout>
 

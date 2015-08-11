@@ -11,4 +11,25 @@
     <string name="title_activity_post_detail">PostDetailActivity</string>
     <string name="title_activity_post_news">PostNewsActivity</string>
 
+    <string name="open_internet_warning">Please Open Internet Connection.</string>
+    <string name="open_internet_warning_mm">အင္တာနက္ ခ်ိတ္ဆက္မွုုဖြင္ ့ရန္လိုုအပ္ပါသည္။</string>
+
+
+    <string name="about_us_mm">ကြ်ႏုုပ္တိုု ့အေၾကာင္း</string>
+    <string name="about_us_eng">About</string>
+
+    <string name="leadership_mm">ေခါင္းေဆာင္မႈသင္ခန္းစာမ်ား</string>
+    <string name="leadership_eng">About</string>
+
+    <string name="com_parse_ui_username_input_hint_mm">အမည္</string>
+    <string name="com_parse_ui_password_input_hint_mm">လွ်ိဳ ့၀ွက္ စာလံုုး</string>
+    <string name="com_parse_ui_confirm_password_input_hint_mm">လွ်ိဳ ့၀ွက္ စာလံုုးေနာက္တစ္ၾကိမ္ၿပန္ရိုုက္ပါ</string>
+    <string name="com_parse_ui_parse_login_button_label_mm">၀င္ရန္</string>
+    <string name="com_parse_ui_parse_signup_button_label_mm">အေကာင့္ အသစ္ၿပဳလုုပ္ရန္</string>
+
+    <string name="com_parse_ui_forgot_password_button_mm"><u>လွ်ိဳ ့၀ွက္ စာလံုုးေမ ့ေနပါသလား</u></string>
+    <string name="com_parse_ui_ph_input_hint_mm">ဖုုန္းနံပါတ္</string>
+    <string name="com_parse_ui_create_account_button_label_mm">၀င္မည္</string>
+    <string name="com_parse_ui_edit_account_button_label_mm">ၿပင္ဆင္မည္</string>
+    <string name="i_agree_mm">မွတ္ပံုုတင္အခ်က္ အလက္မ်ားကိုုသေဘာတူပါသည္ <a href="http://gobus.asia/terms-and-conditions/"></a></string>
 </resources>

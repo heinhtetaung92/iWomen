@@ -2,9 +2,26 @@
 
     <string name="com_parse_ui_logo_content_description">Logo</string>
     <string name="com_parse_ui_progress_dialog_text">Loading...</string>
+
+    <string name="com_parse_ui_username_input_hint_mm">အမည္</string>
+    <string name="com_parse_ui_password_input_hint_mm">လွ်ိဳ ့၀ွက္ စာလံုုး</string>
+    <string name="com_parse_ui_parse_login_button_label_mm">၀င္ရန္</string>
+    <string name="com_parse_ui_parse_signup_button_label_mm">အေကာင့္ အသစ္ၿပဳလုုပ္ရန္</string>
+    <string name="com_parse_ui_confirm_password_input_hint_mm">လွ်ိဳ ့၀ွက္ စာလံုုးေနာက္တစ္ၾကိမ္ၿပန္ရိုုက္ပါ</string>
+
+    <string name="com_parse_ui_forgot_password_button_mm"><u>လွ်ိဳ ့၀ွက္ စာလံုုးေမ ့ေနပါသလား</u></string>
+    <string name="com_parse_ui_ph_input_hint_mm">ဖုုန္းနံပါတ္</string>
+    <string name="com_parse_ui_create_account_button_label_mm">၀င္မည္</string>
+    <string name="com_parse_ui_edit_account_button_label_mm">ၿပင္ဆင္မည္</string>
+
     <string name="com_parse_ui_username_input_hint">Username</string>
     <string name="com_parse_ui_password_input_hint">Password</string>
     <string name="com_parse_ui_forgot_password_button_label"><u>Forgot password</u></string>
+
+
+
+    
+
     <string name="com_parse_ui_parse_login_button_label">LOG IN</string>
     <string name="com_parse_ui_parse_signup_button_label">CREATE ACCOUNT</string>
     <string name="com_parse_ui_facebook_login_button_label">Log in with Facebook</string>
@@ -14,6 +31,8 @@
     <string name="com_parse_ui_name_input_hint">Name</string>
     <string name="com_parse_ui_create_account_button_label">Create account</string>
     <string name="com_parse_ui_edit_account_button_label">Edit account</string>
+    <string name="com_parse_ui_ph_input_hint">Phone</string>
+
 
     <string name="com_parse_ui_no_username_toast">Please enter your username</string>
     <string name="com_parse_ui_no_password_toast">Please enter your password</string>
@@ -88,5 +107,6 @@
     <string name="com_parse_ui_login_dispatch_user_not_logged_in">User not logged in, starting ParseLoginActivity</string>
 
     <string name="i_agree">I agree to all the <a href="http://gobus.asia/terms-and-conditions/">Terms and Conditions</a></string>
+    <string name="i_agree_mm">မွတ္ပံုုတင္အခ်က္ အလက္မ်ားကိုုသေဘာတူပါသည္ <a href="http://gobus.asia/terms-and-conditions/"></a></string>
 
 </resources>
