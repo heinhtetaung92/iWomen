@@ -5,15 +5,31 @@
     <string name="parse_app_id">WyU802fB70eNhyF9uSoj1SgKVKGLYYAZ0kX96xhr</string>
     <string name="parse_client_key">qnaqxGzfOLEgFAWXUTUJpTkgbOgn3CVxTqtTD6pn</string>
     <string name="hello_world">Hello world!</string>
+
+
     <string name="action_settings">Settings</string>
+    <string name="action_settings_mm">ၿပင္ဆင္မည္</string>
+    <string name="title_action_settings_eng">Language Settings</string>
+    <string name="title_action_settings_mm">ဘာသာ စကားေၿပာင္းရန္</string>
+    <string name="title_notrification_eng">Get Notrification</string>
+    <string name="title_notrification_mm">အသိေပးအေၾကာင္းၾကားစာလက္ခံရန္</string>
+
+    <string name="title_change_theme_eng">Change Theme</string>
+    <string name="title_change_theme_mm">အေရာင္ေၿပာင္းလဲရန္</string>
+
+
     <string name="login_fb_appid">909633732437583</string>
     <string name="action_refresh">Refresh</string>
     <string name="title_activity_post_detail">PostDetailActivity</string>
-    <string name="title_activity_post_news">PostNewsActivity</string>
+    <string name="title_activity_about_us_eng">Abous Us</string>
+    <string name="title_activity_about_us_mm">ကြ်ႏုုပ္တိုု ့အေၾကာင္း</string>
+    <string name="title_activity_post_news">News</string>
 
     <string name="open_internet_warning">Please Open Internet Connection.</string>
     <string name="open_internet_warning_mm">အင္တာနက္ ခ်ိတ္ဆက္မွုုဖြင္ ့ရန္လိုုအပ္ပါသည္။</string>
 
+    <string name="loading_mm">ခဏေစာင့္ပါ ….</string>
+    <string name="loading_eng">Loading...</string>
 
     <string name="about_us_mm">ကြ်ႏုုပ္တိုု ့အေၾကာင္း</string>
     <string name="about_us_eng">About</string>

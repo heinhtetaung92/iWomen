@@ -1,98 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    android:paddingTop="@dimen/keyline_1_plus_8dp"
-    >
-
-    <FrameLayout
-        android:id="@+id/facebook_login_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/keyline_2_minus_16dp"
-        android:layout_marginRight="@dimen/keyline_2_minus_16dp">
-
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/facebook_login"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:textColor="#fff"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            />
+    android:paddingTop="@dimen/keyline_1_plus_8dp">
 
 
-
-            <org.undp_iwomen.iwomen.ui.widget.ProfilePictureView
-                android:id="@+id/register_profilePic"
-                android:layout_width="@dimen/feed_item_profile_pic"
-                android:layout_height="@dimen/feed_item_profile_pic"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:scaleType="fitCenter"
-
-                android:src="@drawable/bonsai"
-                android:visibility="gone"></org.undp_iwomen.iwomen.ui.widget.ProfilePictureView>
-
-
-    </FrameLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:id="@+id/register_ly"
-        android:layout_width="match_parent"
-        android:gravity="center_horizontal"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/facebook_login_container">
-        <org.undp_iwomen.iwomen.ui.widget.ResizableImageView
-            android:id="@+id/register_profilePic_resizable"
-            android:layout_width="@dimen/feed_item_profile_pic"
-            android:layout_height="@dimen/feed_item_profile_pic"
-            android:scaleType="fitCenter"
-            android:layout_marginBottom="@dimen/abc_list_item_padding_horizontal_material"
-            android:layout_marginTop="@dimen/abc_list_item_padding_horizontal_material"
-            android:gravity="center"
-            android:src="@drawable/camera_icon"
-            android:visibility="visible"
-            ></org.undp_iwomen.iwomen.ui.widget.ResizableImageView>
-    </LinearLayout>
-
-
-
-    <TextView
-        android:id="@+id/or_textview"
-        style="@style/Caption"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/register_ly"
-        android:layout_marginBottom="@dimen/abc_list_item_padding_horizontal_material"
-        android:layout_marginTop="@dimen/abc_list_item_padding_horizontal_material"
-        android:gravity="center"
-        android:text="Image Upload"
-        android:textColor="@color/body_text_3"
-        android:visibility="visible"
-        android:textSize="15sp" />
 
     <ScrollView
         android:id="@+id/input_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/separator"
-        android:layout_below="@+id/or_textview"
         android:fillViewport="true"
         android:paddingLeft="@dimen/keyline_1"
         android:paddingRight="@dimen/keyline_1">
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <FrameLayout
+                android:id="@+id/facebook_login_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/keyline_2_minus_16dp"
+                android:layout_marginRight="@dimen/keyline_2_minus_16dp">
+
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/facebook_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="#fff"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+
+                <org.undp_iwomen.iwomen.ui.widget.ProfilePictureView
+                    android:id="@+id/register_profilePic"
+                    android:layout_width="@dimen/feed_item_profile_pic"
+                    android:layout_height="@dimen/feed_item_profile_pic"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:scaleType="fitCenter"
+
+                    android:src="@drawable/bonsai"
+                    android:visibility="gone"></org.undp_iwomen.iwomen.ui.widget.ProfilePictureView>
+
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/register_ly"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/facebook_login_container"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+                <!--<org.undp_iwomen.iwomen.ui.widget.ResizableImageView
+                    android:id="@+id/register_profilePic_resizable"
+                    android:layout_width="@dimen/feed_item_profile_pic"
+                    android:layout_height="@dimen/feed_item_profile_pic"
+                    android:scaleType="fitCenter"
+                    android:layout_marginBottom="@dimen/abc_list_item_padding_horizontal_material"
+                    android:layout_marginTop="@dimen/abc_list_item_padding_horizontal_material"
+                    android:gravity="center"
+                    android:src="@drawable/camera_icon"
+                    android:visibility="visible"
+                    ></org.undp_iwomen.iwomen.ui.widget.ResizableImageView>-->
+                <com.makeramen.RoundedImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/register_profilePic_rounded"
+                    android:layout_width="@dimen/feed_item_profile_pic"
+                    android:layout_height="@dimen/feed_item_profile_pic"
+                    android:layout_marginTop="30dp"
+
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/camera_icon"
+                    android:visibility="visible"
+                    app:riv_border_color="#333333"
+                    app:riv_border_width="0dip"
+                    app:riv_corner_radius="30dip"
+                    app:riv_mutate_background="true"
+                    app:riv_oval="true"></com.makeramen.RoundedImageView>
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/register_img_upload_textview"
+                style="@style/Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/register_ly"
+                android:layout_marginBottom="@dimen/abc_list_item_padding_horizontal_material"
+                android:layout_marginTop="@dimen/abc_list_item_padding_horizontal_material"
+                android:gravity="center"
+                android:text="Image Upload"
+                android:textColor="@color/body_text_3"
+                android:textSize="15sp"
+                android:visibility="visible" />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_signup_user_name"
@@ -103,10 +117,9 @@
                     android:id="@+id/signup_username_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/com_parse_ui_username_input_hint_mm"
                     android:inputType="textCapWords"
                     android:nextFocusDown="@+id/signup_email_input"
-                    android:nextFocusForward="@+id/signup_email_input"/>
+                    android:nextFocusForward="@+id/signup_email_input" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -120,11 +133,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
-                    android:hint="@string/com_parse_ui_password_input_hint_mm"
                     android:inputType="textPassword"
                     android:nextFocusDown="@+id/signup_confirm_password_input"
                     android:nextFocusForward="@+id/signup_confirm_password_input"
-                    android:selectAllOnFocus="true"/>
+                    android:selectAllOnFocus="true" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -138,11 +150,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
-                    android:hint="@string/com_parse_ui_confirm_password_input_hint_mm"
                     android:inputType="textPassword"
                     android:nextFocusDown="@+id/signup_ph_input"
                     android:nextFocusForward="@+id/signup_ph_input"
-                    android:selectAllOnFocus="true"/>
+                    android:selectAllOnFocus="true" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -156,10 +167,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/abc_edit_text_material"
-                    android:hint="@string/com_parse_ui_ph_input_hint_mm"
                     android:inputType="phone"
                     android:selectAllOnFocus="true"
-                    android:text=" "/>
+                    android:text=" " />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -171,20 +181,20 @@
                 <CheckBox
                     android:id="@+id/i_agree_checkbox"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/terms_and_conditions_textview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:text="@string/i_agree_mm"/>
+                    android:text="@string/i_agree_mm" />
 
             </LinearLayout>
 
             <android.support.v4.widget.Space
                 android:layout_width="match_parent"
-                android:layout_height="48dp"/>
+                android:layout_height="48dp" />
 
         </LinearLayout>
     </ScrollView>
@@ -194,8 +204,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_above="@+id/bottom_bar"
-        android:background="#e0e0e0"
-        />
+        android:background="#e0e0e0" />
 
     <LinearLayout
         android:id="@+id/bottom_bar"
@@ -204,9 +213,9 @@
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
-        >
+        android:paddingBottom="20dp"
+        android:paddingTop="40dp">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -228,12 +237,12 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/register_edit_account"
                 style="@style/ParseLoginUI.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="16dp"
                 android:enabled="false"
                 android:text="@string/com_parse_ui_edit_account_button_label_mm"
 

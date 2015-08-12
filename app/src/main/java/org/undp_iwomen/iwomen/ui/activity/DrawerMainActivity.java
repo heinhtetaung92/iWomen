@@ -22,10 +22,12 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.parse.ParseUser;
 import com.parse.ui.ParseLoginBuilder;
+import com.parse.utils.Utils;
 
 import org.undp_iwomen.iwomen.CommonConfig;
 import org.undp_iwomen.iwomen.R;
@@ -54,7 +56,7 @@ public class DrawerMainActivity extends AppCompatActivity {
     private String[] DrawerListName;
     private int[] DrawerListIcon;
     private CharSequence mTitle;
-    private TextView textViewTitle;
+    public TextView textViewTitle;
     private TextView txt_user_name;
 
     private static final int LOGIN_REQUEST = 0;
@@ -63,6 +65,10 @@ public class DrawerMainActivity extends AppCompatActivity {
     private SharedPreferences mSharedPreferencesUserInfo;
     private SharedPreferences.Editor mEditorUserInfo;
     private String user_name, user_obj_id, user_ph;
+    SharedPreferences sharePrefLanguageUtil;
+    String mstr_lang;
+    Runnable run;
+    DrawerListViewAdapter drawer_adapter;
 
     @Override
     protected void onStart() {
@@ -85,7 +91,6 @@ public class DrawerMainActivity extends AppCompatActivity {
 
         setContentView(R.layout.main_drawer_material);
 
-
         //getFacebookHashKey();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
@@ -107,8 +112,7 @@ public class DrawerMainActivity extends AppCompatActivity {
 
         // set a custom shadow that overlays the main content when the drawer opens
         drawerLayoutt.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        // set up the drawer's list view with items and click listener
-        LoadDrawerCustomData();
+
 
 
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayoutt, toolbar, R.string.app_name, R.string.app_name);
@@ -119,8 +123,10 @@ public class DrawerMainActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
 
+        // set up the drawer's list view with items and click listener
         mSharedPreferencesUserInfo = getSharedPreferences(CommonConfig.SHARE_PREFERENCE_USER_INFO, Context.MODE_PRIVATE);
 
+        sharePrefLanguageUtil = getSharedPreferences(Utils.PREF_SETTING, Context.MODE_PRIVATE);
 
 
        /* if (user_obj_id == null) {
@@ -138,13 +144,14 @@ public class DrawerMainActivity extends AppCompatActivity {
 
          currentUser = ParseUser.getCurrentUser();
 
+
+
         if (currentUser != null) {
             // User clicked to log out.
             //showProfileLoggedOut();
             if (savedInstanceState == null) {
 
-                selectItem(0);
-                drawerLayoutt.openDrawer(mDrawerLinearLayout);
+
 
 
                 if (!mSharedPreferencesUserInfo.getBoolean(CommonConfig.IS_LOGIN, false)) {
@@ -153,6 +160,7 @@ public class DrawerMainActivity extends AppCompatActivity {
                     String objectId = bundle.getString(CommonConfig.USER_OBJ_ID);
                     String userName = bundle.getString(CommonConfig.USER_NAME);
                     String userPH = bundle.getString(CommonConfig.USER_PH);
+                    String lang = bundle.getString(Utils.PREF_SETTING_LANG);
 
 
                     if (objectId.length() != 0) {
@@ -160,6 +168,9 @@ public class DrawerMainActivity extends AppCompatActivity {
                         mEditorUserInfo.putBoolean(CommonConfig.IS_LOGIN, true);
                         mEditorUserInfo.putString(CommonConfig.USER_OBJ_ID, objectId);
                         mEditorUserInfo.putString(CommonConfig.USER_NAME, userName);
+
+                        SharedPreferences.Editor editor = sharePrefLanguageUtil.edit();
+                        editor.putString(Utils.PREF_SETTING_LANG, lang);
 
                 /*if(userNrc != null) {
                     mEditorUserInfo.putString(CommonConfig.USER_NRC, userNrc);
@@ -175,16 +186,22 @@ public class DrawerMainActivity extends AppCompatActivity {
                     user_obj_id = mSharedPreferencesUserInfo.getString(CommonConfig.USER_OBJ_ID, null);
 
                     txt_user_name.setText(user_name);
-                    //Toast.makeText(this, "You are login as at Payment \n " + objectId + "\n" + userName + userEmail, Toast.LENGTH_LONG).show();
-                    Log.e("==== > user Info parse", objectId + "Parse :" + userName + ":session >>" + user_obj_id);
+                    Toast.makeText(this, "You are login as at First \n " + lang, Toast.LENGTH_LONG).show();
+                    Log.e("==== > user Info parse", objectId + "Parse :" + userName + ":Language >>" + lang);
                 } else {
                     user_name = mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null);
                     user_obj_id = mSharedPreferencesUserInfo.getString(CommonConfig.USER_OBJ_ID, null);
-                    //Toast.makeText(this, "2ndTime(PaymentActivity) You are login as \n " + mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null) + "\n" + mSharedPreferencesUserInfo.getString(CommonConfig.USER_OBJ_ID, null), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "2ndTime(PaymentActivity) You are login as \n " + mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null) + "\n" + sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG), Toast.LENGTH_LONG).show();
 
 
                     txt_user_name.setText(user_name);
                 }
+
+                mstr_lang =sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
+
+                LoadDrawerCustomData();
+                selectItem(0);
+                drawerLayoutt.openDrawer(mDrawerLinearLayout);
 
             }
         } else {
@@ -198,6 +215,23 @@ public class DrawerMainActivity extends AppCompatActivity {
         }
 
 
+
+        run = new Runnable() {
+            @Override
+            public void run() {
+
+
+                //queryToBooking();
+
+                drawer_adapter.notifyDataSetChanged();
+                mDrawerList.invalidateViews();
+                mDrawerList.refreshDrawableState();
+
+                //Log.e("Load Adapter===","==runRunnable=" );
+            }
+        };
+
+
     }
 
     public void LoadDrawerCustomData() {
@@ -205,20 +239,42 @@ public class DrawerMainActivity extends AppCompatActivity {
         /*DrawerListName = new String[]
                 {"Stories",  "Resources", "Setting","AboutUs"};*/
 
-        DrawerListName = new String[]
-                {"စာလ\u103Cာမ\u103Aား",  "နည္းလမ္းမ\u103Aား", "\u107Fပင္ဆင္ရန္","က\u103C\u103A\u108Fုုပ္တိုု ့အေ\u107Eကာင္း"};
-        DrawerListIcon = new int[]
-                {R.drawable.ic_stories, R.drawable.ic_resources, R.drawable.ic_setting,R.drawable.about_us};
+        if(mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)){
+            DrawerListName = new String[]
+                    {"Stories",  "Resources", "Setting","AboutUs"};
 
-        // R.drawable.ic_community, R.drawable.ic_news
+            DrawerListIcon = new int[]
+                    {R.drawable.ic_stories, R.drawable.ic_resources, R.drawable.ic_setting,R.drawable.about_us};
 
-        DrawerListViewAdapter drawer_adapter = new DrawerListViewAdapter(getApplicationContext(), DrawerListName, DrawerListIcon);//mCategoriesTitles
+            // R.drawable.ic_community, R.drawable.ic_news
+
+            drawer_adapter = new DrawerListViewAdapter(getApplicationContext(), DrawerListName, DrawerListIcon,mstr_lang);//mCategoriesTitles
                     /*mDrawerList.setAdapter(new ArrayAdapter<String>(this,
                     R.layout.drawer_list_item, mPlanetTitles));*/
-        drawer_adapter.notifyDataSetChanged();
-        mDrawerList.setAdapter(drawer_adapter);
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        setListViewHeightBasedOnChildren(mDrawerList);
+            drawer_adapter.notifyDataSetChanged();
+            mDrawerList.setAdapter(drawer_adapter);
+            mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+            setListViewHeightBasedOnChildren(mDrawerList);
+        }
+        else if(mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG)){
+            DrawerListName = new String[]
+                    {"စာလ\u103Cာမ\u103Aား",  "နည္းလမ္းမ\u103Aား", "\u107Fပင္ဆင္ရန္","က\u103C\u103A\u108Fုုပ္တိုု ့အေ\u107Eကာင္း"};
+
+            DrawerListIcon = new int[]
+                    {R.drawable.ic_stories, R.drawable.ic_resources, R.drawable.ic_setting,R.drawable.about_us};
+
+            // R.drawable.ic_community, R.drawable.ic_news
+
+            drawer_adapter = new DrawerListViewAdapter(getApplicationContext(), DrawerListName, DrawerListIcon,mstr_lang);//mCategoriesTitles
+                    /*mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                    R.layout.drawer_list_item, mPlanetTitles));*/
+            drawer_adapter.notifyDataSetChanged();
+            mDrawerList.setAdapter(drawer_adapter);
+            mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+            setListViewHeightBasedOnChildren(mDrawerList);
+        }
+
+
 
     }
 
@@ -281,15 +337,17 @@ public class DrawerMainActivity extends AppCompatActivity {
                 setTitle(DrawerListName[position]);
                 break;
             case 2:
-                fragmentManager.beginTransaction().replace(R.id.content_frame, settingsFragment).commit();
 
-                //materialTab.setRetainInstance(true);
+                Intent intent = new Intent(this, SettingActivity.class);
+                startActivity(intent);
+                //fragmentManager.beginTransaction().replace(R.id.content_frame, settingsFragment).commit();
+
 
                 setTitle(DrawerListName[position]);
                 break;
             case 3:
-                Intent intent = new Intent(this, AboutUsmmActivity.class);
-                startActivity(intent);
+                Intent intent2 = new Intent(this, AboutUsWebActivity.class);
+                startActivity(intent2);
                 break;
         }
 

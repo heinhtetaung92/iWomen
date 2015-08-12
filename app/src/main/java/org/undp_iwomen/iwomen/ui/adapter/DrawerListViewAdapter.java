@@ -1,6 +1,8 @@
 package org.undp_iwomen.iwomen.ui.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,14 +10,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.undp_iwomen.iwomen.CommonConfig;
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
 
 /**
  * Created by khinsandar on 7/29/15.
  */
-public class DrawerListViewAdapter extends BaseAdapter
-{
+public class DrawerListViewAdapter extends BaseAdapter {
     private String[] listName = null;
     private int[] listicon = null;
 
@@ -24,13 +26,19 @@ public class DrawerListViewAdapter extends BaseAdapter
     // Declare Variables
     Context mContext;
     LayoutInflater inflater;
-    public DrawerListViewAdapter(Context context, String[] listName , int[] listic) { //
+    SharedPreferences sharePrefLanguageUtil;
+    String mstr_lang;
+
+    public DrawerListViewAdapter(Context context, String[] listName, int[] listic, String typefaceName) { //
         super();
         mContext = context;
         inflater = LayoutInflater.from(mContext);
         //Log.e("BrowseGridviewAdapter Constructor", "" + listCountry.size() +listCountry.toString());
         this.listName = listName;
         this.listicon = listic;
+        sharePrefLanguageUtil = mContext.getSharedPreferences(CommonConfig.SHARE_PREFERENCE_USER_INFO, Context.MODE_PRIVATE);
+        mstr_lang = typefaceName;
+
         //Log.e("BrowseGridviewAdapter Constructor", "" + listShopName.size() +listShopName.toString());
         //this.activity = activity;
     }
@@ -53,8 +61,7 @@ public class DrawerListViewAdapter extends BaseAdapter
         return 0;
     }
 
-    public static class ViewHolder
-    {
+    public static class ViewHolder {
 
         public TextView txtName;
         public ImageView imgIcon;
@@ -68,24 +75,29 @@ public class DrawerListViewAdapter extends BaseAdapter
 
         //LayoutInflater inflator = activity.getLayoutInflater();
 
-        if(view ==null)
-        {
+        if (view == null) {
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.drawer_list_item, null);//gridview_row //fra_browse_gridview_item
-            holder.txtName= (TextView)view.findViewById(R.id.txt_item_name);
+            holder.txtName = (TextView) view.findViewById(R.id.txt_item_name);
             holder.imgIcon = (ImageView) view.findViewById(R.id.icon);
 
 
             view.setTag(holder);
-        }
-        else
-        {
+        } else {
             //holder = (ViewHolder) view.getTag();
             holder = (ViewHolder) view.getTag();
         }
 
         holder.txtName.setText(listName[position]);
-        holder.txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+
+
+        if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)) {
+            holder.txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
+
+        } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG)) {
+            holder.txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+
+        }
 
 
         holder.imgIcon.setImageResource(listicon[position]);

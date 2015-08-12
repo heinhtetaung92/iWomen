@@ -22,7 +22,9 @@
 package com.parse.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
@@ -35,6 +37,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,9 +50,12 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.makeramen.RoundedImageView;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+import com.parse.model.MyTypeFace;
+import com.parse.utils.Utils;
 import com.parse.utils.ValidatorUtils;
 
 import org.json.JSONObject;
@@ -81,6 +87,7 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
     private EditText nrcNoField;
     private EditText passportFiled;*/
     private Button createAccountButton;
+    private Button editAccountButton;
     private ParseOnLoginSuccessListener onLoginSuccessListener;
 
     private TextInputLayout mUserNameTextInputLayout;
@@ -105,6 +112,7 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
      * *******My Update Code***********
      */
     private LoginButton btnLoginWithFacebook;
+    private RoundedImageView profile_rounded;
     private Button btnContinue;
     private CallbackManager callbackManager;
     private JSONObject user;
@@ -118,6 +126,7 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
             TextUtils.join(",", new String[]{ID, NAME, PICTURE});
 
     private String user_fb_id;
+    private Context mContext;
 
     // variable for control doc Type
     //private RadioGroup mDocTypeRadioGroup;
@@ -128,7 +137,10 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
     //private DocType mDocType = DocType.NRC;
     private EditText mCountryCodeEditText;
 
-    private TextView or_textview;
+    private TextView img_upload_textview;
+    SharedPreferences sharePref;
+
+    String lang;
 
     /**
      * *********************************
@@ -166,6 +178,8 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         //et_user_name = (EditText)v.findViewById(R.id.signup_username_input);//et_user_name_login
 
 
+
+        mContext = getActivity().getApplicationContext();
         //addressField = (EditText) v.findViewById(R.id.signup_address_input);
         //ImageView appLogo = (ImageView) v.findViewById(R.id.app_logo);
         String username = "KHin";//(String) args.getString(USERNAME);
@@ -212,6 +226,7 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
 
         // mNrcTextInputLayout.setError(getResources().getString(R.string.nrc_number_helper));
         createAccountButton = (Button) v.findViewById(R.id.create_account);
+        editAccountButton = (Button)v.findViewById(R.id.register_edit_account);
 
         if (config.getParseSignupSubmitButtonText() != null) {
             createAccountButton.setText(config.getParseSignupSubmitButtonText());
@@ -222,16 +237,30 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         mIAgreeCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked) {
                     createAccountButton.setEnabled(true);
-                }else{
+                } else {
                     createAccountButton.setEnabled(false);
                 }
             }
         });
 
         btnLoginWithFacebook = (LoginButton) v.findViewById(R.id.facebook_login);
-        //or_textview = (TextView)v.findViewById(R.id.or_textview);
+
+        profile_rounded = (RoundedImageView)v.findViewById(R.id.register_profilePic_rounded);
+        profile_rounded.setAdjustViewBounds(true);
+        profile_rounded.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        profile_rounded.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.doToastEng(getActivity().getApplicationContext(),"Coming soon pls !");
+            }
+        });
+
+        img_upload_textview = (TextView)v.findViewById(R.id.register_img_upload_textview);
+
+
         //btnLoginWithFacebook.setText("Connect with facebook");
         btnLoginWithFacebook.setReadPermissions("public_profile", "email", "user_friends");
         // If using in a fragment
@@ -260,6 +289,21 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
                 //Utils.doToast(getActivity(), "Login error");
             }
         });
+
+        /******Font Setting*********/
+        sharePref = getActivity().getSharedPreferences(Utils.PREF_SETTING, Context.MODE_PRIVATE);
+
+        lang = sharePref.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
+
+        if(lang.equals(Utils.ENG_LANG)){
+
+            setEnglishFont();
+        }
+        else if(lang.equals(Utils.MM_LANG)){
+
+            setMyanmarFont();
+        }
+        /******Font Setting*********/
 
 
         return v;
@@ -340,7 +384,15 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
 
         if (TextUtils.isEmpty(username)) {
             mUserNameTextInputLayout.setError(getResources().getString(R.string.your_name_error));
-            doToast(getResources().getString(R.string.your_name_error));
+
+            if(lang.equals(Utils.ENG_LANG)){
+                doToast(getResources().getString(R.string.your_name_error));
+            }
+            else if(lang.equals(Utils.MM_LANG)){
+
+                Utils.doToastMM(mContext, getResources().getString(R.string.your_name_error_mm));
+            }
+
             return;
         } else {
             mUserNameTextInputLayout.setErrorEnabled(false);
@@ -354,31 +406,55 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
             mEmailTextInputLayout.setErrorEnabled(false);
         }*/
 
-        if (TextUtils.isEmpty(password)) {
+        /*if (TextUtils.isEmpty(password)) {
             mPasswordTextInputLayout.setError(getResources().getString(R.string.password_error));
             doToast(getResources().getString(R.string.passport_error));
             return;
         } else {
             mPasswordTextInputLayout.setErrorEnabled(false);
-        }
+        }*/
 
         if (TextUtils.isEmpty(passwordAgain)) {
             mConfirmPasswordTextInputLayout.setError(getResources().getString(R.string.confirm_password_error));
-            doToast(getResources().getString(R.string.confirm_password_error));
+
+            if(lang.equals(Utils.ENG_LANG)){
+                doToast(getResources().getString(R.string.confirm_password_error));
+            }
+            else if(lang.equals(Utils.MM_LANG)){
+
+                Utils.doToastMM(mContext, getResources().getString(R.string.confirm_password_error_mm));
+            }
             return;
         } else {
             mConfirmPasswordTextInputLayout.setErrorEnabled(false);
         }
 
         if (password.length() < minPasswordLength) {
-            showToast(getResources().getQuantityString(
-                    R.plurals.com_parse_ui_password_too_short_toast,
-                    minPasswordLength, minPasswordLength));
+
+            if(lang.equals(Utils.ENG_LANG)){
+
+                showToast(getResources().getQuantityString(
+                        R.plurals.com_parse_ui_password_too_short_toast,
+                        minPasswordLength, minPasswordLength));
+            }
+            else if(lang.equals(Utils.MM_LANG)){
+
+                Utils.doToastMM(mContext, getResources().getQuantityString(
+                        R.plurals.com_parse_ui_password_too_short_toast_mm,
+                        minPasswordLength, minPasswordLength));
+            }
             return;
         }
 
         if (!password.equals(passwordAgain)) {
-            showToast(R.string.com_parse_ui_mismatch_confirm_password_toast);
+            //showToast(R.string.com_parse_ui_mismatch_confirm_password_toast);
+            if(lang.equals(Utils.ENG_LANG)){
+                doToast(getResources().getString(R.string.com_parse_ui_mismatch_confirm_password_toast));
+            }
+            else if(lang.equals(Utils.MM_LANG)){
+
+                Utils.doToastMM(mContext, getResources().getString(R.string.com_parse_ui_mismatch_confirm_password_toast_mm));
+            }
             confirmPasswordField.selectAll();
             confirmPasswordField.requestFocus();
             return;
@@ -387,12 +463,26 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
 
         if (TextUtils.isEmpty(mobileNoForNrc)) {
             mMobileNoForNrcTextInputLayout.setError(getResources().getString(R.string.mobile_number_error));
-            doToast(getResources().getString(R.string.mobile_number_error));
+            //doToast(getResources().getString(R.string.mobile_number_error));
+            if(lang.equals(Utils.ENG_LANG)){
+                doToast(getResources().getString(R.string.mobile_number_error));
+            }
+            else if(lang.equals(Utils.MM_LANG)){
+
+                Utils.doToastMM(mContext, getResources().getString(R.string.mobile_number_error_mm));
+            }
             inputMobileOk = false;
             return;
         } else if (!ValidatorUtils.isValidMobileNo(mobileNoForNrc)) {
             mMobileNoForNrcTextInputLayout.setError(getResources().getString(R.string.invalid_mobile_number));
-            doToast(getResources().getString(R.string.invalid_mobile_number));
+            //doToast(getResources().getString(R.string.invalid_mobile_number));
+            if(lang.equals(Utils.ENG_LANG)){
+                doToast(getResources().getString(R.string.invalid_mobile_number));
+            }
+            else if(lang.equals(Utils.MM_LANG)){
+
+                Utils.doToastMM(mContext, getResources().getString(R.string.invalid_mobile_number_mm));
+            }
             inputMobileOk = false;
             return;
         }
@@ -530,13 +620,28 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
                                 showToast(R.string.com_parse_ui_invalid_email_toast);
                                 break;
                             case ParseException.USERNAME_TAKEN:
-                                showToast(R.string.com_parse_ui_username_taken_toast);
+                                if(lang.equals(Utils.ENG_LANG)){
+                                    showToast(R.string.com_parse_ui_username_taken_toast);
+                                }
+                                else if(lang.equals(Utils.MM_LANG)){
+
+                                    Utils.doToastMM(mContext, getResources().getString(R.string.com_parse_ui_username_taken_toast_mm));
+                                }
+
+
                                 break;
                             case ParseException.EMAIL_TAKEN:
                                 showToast(R.string.com_parse_ui_email_taken_toast);
                                 break;
                             default:
-                                showToast(R.string.com_parse_ui_signup_failed_unknown_toast);
+                                if(lang.equals(Utils.ENG_LANG)){
+                                    showToast(R.string.com_parse_ui_signup_failed_unknown_toast);
+                                }
+                                else if(lang.equals(Utils.MM_LANG)){
+
+                                    Utils.doToastMM(mContext, getResources().getString(R.string.com_parse_ui_signup_failed_unknown_toast_mm));
+                                }
+
                         }
                     }
                 }
@@ -644,5 +749,45 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
 
     private void doToast(String toast){
         Toast.makeText(getActivity(), toast, Toast.LENGTH_SHORT).show();
+    }
+    public void setEnglishFont(){
+        img_upload_textview.setText(getResources().getString(R.string.com_parse_ui_parse_signup_img_upload_label_eng));
+        usernameField.setHint(getResources().getString(R.string.com_parse_ui_name_input_hint));
+        passwordField.setHint(getResources().getString(R.string.com_parse_ui_password_input_hint));
+        confirmPasswordField.setHint(getResources().getString(R.string.com_parse_ui_confirm_password_input_hint));
+        mTosTextView.setText(getResources().getString(R.string.i_agree));
+        createAccountButton.setText(getResources().getString(R.string.com_parse_ui_create_account_button_label_eng));
+        mobileNoForNrcField.setHint(getResources().getString(R.string.com_parse_ui_ph_input_hint));
+        editAccountButton.setText(getResources().getString(R.string.com_parse_ui_edit_account_button_label_eng));
+        //Set Type Face
+        img_upload_textview.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+        usernameField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+        passwordField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+        confirmPasswordField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+        mTosTextView.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+        createAccountButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+        editAccountButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+    }
+    public void setMyanmarFont(){
+
+        img_upload_textview.setText(getResources().getString(R.string.com_parse_ui_parse_signup_img_upload_label_mm));
+        usernameField.setHint(getResources().getString(R.string.com_parse_ui_username_input_hint_mm));
+        passwordField.setHint(getResources().getString(R.string.com_parse_ui_password_input_hint_mm));
+        confirmPasswordField.setHint(getResources().getString(R.string.com_parse_ui_confirm_password_input_hint_mm));
+        mobileNoForNrcField.setHint(getResources().getString(R.string.com_parse_ui_ph_input_hint_mm));
+        createAccountButton.setText(getResources().getString(R.string.com_parse_ui_create_account_button_label_mm));
+        editAccountButton.setText(getResources().getString(R.string.com_parse_ui_edit_account_button_label_mm));
+        mTosTextView.setText(getResources().getString(R.string.i_agree_mm));
+
+        //Set Type Face
+        img_upload_textview.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+        usernameField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+        passwordField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+        confirmPasswordField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+        mTosTextView.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+        createAccountButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+        editAccountButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+
+
     }
 }

@@ -41,6 +41,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
+import com.parse.model.MyTypeFace;
 import com.parse.utils.Utils;
 
 
@@ -64,6 +65,7 @@ public class ParseLoginFragment extends ParseLoginFragmentBase implements Compou
     private static final String USER_OBJECT_EMAIL_FIELD = "email";
 
   private View parseLogin;
+  private ImageView appLogo;
   private EditText usernameField;
   private EditText passwordField;
   private TextView loginMotoTextView;
@@ -100,7 +102,7 @@ public class ParseLoginFragment extends ParseLoginFragmentBase implements Compou
 
     View v = inflater.inflate(R.layout.com_parse_ui_parse_login_fragment,
         parent, false);
-    ImageView appLogo = (ImageView) v.findViewById(R.id.app_logo);
+    appLogo= (ImageView) v.findViewById(R.id.app_logo);
     parseLogin = v.findViewById(R.id.parse_login);
     usernameField = (EditText) v.findViewById(R.id.login_username_input);
     passwordField = (EditText) v.findViewById(R.id.login_password_input);
@@ -144,7 +146,7 @@ public class ParseLoginFragment extends ParseLoginFragmentBase implements Compou
       setUpTwitterLogin();
     }
 
-    loginMotoTextView.setVisibility(View.VISIBLE);
+    //loginMotoTextView.setVisibility(View.VISIBLE);
 
     return v;
   }
@@ -488,11 +490,37 @@ public class ParseLoginFragment extends ParseLoginFragmentBase implements Compou
   }
 
   public void setEnglishFont(){
+    appLogo.setImageResource(R.drawable.logo_eng);
+    usernameField.setHint(getResources().getString(R.string.com_parse_ui_name_input_hint));
+    passwordField.setHint(getResources().getString(R.string.com_parse_ui_password_input_hint));
+    parseLoginButton.setText(getResources().getString(R.string.com_parse_ui_parse_login_button_label));
+    parseLoginHelpButton.setText(getResources().getString(R.string.com_parse_ui_forgot_password_button_label));
 
+    parseSignupButton.setText(getResources().getString(R.string.com_parse_ui_create_account_button_label));
 
+    //Set Type Face
+    usernameField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+    passwordField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+    parseLoginButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+    parseLoginHelpButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+    parseSignupButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
 
   }
   public void setMyanmarFont(){
+    appLogo.setImageResource(R.drawable.logo_mm);
+    usernameField.setHint(getResources().getString(R.string.com_parse_ui_username_input_hint_mm));
+    passwordField.setHint(getResources().getString(R.string.com_parse_ui_password_input_hint_mm));
+    parseLoginButton.setText(getResources().getString(R.string.com_parse_ui_parse_login_button_label_mm));
+    parseLoginHelpButton.setText(getResources().getString(R.string.com_parse_ui_forgot_password_button_mm));
+
+    parseSignupButton.setText(getResources().getString(R.string.com_parse_ui_parse_signup_button_label_mm));
+
+    //Set Type Face
+    usernameField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+    passwordField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+    parseLoginButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+    parseLoginHelpButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+    parseSignupButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
 
   }
 

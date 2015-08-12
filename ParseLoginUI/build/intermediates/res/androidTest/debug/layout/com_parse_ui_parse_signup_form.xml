@@ -6,6 +6,7 @@
 
     <include layout="@layout/toolbar_actionbar" />
 
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,6 +23,58 @@
             android:paddingRight="@dimen/com_parse_ui_horizontal_margin"
             android:paddingTop="@dimen/com_parse_ui_vertical_margin">
 
+            <LinearLayout
+                android:orientation="vertical"
+                android:id="@+id/register_ly"
+                android:layout_width="match_parent"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/facebook_login_container"
+                android:layout_marginTop="30dp">
+                <!--<org.undp_iwomen.iwomen.ui.widget.ResizableImageView
+                    android:id="@+id/register_profilePic_resizable"
+                    android:layout_width="@dimen/feed_item_profile_pic"
+                    android:layout_height="@dimen/feed_item_profile_pic"
+                    android:scaleType="fitCenter"
+                    android:layout_marginBottom="@dimen/abc_list_item_padding_horizontal_material"
+                    android:layout_marginTop="@dimen/abc_list_item_padding_horizontal_material"
+                    android:gravity="center"
+                    android:src="@drawable/camera_icon"
+                    android:visibility="visible"
+                    ></org.undp_iwomen.iwomen.ui.widget.ResizableImageView>-->
+                <com.makeramen.RoundedImageView
+                    android:id="@+id/register_profilePic_rounded"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="@dimen/feed_item_profile_pic"
+                    android:layout_height="@dimen/feed_item_profile_pic"
+
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/camera_icon"
+                    app:riv_border_color="#333333"
+                    app:riv_border_width="0dip"
+                    app:riv_corner_radius="30dip"
+                    app:riv_mutate_background="true"
+                    app:riv_oval="true"
+                    android:visibility="visible"></com.makeramen.RoundedImageView>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/register_img_upload_textview"
+                style="@style/Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/register_ly"
+                android:layout_marginBottom="@dimen/abc_list_item_padding_horizontal_material"
+                android:layout_marginTop="@dimen/abc_list_item_padding_horizontal_material"
+                android:gravity="center"
+
+                android:textColor="@color/body_text_3"
+                android:visibility="visible"
+                android:textSize="15sp" />
+
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_signup_user_name"
                 android:layout_width="match_parent"
@@ -32,7 +85,7 @@
                     style="@style/ParseLoginUI.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/com_parse_ui_username_input_hint_mm" />
+                     />
             </android.support.design.widget.TextInputLayout>
 
 
@@ -48,7 +101,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/com_parse_ui_small_vertical_spacing"
                     android:fontFamily="sans-serif"
-                    android:hint="@string/com_parse_ui_password_input_hint_mm"
                     android:inputType="textPassword"
                     android:nextFocusForward="@+id/signup_confirm_password_input"
                     android:selectAllOnFocus="true" />
@@ -68,7 +120,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/com_parse_ui_small_vertical_spacing"
                     android:fontFamily="sans-serif"
-                    android:hint="@string/com_parse_ui_confirm_password_input_hint_mm"
                     android:inputType="textPassword"
                     android:selectAllOnFocus="true" />
 
@@ -85,7 +136,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/abc_edit_text_material"
-                    android:hint="@string/com_parse_ui_ph_input_hint_mm"
                     android:inputType="phone"
                     android:nextFocusDown="@+id/signup_nrc_input"
                     android:nextFocusForward="@+id/signup_nrc_input"
@@ -116,8 +166,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:paddingBottom="20dp"
-                android:paddingTop="20dp">
+                android:paddingBottom="30dp"
+                android:paddingTop="40dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -140,12 +190,12 @@
                     android:orientation="vertical">
 
                     <Button
-                        android:id="@+id/button"
+                        android:id="@+id/register_edit_account"
                         style="@style/ParseLoginUI.Button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="16dp"
                         android:enabled="false"
                         android:text="@string/com_parse_ui_edit_account_button_label_mm"
                         android:textSize="20dp" />

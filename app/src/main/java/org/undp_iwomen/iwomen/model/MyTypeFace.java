@@ -28,25 +28,28 @@ public class MyTypeFace {
 
                     if(assetPath.equals(NORMAL)) {
                         Typeface tf = Typeface.createFromAsset(c.getAssets(),
-                                "fonts/ciclesemi.ttf");
+                                "fonts/proximanova-regular.ttf");
 
                         cache.put(assetPath, tf);
                     }else if(assetPath.equals(BOLD)) {
                         Typeface tf = Typeface.createFromAsset(c.getAssets(),
-                                "fonts/ciclegordita.ttf");
+                                "fonts/proximanova-bold.ttf");
 
                         cache.put(assetPath, tf);
-                    }else if(assetPath.equals(ITALIC)) {
+                    }
+                    /*else if(assetPath.equals(ITALIC)) {
                         Typeface tf = Typeface.createFromAsset(c.getAssets(),
                                 "fonts/ciclesemiitalic.ttf");
 
                         cache.put(assetPath, tf);
-                    }else if(assetPath.equals(ZAWGYI)) {
+                    }*/
+                    else if(assetPath.equals(ZAWGYI)) {
                         Typeface tf = Typeface.createFromAsset(c.getAssets(),
                                 "fonts/zawgyi.ttf");
 
                         cache.put(assetPath, tf);
                     }
+
 
 
 

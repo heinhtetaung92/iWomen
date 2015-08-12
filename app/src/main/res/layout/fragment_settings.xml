@@ -12,27 +12,29 @@
         android:id="@+id/settings_language_setting_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="Change Language"/>
+        android:title="Change Language"
+        android:layout_margin="16dp" />
 
     <RadioGroup
         android:id="@+id/settings_language"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_margin="16dp">
 
         <RadioButton
             android:id="@+id/settings_english_language"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="English"
+            android:text="ENGLISH"
             android:checked="true"/>
 
         <RadioButton
             android:id="@+id/settings_myanmar_language"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Myanmar"/>
+            android:text="MYANMAR"/>
 
     </RadioGroup>
 
