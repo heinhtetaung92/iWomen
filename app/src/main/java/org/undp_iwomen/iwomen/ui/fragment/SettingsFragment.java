@@ -28,7 +28,7 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
     private RadioButton radioLanguageButton;
 
     RadioButton rd_lang_en, rd_lang_mm;
-    SharedPreferences sharePref;
+    SharedPreferences sharePrefLanguageUtil;
 
     TextView settings_language_setting_title;
     private Context mContext;
@@ -54,7 +54,7 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
         mContext = getActivity().getApplicationContext();
 
 
-        sharePref = getActivity().getSharedPreferences(Utils.PREF_SETTING, Context.MODE_PRIVATE);
+        sharePrefLanguageUtil = getActivity().getSharedPreferences(Utils.PREF_SETTING, Context.MODE_PRIVATE);
         radioLanguageGroup = (RadioGroup) rootView.findViewById(R.id.settings_language);
         rd_lang_en = (RadioButton) rootView.findViewById(R.id.settings_english_language);
         rd_lang_mm = (RadioButton) rootView.findViewById(R.id.settings_myanmar_language);
@@ -62,7 +62,7 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
         settings_changeTheme = (TextView)rootView.findViewById(R.id.settings_changeTheme);
         chk_settings_getnotification = (CheckBox)rootView.findViewById(R.id.settings_getnotification);
 
-        String lang = sharePref.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
+        String lang = sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
         rd_lang_en.setOnCheckedChangeListener(this);
         rd_lang_mm.setOnCheckedChangeListener(this);
         if(lang.equals(Utils.ENG_LANG)){
@@ -81,7 +81,7 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        SharedPreferences.Editor editor = sharePref.edit();
+        SharedPreferences.Editor editor = sharePrefLanguageUtil.edit();
 
 
         if(isChecked) {

@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -64,6 +65,8 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
     private ProgressDialog mProgressDialog;
 
     FloatingActionButton fab;
+    SharedPreferences sharePrefLanguageUtil;
+    String mstr_lang;
 
     public StoriesFragment() {
         // Empty constructor required for fragment subclasses
@@ -97,6 +100,8 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
     }
 
     private void init(View rootView) {
+        sharePrefLanguageUtil = getActivity().getSharedPreferences(Utils.PREF_SETTING, Context.MODE_PRIVATE);
+
         feedItems = new ArrayList<FeedItem>();
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.activity_main_recyclerview);
@@ -111,6 +116,7 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
 
         progress.setVisibility(View.VISIBLE);
 
+        mstr_lang = sharePrefLanguageUtil.getString(com.parse.utils.Utils.PREF_SETTING_LANG, com.parse.utils.Utils.ENG_LANG);
 
         //When very start this fragment open , need to check db data
         Cursor cursorMain = getActivity().getContentResolver().query(IwomenProviderData.PostProvider.CONTETN_URI, null, null, null, BaseColumns._ID + " DESC");
@@ -132,7 +138,7 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
                     /* Toast.makeText(getActivity().getApplicationContext(),
                     "Please Open Internet Connection!",
                     Toast.LENGTH_LONG).show();*/
-                Utils.doToastMM(mContext,getActivity().getResources().getString(R.string.open_internet_warning_mm));
+                Utils.doToastMM(mContext, getActivity().getResources().getString(R.string.open_internet_warning_mm));
 
 
             }
@@ -205,7 +211,7 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
             String post_obj_id = "";
             String post_title = "";
             String post_content = "";
-            String post_like = "";
+            int post_like = 0;
             String post_img_path = "";
             String post_content_type = "";
             String post_content_user_id = "";
@@ -214,76 +220,100 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
 
             String video_id = "";
             String post_content_suggest_text = "";
+            String post_content_mm = "";
             String post_content_title_mm = "";
 
+            String like_status = "";
             String status = "";
             String created_at = "";
             String updated_at = "";
             feedItems.clear();
-            if (cursor != null && cursor.moveToFirst()) {
-                int i = 0;
-                do {
+            try {
 
-                    post_obj_id = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_OBJ_ID));
-                    post_title = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_TITLE));
-                    post_content = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT));
-                    post_like = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_LIKES));
-                    post_img_path = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_IMG_PATH));
-                    post_content_type = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_TYPES));
-                    post_content_user_id = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID));
-                    post_content_user_name = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_USER_NAME));
-                    post_content_user_img_path = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH));
+                if (cursor != null && cursor.moveToFirst()) {
+                    int i = 0;
+                    do {
 
-                    video_id = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID));
-                    post_content_suggest_text = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_SUGGEST_TEXT));
-                    post_content_title_mm = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_TITLE_MM));
+                        post_obj_id = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_OBJ_ID));
+                        post_title = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_TITLE));
+                        post_content = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT));
+                        post_like = cursor.getInt(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_LIKES));
+                        post_img_path = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_IMG_PATH));
+                        post_content_type = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_TYPES));
+                        post_content_user_id = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID));
+                        post_content_user_name = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_USER_NAME));
+                        post_content_user_img_path = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH));
 
-
-                    status = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.STATUS));
-                    created_at = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREATED_DATE));
-                    updated_at = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.UPDATED_DATE));
+                        video_id = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID));
+                        post_content_suggest_text = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_SUGGEST_TEXT));
+                        post_content_mm = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_MM));
+                        post_content_title_mm = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_TITLE_MM));
 
 
-                    FeedItem item = new FeedItem();
+                        like_status   = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.LIKE_STATUS));
+                        status = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.STATUS));
+                        created_at = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREATED_DATE));
+                        updated_at = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.UPDATED_DATE));
 
-                    item.setPost_obj_id(post_obj_id);
-                    item.setPost_title(post_title);
-                    item.setPost_content(post_content);
-                    item.setPost_like(post_like);
-                    item.setPost_img_path(post_img_path);
-                    item.setPost_content_type(post_content_type);
-                    item.setPost_content_user_id(post_content_user_id);
-                    item.setPost_content_user_name(post_content_user_name);
-                    item.setPost_content_user_img_path(post_content_user_img_path);
 
-                    item.setPost_content_video_id(video_id);
-                    item.setPost_content_suggest_text(post_content_suggest_text);
-                    item.setPost_title_mm(post_content_title_mm);
-                    item.setStatus(status);
-                    item.setCreated_at(created_at);
-                    item.setUpdated_at(updated_at);
+                        FeedItem item = new FeedItem();
+
+                        item.setPost_obj_id(post_obj_id);
+                        item.setPost_title(post_title);
+                        item.setPost_content(post_content);
+                        item.setPost_like(post_like);
+                        item.setPost_img_path(post_img_path);
+                        item.setPost_content_type(post_content_type);
+                        item.setPost_content_user_id(post_content_user_id);
+                        item.setPost_content_user_name(post_content_user_name);
+                        item.setPost_content_user_img_path(post_content_user_img_path);
+
+                        item.setPost_content_mm(post_content_mm);
+                        item.setPost_content_video_id(video_id);
+                        item.setPost_content_suggest_text(post_content_suggest_text);
+                        item.setPost_title_mm(post_content_title_mm);
+
+                        item.setPost_like_status(like_status);
+                        item.setStatus(status);
+                        item.setCreated_at(created_at);
+                        item.setUpdated_at(updated_at);
 
 
 
                     /*String image = feedObj.isNull("image") ? null : feedObj
                             .getString("image");*/
 
-                    feedItems.add(item);
+                        feedItems.add(item);
 
-                    i++;
+                        i++;
 
 
-                } while (cursor.moveToNext());
+                    } while (cursor.moveToNext());
+                }
+
+                cursor.close();
+
+                //lost_data_list, lost_data_id_list, lost_data_obj_id_list ,lost_data_img_url_list
+                //storageUtil.SaveArrayListToSD("lost_data_list", lost_data_list);
+
+
+                if (mstr_lang.equals(com.parse.utils.Utils.ENG_LANG)) {
+                    mPostListRecyclerViewAdapter = new PostListRecyclerViewAdapter(getActivity().getApplicationContext(), feedItems, mstr_lang);
+                    mRecyclerView.setAdapter(mPostListRecyclerViewAdapter);
+                    mProgressDialog.dismiss();
+                    progress.setVisibility(View.INVISIBLE);
+                } else {
+                    mPostListRecyclerViewAdapter = new PostListRecyclerViewAdapter(getActivity().getApplicationContext(), feedItems, mstr_lang);
+                    mRecyclerView.setAdapter(mPostListRecyclerViewAdapter);
+                    mProgressDialog.dismiss();
+                    progress.setVisibility(View.INVISIBLE);
+                }
+
+            }catch (IllegalStateException ex){
+                ex.printStackTrace();
             }
 
-            cursor.close();
 
-            //lost_data_list, lost_data_id_list, lost_data_obj_id_list ,lost_data_img_url_list
-            //storageUtil.SaveArrayListToSD("lost_data_list", lost_data_list);
-            mPostListRecyclerViewAdapter = new PostListRecyclerViewAdapter(getActivity().getApplicationContext(), feedItems);
-            mRecyclerView.setAdapter(mPostListRecyclerViewAdapter);
-            mProgressDialog.dismiss();
-            progress.setVisibility(View.INVISIBLE);
             //Utils.doToast(getActivity(), String.valueOf(feedItems.size()));
         } else {
             Log.e("LostListFragment", "Activity Null Case");
@@ -375,11 +405,9 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
         int id = item.getItemId();
         switch (id) {
 
-
             case R.id.action_refresh:
                 //Utils.doToast(getActivity(), "do refresh");
                 //mProgressDialog.show();
-
 
                 //SetPostData();
                 getPostDataOrderByLikesDate();
@@ -425,9 +453,9 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
         cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_NAME, "Khin");
         cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "http://www.windowsegis.com/wp-content/uploads/2013/08/100-superb-windows-phone-wallpapers-to-mark-you-niftier-01.jpg");
 
-        cv.put(TableAndColumnsName.UserUtil.STATUS, "0");
-        cv.put(TableAndColumnsName.UserUtil.CREATED_DATE, "Sun Aug 02 18:07:00 GMT+06:30 2015");
-        cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, "Sun Aug 02 18:07:00 GMT+06:30 2015");
+        cv.put(TableAndColumnsName.PostUtil.STATUS, "0");
+        cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, "Sun Aug 02 18:07:00 GMT+06:30 2015");
+        cv.put(TableAndColumnsName.PostUtil.UPDATED_DATE, "Sun Aug 02 18:07:00 GMT+06:30 2015");
 
         Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
 
@@ -487,7 +515,9 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
                                         cv.put(TableAndColumnsName.PostUtil.POST_OBJ_ID, post.getObjectId());
                                         cv.put(TableAndColumnsName.PostUtil.POST_TITLE, post.getString("title"));
                                         cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, post.getString("content"));
-                                        cv.put(TableAndColumnsName.PostUtil.POST_LIKES, post.getNumber("likes").toString());
+                                        cv.put(TableAndColumnsName.PostUtil.POST_LIKES, post.getNumber("likes").intValue());
+
+
                                         if (post.get("image") != null) {
 
                                             cv.put(TableAndColumnsName.PostUtil.POST_IMG_PATH, post.getParseFile("image").getUrl());
@@ -537,11 +567,18 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
                                             cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TITLE_MM, "");
 
                                         }
+                                        if (post.get("content_mm") != null) {
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_MM, post.getString("content_mm"));
+                                        }else{
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_MM, "");
 
+                                        }
 
-                                        cv.put(TableAndColumnsName.UserUtil.STATUS, "0");
-                                        cv.put(TableAndColumnsName.UserUtil.CREATED_DATE, post.get("postUploadedDate").toString());// post.get("postUploadedDate").toString() //post.getCreatedAt().toString()
-                                        cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, post.get("postUploadedDate").toString());
+                                        cv.put(TableAndColumnsName.PostUtil.LIKE_STATUS, "0");
+
+                                        cv.put(TableAndColumnsName.PostUtil.STATUS, "0");
+                                        cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, post.get("postUploadedDate").toString());// post.get("postUploadedDate").toString() //post.getCreatedAt().toString()
+                                        cv.put(TableAndColumnsName.PostUtil.UPDATED_DATE, post.get("postUploadedDate").toString());
 
                                         Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
 
@@ -585,7 +622,7 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
                                 cv.put(TableAndColumnsName.PostUtil.POST_OBJ_ID, post.getObjectId());
                                 cv.put(TableAndColumnsName.PostUtil.POST_TITLE, post.getString("title"));
                                 cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, post.getString("content"));
-                                cv.put(TableAndColumnsName.PostUtil.POST_LIKES, post.getNumber("likes").toString());
+                                cv.put(TableAndColumnsName.PostUtil.POST_LIKES, post.getNumber("likes").intValue());
 
                                 if (post.get("image") != null) {
 
@@ -645,10 +682,18 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
                                     cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TITLE_MM, "");
 
                                 }
+                                if (post.get("content_mm") != null) {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_MM, post.getString("content_mm"));
+                                }else{
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_MM, "");
 
-                                cv.put(TableAndColumnsName.UserUtil.STATUS, "0");
-                                cv.put(TableAndColumnsName.UserUtil.CREATED_DATE, post.get("postUploadedDate").toString());// post.get("postUploadedDate").toString() //post.getCreatedAt().toString()
-                                cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, post.get("postUploadedDate").toString());
+                                }
+
+                                cv.put(TableAndColumnsName.PostUtil.LIKE_STATUS, "0");
+
+                                cv.put(TableAndColumnsName.PostUtil.STATUS, "0");
+                                cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, post.get("postUploadedDate").toString());// post.get("postUploadedDate").toString() //post.getCreatedAt().toString()
+                                cv.put(TableAndColumnsName.PostUtil.UPDATED_DATE, post.get("postUploadedDate").toString());
 
 
                                 Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
@@ -671,7 +716,7 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
         } else {
             //Utils.doToast(mContext, "Internet Connection need!");
 
-            Utils.doToastMM(mContext,getActivity().getResources().getString(R.string.open_internet_warning_mm));
+            Utils.doToastMM(mContext, getActivity().getResources().getString(R.string.open_internet_warning_mm));
         }
     }
 
@@ -682,7 +727,7 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
             case R.id.post_news:
 
                 //startActivity(new Intent(getActivity(), PostNewsActivity.class));
-                Utils.doToastEng(mContext,"Coming Soon!");
+                Utils.doToastEng(mContext, "Coming Soon!");
 
                 break;
         }

@@ -36,6 +36,16 @@
     <color name="btn_bg_colorPrimary">#3F51B5</color>
     <color name="btn_bg_tranprimary">#B39BBD</color>
 
+    <color name="line_color">#c3c3c3</color>
+
+    <color name="text_bg">#F4F4F4</color>
+
+    <color name="fill_color">#F4F4F4</color>
+    <color name="border_color">#5c5c5c</color>
+
+    <color name="viber_color">#59267c</color>
+    <color name="vi_color">#8f5db7</color>
+    <color name="fb_color">#3b5998</color>
 
     <color name="red_500">#f44336</color>
     <color name="pink_500">#e91e63</color>

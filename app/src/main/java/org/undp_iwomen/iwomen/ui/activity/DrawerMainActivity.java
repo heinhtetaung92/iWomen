@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,20 +23,22 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.parse.ParseUser;
 import com.parse.ui.ParseLoginBuilder;
 import com.parse.utils.Utils;
+import com.squareup.picasso.Picasso;
 
 import org.undp_iwomen.iwomen.CommonConfig;
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
 import org.undp_iwomen.iwomen.ui.adapter.DrawerListViewAdapter;
+import org.undp_iwomen.iwomen.ui.fragment.MainMaterialTab;
 import org.undp_iwomen.iwomen.ui.fragment.ResourcesFragment;
 import org.undp_iwomen.iwomen.ui.fragment.SettingsFragment;
-import org.undp_iwomen.iwomen.ui.fragment.StoriesFragment;
+import org.undp_iwomen.iwomen.ui.widget.ProfilePictureView;
+import org.undp_iwomen.iwomen.utils.SharePrefUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -58,6 +61,7 @@ public class DrawerMainActivity extends AppCompatActivity {
     private CharSequence mTitle;
     public TextView textViewTitle;
     private TextView txt_user_name;
+    private TextView txt_sing_out;
 
     private static final int LOGIN_REQUEST = 0;
     private ParseUser currentUser;
@@ -69,6 +73,12 @@ public class DrawerMainActivity extends AppCompatActivity {
     String mstr_lang;
     Runnable run;
     DrawerListViewAdapter drawer_adapter;
+
+    ProfilePictureView userProfilePicture;
+
+
+    String mstrUserfbId;
+    SharePrefUtils sessionManager;
 
     @Override
     protected void onStart() {
@@ -91,6 +101,12 @@ public class DrawerMainActivity extends AppCompatActivity {
 
         setContentView(R.layout.main_drawer_material);
 
+        //Back from LoginActivity Control
+        if( getIntent().getBooleanExtra("Exit me", false)){
+            finish();
+            return; // add this to prevent from doing unnecessary stuffs
+        }
+
         //getFacebookHashKey();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
@@ -106,10 +122,10 @@ public class DrawerMainActivity extends AppCompatActivity {
 
         drawerLayoutt = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLinearLayout = (LinearLayout) findViewById(R.id.left_drawer);
-
+        userProfilePicture = (ProfilePictureView)findViewById(R.id.profilePicture);
         mDrawerList = (ListView) findViewById(R.id.left_drawer_lv);
         txt_user_name = (TextView)findViewById(R.id.txt_user_name);
-
+        txt_sing_out = (TextView)findViewById(R.id.menu_sing_out);
         // set a custom shadow that overlays the main content when the drawer opens
         drawerLayoutt.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
@@ -128,7 +144,7 @@ public class DrawerMainActivity extends AppCompatActivity {
 
         sharePrefLanguageUtil = getSharedPreferences(Utils.PREF_SETTING, Context.MODE_PRIVATE);
 
-
+        sessionManager = new SharePrefUtils(getApplicationContext());
        /* if (user_obj_id == null) {
 
             if (savedInstanceState == null) {
@@ -161,6 +177,9 @@ public class DrawerMainActivity extends AppCompatActivity {
                     String userName = bundle.getString(CommonConfig.USER_NAME);
                     String userPH = bundle.getString(CommonConfig.USER_PH);
                     String lang = bundle.getString(Utils.PREF_SETTING_LANG);
+                    Boolean isFbInclude = bundle.getBoolean(CommonConfig.USER_FBID_INCLUDE);
+
+
 
 
                     if (objectId.length() != 0) {
@@ -168,6 +187,10 @@ public class DrawerMainActivity extends AppCompatActivity {
                         mEditorUserInfo.putBoolean(CommonConfig.IS_LOGIN, true);
                         mEditorUserInfo.putString(CommonConfig.USER_OBJ_ID, objectId);
                         mEditorUserInfo.putString(CommonConfig.USER_NAME, userName);
+                        if(isFbInclude){
+                            mstrUserfbId = bundle.getString(CommonConfig.USER_FBID);
+                            mEditorUserInfo.putString(CommonConfig.USER_FBID, mstrUserfbId);
+                        }
 
                         SharedPreferences.Editor editor = sharePrefLanguageUtil.edit();
                         editor.putString(Utils.PREF_SETTING_LANG, lang);
@@ -186,12 +209,59 @@ public class DrawerMainActivity extends AppCompatActivity {
                     user_obj_id = mSharedPreferencesUserInfo.getString(CommonConfig.USER_OBJ_ID, null);
 
                     txt_user_name.setText(user_name);
-                    Toast.makeText(this, "You are login as at First \n " + lang, Toast.LENGTH_LONG).show();
-                    Log.e("==== > user Info parse", objectId + "Parse :" + userName + ":Language >>" + lang);
+
+                    if(mstrUserfbId  != null){
+
+                        userProfilePicture.setProfileId(mstrUserfbId);
+                    }
+                    if( currentUser.get("user_profile_img") != null){
+
+                        Uri uri =  Uri.parse(currentUser.getParseFile("user_profile_img").getUrl());
+                        Log.e("1st profile Path", "==>" + uri);
+                        //userProfilePicture.setD
+
+                    }
+                    //1st Login==== > user Info parse﹕ GuzTg3T1aWParse :Su:mstrUserfbId >>null
+                    Log.e("1st Login==== > user Info parse", objectId + "Parse :" + userName + ":mstrUserfbId >>" + mstrUserfbId);
                 } else {
                     user_name = mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null);
                     user_obj_id = mSharedPreferencesUserInfo.getString(CommonConfig.USER_OBJ_ID, null);
-                    Toast.makeText(this, "2ndTime(PaymentActivity) You are login as \n " + mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null) + "\n" + sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(this, "2ndTime(PaymentActivity) You are login as \n " + mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null) + "\n" + sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG), Toast.LENGTH_LONG).show();
+
+                    mstrUserfbId = mSharedPreferencesUserInfo.getString(CommonConfig.USER_FBID,null);
+                    //2nd Login==== > user Info parse﹕ GuzTg3T1aWParse :Su:mstrUserfbId >>null
+                    Log.e("2nd Login==== > user Info parse", user_obj_id + "Parse :" + user_name + ":mstrUserfbId >>" + mstrUserfbId);
+
+                    if(mstrUserfbId  != null){
+
+
+                        userProfilePicture.setProfileId(mstrUserfbId);
+
+                    }
+                    if( currentUser.get("user_profile_img") != null){
+
+                        /*try {
+
+                            Picasso.with(getApplicationContext())
+                                    .load(currentUser.getParseFile("user_profile_img").getUrl()) //"http://cheapandcheerfulshopper.com/wp-content/uploads/2013/08/shopping1257549438_1370386595.jpg" //deal.photo1
+                                    .placeholder(com.parse.ui.R.drawable.camera_icon)
+                                    .error(com.parse.ui.R.drawable.camera_icon)
+                                    .into(profile_rounded, new ImageLoadedCallback(register_profilePic_progressBar) {
+                                        @Override
+                                        public void onSuccess() {
+                                            if (this.progressBar != null) {
+                                                this.progressBar.setVisibility(View.GONE);
+                                            } else {
+                                                this.progressBar.setVisibility(View.VISIBLE);
+                                            }
+                                        }
+
+                                    });
+                        } catch (OutOfMemoryError outOfMemoryError) {
+                            outOfMemoryError.printStackTrace();
+                        }*/
+
+                    }
 
 
                     txt_user_name.setText(user_name);
@@ -213,6 +283,21 @@ public class DrawerMainActivity extends AppCompatActivity {
 
 
         }
+
+        txt_sing_out.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentUser != null){
+                    ParseUser.logOut();
+                    sessionManager.ClearLogOut();
+                    // User clicked to log in.
+                    ParseLoginBuilder loginBuilder = new ParseLoginBuilder(
+                            DrawerMainActivity.this);
+                    startActivityForResult(loginBuilder.build(), LOGIN_REQUEST);
+
+                }
+            }
+        });
 
 
 
@@ -315,10 +400,12 @@ public class DrawerMainActivity extends AppCompatActivity {
 
     private void selectItem(int position) {
         // update the main content by replacing fragments
-        StoriesFragment storiesFragment = new StoriesFragment();
+        //
+        MainMaterialTab mainMaterialTab = new MainMaterialTab();
+        /*StoriesFragment storiesFragment = new StoriesFragment();
         Bundle args = new Bundle();
         args.putInt(StoriesFragment.ARG_MENU_INDEX, position);
-        storiesFragment.setArguments(args);
+        storiesFragment.setArguments(args);*/
 
 
         ResourcesFragment resourcesFragment = new ResourcesFragment();
@@ -329,7 +416,7 @@ public class DrawerMainActivity extends AppCompatActivity {
 
         switch (position) {
             case 0://Categories 1
-                fragmentManager.beginTransaction().replace(R.id.content_frame, storiesFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.content_frame, mainMaterialTab).commit();
                 setTitle(DrawerListName[position]);
                 break;
             case 1:

@@ -10,10 +10,10 @@ import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.PushService;
 import com.parse.SaveCallback;
-import com.parse.ui.ParseLoginBuilder;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.parse.AppVersion;
+import org.undp_iwomen.iwomen.model.parse.Comment;
 import org.undp_iwomen.iwomen.model.parse.Post;
 import org.undp_iwomen.iwomen.ui.activity.DrawerMainActivity;
 
@@ -34,8 +34,12 @@ public class MainApplication extends Application {
         //channel '13fb3c43 com.questmyanmar.gobus/com.questmyanmar.gobus.ui.activity.SearchActivity (server)'
         Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);
 
+        //You must register this ParseObject subclass before instantiating it.
         ParseObject.registerSubclass(AppVersion.class);
         ParseObject.registerSubclass(Post.class);
+        ParseObject.registerSubclass(Comment.class);
+
+        
         ParseACL defaultACL = new ParseACL();
         ParseACL.setDefaultACL(defaultACL, true);
 

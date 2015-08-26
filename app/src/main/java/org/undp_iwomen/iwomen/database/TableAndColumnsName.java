@@ -61,6 +61,7 @@ public class TableAndColumnsName {
         String POST_CONTENT_VIDEO_ID = "video_id";
         String POST_CONTENT_SUGGEST_TEXT= "post_content_suggest_text";
         String POST_CONTENT_TITLE_MM = "post_title_mm";
+        String LIKE_STATUS = "like_status";
 
         String STATUS = "status";
         String CREATED_DATE ="created_at";
@@ -72,7 +73,8 @@ public class TableAndColumnsName {
                 POST_OBJ_ID + " Text Not Null," +
                 POST_TITLE + " Text Not Null," +
                 POST_CONTENT + " Text Not Null," +
-                POST_LIKES + " Text Not Null," +
+                POST_CONTENT_MM+ " Text Not Null," +
+                POST_LIKES + " INTEGER Not Null," +
                 POST_IMG_PATH + " Text Not Null," +
                 POST_CONTENT_TYPES + " Text Not Null," +
 
@@ -84,7 +86,7 @@ public class TableAndColumnsName {
                 POST_CONTENT_SUGGEST_TEXT + " Text Not Null," +
                 POST_CONTENT_TITLE_MM + " Text Not Null," +
 
-
+                LIKE_STATUS + " Text Not Null," +
                 STATUS + " Text Not Null," +
                 CREATED_DATE + " DateTime Not Null," +
                 UPDATED_DATE + " DateTime Not Null);";

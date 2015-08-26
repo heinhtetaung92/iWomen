@@ -3,6 +3,7 @@ package org.undp_iwomen.iwomen.ui.fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -32,6 +33,9 @@ public class ResourcesFragment extends Fragment {
     private ArrayList<ResourceItem> ResourceItems;
 
     private ResourcesListViewAdapter adapter;
+    SharedPreferences sharePrefLanguageUtil;
+    String mstr_lang;
+    String name[] ;
 
     int[] randomImgMain = new int[]{R.drawable.idea
             ,R.drawable.donors,R.drawable.law};
@@ -56,15 +60,30 @@ public class ResourcesFragment extends Fragment {
         return rootView;
     }
     private void init(View rootView) {
+        sharePrefLanguageUtil = getActivity().getSharedPreferences(Utils.PREF_SETTING, Context.MODE_PRIVATE);
 
         ResourceItems = new ArrayList<ResourceItem>();
         lvResouces =(ListView)rootView.findViewById(R.id.resource_list);
 
-        String name[] = new String[]{"ေခ\u102Bင္းေဆာင္မ\u103Dုုသင္ခန္းစာ မ\u103Aား ","အလ\u103D\u1034 ရ\u103Dင္ မ\u103Aား",
+
+        mstr_lang = sharePrefLanguageUtil.getString(com.parse.utils.Utils.PREF_SETTING_LANG, com.parse.utils.Utils.ENG_LANG);
+        if(mstr_lang.equals(com.parse.utils.Utils.ENG_LANG)){
+
+             name = new String[]{"Leadership","Donors",
+                    "Laws"
+
+            };
+        }else{
+             name = new String[]{"ေခ\u102Bင္းေဆာင္မ\u103Dုုသင္ခန္းစာ မ\u103Aား ","အလ\u103D\u1034 ရ\u103Dင္ မ\u103Aား",
+                    "ဥပေဒ မ\u103Aား"
+
+            };
+        }
+        /*String name[] = new String[]{"ေခ\u102Bင္းေဆာင္မ\u103Dုုသင္ခန္းစာ မ\u103Aား ","အလ\u103D\u1034 ရ\u103Dင္ မ\u103Aား",
                 "ဥပေဒ မ\u103Aား"
 
         };
-
+*/
         String text[] = new String[]{"Leadership","Leadership","Leadership",
                                     };
 

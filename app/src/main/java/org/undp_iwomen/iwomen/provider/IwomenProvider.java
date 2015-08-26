@@ -132,8 +132,20 @@ public class IwomenProvider extends ContentProvider {
 
 
     @Override
-    public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
-        return 0;
+    public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionargs) {
+        SQLiteDatabase db = sqliteHelper.getWritableDatabase();
+        int match = matcher.match(uri);
+
+        switch (match){
+            case USER:
+                return db.update(TableAndColumnsName.TableNames.USER,contentValues,selection,selectionargs);
+
+            case POST:
+                return db.update(TableAndColumnsName.TableNames.POST,contentValues,selection,selectionargs);
+            default:
+                throw new UnsupportedOperationException("Unknown uri : "+uri);
+        }
+
     }
 
     @Override

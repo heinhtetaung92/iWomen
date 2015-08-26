@@ -49,6 +49,8 @@
         <item quantity="one">လွ်ိဳ ့၀ွက္ စာလံုုး အေရအတြက္အနည္းဆံုုး  %d လံုုး ရွိရပါမည္။</item>
         <item quantity="other">လွ်ိဳ့ ၀ွက္ စာလံုုး အေရအတြက္ အမ်ားဆံုုး %d လံုုး ရွိရပါမည္။</item>
     </plurals>
+    <string name="action_photo_camera">Take Photo</string>
+    <string name="action_photo_gallery">Choose Existing</string>
     <string name="com_parse_ui_confirm_password_input_hint">Re-enter password</string>
     <string name="com_parse_ui_confirm_password_input_hint_mm">လွ်ိဳ ့၀ွက္ စာလံုုးေနာက္တစ္ၾကိမ္ၿပန္ရိုုက္ပါ</string>
     <string name="com_parse_ui_create_account_button_label">Create account</string>
@@ -146,6 +148,7 @@
     <string name="passport_error">Passport number is required</string>
     <string name="password_error">Password is required</string>
     <string name="password_error_mm">လွ်ိဳ ့၀ွက္ စာလံုုးရိုုက္ထည့္ရန္လိုုအပ္ပါသည္</string>
+    <string name="select_picture">Select Picture</string>
     <string name="your_name_error">Your name is required</string>
     <string name="your_name_error_mm">အမည္ ရိုုက္ထည့္ရန္လိုုအပ္ပါသည္</string>
     <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/res/values/styles.xml -->
