@@ -25,4 +25,7 @@
     <dimen name="feed_item_corner_radius">3dp</dimen>
     <dimen name="feed_item_border_width">1dp</dimen>
 
+    <dimen name="theme_color_icon_size_small">16dp</dimen>
+
+
 </resources>

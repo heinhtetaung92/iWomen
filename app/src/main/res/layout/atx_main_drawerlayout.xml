@@ -31,7 +31,7 @@
 
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical|left"
                 android:orientation="vertical"
@@ -102,20 +102,81 @@
                         android:paddingLeft="16dip"
 
                         android:singleLine="true"
-                        android:text="Log in with Facebook"
+                        android:text="Name"
                         android:textColor="@color/white" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="left">
+
+                        <TextView
+                            style="?attr/spinnerDropDownItemStyle"
+                            android:id="@+id/menu_user_post_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:ellipsize="end"
+                            android:padding="2dip"
+                            android:paddingLeft="16dip"
+                            android:singleLine="true"
+                            android:text="1 Post"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal"
+                        android:layout_gravity="right"
+                        android:paddingRight="16dp">
+
+                        <!--<com.facebook.login.widget.LoginButton
+                            android:id="@+id/login_button2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="16dip"
+                            android:layout_marginTop="5dp"
+
+                            android:gravity="center_horizontal"
+
+
+                            android:textSize="10sp"
+                            android:visibility="gone"
+                             />-->
+
+
+                        <TextView
+                            android:id="@+id/menu_sing_out"
+                            style="?attr/spinnerDropDownItemStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:layout_marginTop="5dp"
+                            android:ellipsize="end"
+                            android:padding="2dip"
+                            android:paddingLeft="16dip"
+
+                            android:singleLine="true"
+                            android:text="Sing Out"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+
+
                 </LinearLayout>
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical|left"
-                android:orientation="horizontal">
-
-
-            </LinearLayout>
         </LinearLayout>
 
 

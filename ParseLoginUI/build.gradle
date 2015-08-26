@@ -8,6 +8,12 @@ dependencies {
     compile 'com.makeramen:roundedimageview:1.5.0'
     compile 'com.android.support:design:22.2.0'
     //provided 'com.facebook.android:facebook-android-sdk:3.21.1'
+    //1.6.0
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
+    compile 'com.squareup.okhttp:okhttp:2.0.0'
+    compile 'com.squareup.okio:okio:1.2.0'
+    //1.10
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }
 
 android {

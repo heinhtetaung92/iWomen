@@ -5,8 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.makeramen.RoundedImageView;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
@@ -17,6 +18,7 @@ import org.undp_iwomen.iwomen.model.MyTypeFace;
 public class SubResourceListViewAdapter extends BaseAdapter
 {
     private String[] listName = null;
+    private String[] listAuthorName = null;
     private String[] listDate = null;
     private String[] listDataText = null;
     private int[] listicon = null;
@@ -26,7 +28,7 @@ public class SubResourceListViewAdapter extends BaseAdapter
     // Declare Variables
     Context mContext;
     LayoutInflater inflater;
-    public SubResourceListViewAdapter(Context context, String[] listName, String[] listDate,int[] listic) { //
+    public SubResourceListViewAdapter(Context context,String[] listauthorname, String[] listName, String[] listDate,int[] listic) { //
         super();
         mContext = context;
         inflater = LayoutInflater.from(mContext);
@@ -34,6 +36,7 @@ public class SubResourceListViewAdapter extends BaseAdapter
         this.listName = listName;
         this.listicon = listic;
         this.listDate = listDate;
+        this.listAuthorName = listauthorname;
         //Log.e("BrowseGridviewAdapter Constructor", "" + listShopName.size() +listShopName.toString());
         //this.activity = activity;
     }
@@ -58,10 +61,10 @@ public class SubResourceListViewAdapter extends BaseAdapter
 
     public static class ViewHolder
     {
-
+        public TextView txtAuthour;
         public TextView txtName;
         public TextView txtTime;
-        public ImageView imgIcon;
+        public RoundedImageView imgIcon;
         //public TextView txtViewTitle;
     }
 
@@ -73,12 +76,18 @@ public class SubResourceListViewAdapter extends BaseAdapter
         //LayoutInflater inflator = activity.getLayoutInflater();
 
         if(view ==null)
-        {
-            holder = new ViewHolder();
-            view = inflater.inflate(R.layout.sub_resource_list_item, null);//gridview_row //fra_browse_gridview_item
-            holder.txtName= (TextView)view.findViewById(R.id.txt_sub_resource_item_name);
+        {holder = new ViewHolder();
+            view = inflater.inflate(R.layout.sub_resource_list_item_new, null);//gridview_row //fra_browse_gridview_item
+            /*holder.txtName= (TextView)view.findViewById(R.id.txt_sub_resource_item_name);
             holder.txtTime= (TextView)view.findViewById(R.id.txt_sub_resource_item_time);
-            holder.imgIcon = (ImageView) view.findViewById(R.id.sub_resource_icon);
+            holder.imgIcon = (ImageView) view.findViewById(R.id.sub_resource_icon);*/
+
+
+            holder.txtAuthour = (TextView)view.findViewById(R.id.sub_resouce_list_item_author_name);
+            holder.txtName= (TextView)view.findViewById(R.id.sub_resouce_list_item_title);
+            holder.txtTime= (TextView)view.findViewById(R.id.sub_resouce_list_item_time);
+            holder.imgIcon = (RoundedImageView) view.findViewById(R.id.sub_resouce_list_item_img);
+
 
 
             view.setTag(holder);
@@ -89,13 +98,15 @@ public class SubResourceListViewAdapter extends BaseAdapter
             holder = (ViewHolder) view.getTag();
         }
 
+        holder.txtAuthour.setText(listAuthorName[position]);
+
         holder.txtName.setText(listName[position]);
         holder.txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
 
         holder.txtTime.setText(listDate[position]);
 
 
-        holder.imgIcon.setImageResource(listicon[position]);
+        holder.imgIcon.setImageResource(listicon[position]);//listicon[position]
 
         //For transparent bg alpha 51=20% , 127=50% , 191=75% , 204 = 80%  ,229=90% , 242=95%
         //holder.txtName.setBackgroundColor (Color.argb(229, 175, 42, 43));// Color.argb(0, 175, 42, 43)); // background transparency

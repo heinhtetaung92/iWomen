@@ -29,13 +29,15 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
     private Context mContext;
     private List<FeedItem> feedItems;
     private ArrayList<FeedItem> arraylist;
+    String mstr_lang;
 
-    public PostListRecyclerViewAdapter(Context context, List<FeedItem> feedItems) {
+    public PostListRecyclerViewAdapter(Context context, List<FeedItem> feedItems, String typeFaceName) {
         mContext = context;
         this.feedItems = feedItems;
 
         this.arraylist = new ArrayList<FeedItem>();
         this.arraylist.addAll(feedItems);
+        mstr_lang = typeFaceName;
         //randomizeCatNames();
     }
 
@@ -102,16 +104,35 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
         viewHolder.profile.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         //viewHolder.mPostTile.setText(item.getPost_title());
-        viewHolder.mPostTile.setText(item.getPost_title_mm());
-        viewHolder.post_content.setText(item.getPost_content());
-        viewHolder.post_content_user_name.setText(item.getPost_content_user_name());
+        if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)) {
+            viewHolder.mPostTile.setText(item.getPost_title());
+            viewHolder.post_content.setText(item.getPost_content());
+            viewHolder.post_content_user_name.setText(item.getPost_content_user_name());
+
+            viewHolder.mPostTile.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
+            viewHolder.post_content.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
+
+        } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG)) {
+            viewHolder.mPostTile.setText(item.getPost_title_mm());
+            viewHolder.post_content.setText(item.getPost_content_mm());
+            viewHolder.post_content_user_name.setText(item.getPost_content_user_name());
+
+            viewHolder.mPostTile.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+            viewHolder.post_content.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+            //viewHolder.mPostTile.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+
+        }
+
 
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
-        SimpleDateFormat simpleDateFormatForDb = new SimpleDateFormat("dd-MM-yyyy");
+
+        SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd hh:mm:ss Z yyyy", Locale.US);
 
 
+        //Sun Jun 22 18:32:00 GMT+06:30 2014
+        //Log.e("Stories Post Adapter==","Date===>" + item.getCreated_at());
         try {
-            Date timedate = sdf.parse(item.getCreated_at());
+            Date timedate = format.parse(item.getCreated_at());
             viewHolder.post_timestamp.setText(sdf.format(timedate));
 
         } catch (ParseException e) {
@@ -122,26 +143,32 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
 
         //viewHolder.mCatNameTextView.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
         //viewHolder.profilePictureView.setProfileId(item.get());
-        try {
-            viewHolder.profilePictureView.setVisibility(View.GONE);
-            viewHolder.profile.setVisibility(View.VISIBLE);
-            Picasso.with(mContext)
-                    .load(item.getPost_content_user_img_path()) //"http://cheapandcheerfulshopper.com/wp-content/uploads/2013/08/shopping1257549438_1370386595.jpg" //deal.photo1
-                    .placeholder(R.drawable.blank_profile)
-                    .error(R.drawable.blank_profile)
-                    .into(viewHolder.profile, new ImageLoadedCallback(viewHolder.profile_item_progressBar) {
-                        @Override
-                        public void onSuccess() {
-                            if (this.progressBar != null) {
-                                this.progressBar.setVisibility(View.GONE);
-                            } else {
-                                this.progressBar.setVisibility(View.VISIBLE);
+        // Feed image
+        if (item.getPost_content_user_img_path() != null && !item.getPost_content_user_img_path().isEmpty()) {
+            try {
+                viewHolder.profilePictureView.setVisibility(View.GONE);
+                viewHolder.profile.setVisibility(View.VISIBLE);
+                Picasso.with(mContext)
+                        .load(item.getPost_content_user_img_path()) //"http://cheapandcheerfulshopper.com/wp-content/uploads/2013/08/shopping1257549438_1370386595.jpg" //deal.photo1
+                        .placeholder(R.drawable.blank_profile)
+                        .error(R.drawable.blank_profile)
+                        .into(viewHolder.profile, new ImageLoadedCallback(viewHolder.profile_item_progressBar) {
+                            @Override
+                            public void onSuccess() {
+                                if (this.progressBar != null) {
+                                    this.progressBar.setVisibility(View.GONE);
+                                } else {
+                                    this.progressBar.setVisibility(View.VISIBLE);
+                                }
                             }
-                        }
 
-                    });
-        } catch (OutOfMemoryError outOfMemoryError) {
-            outOfMemoryError.printStackTrace();
+                        });
+            } catch (OutOfMemoryError outOfMemoryError) {
+                outOfMemoryError.printStackTrace();
+            }
+        } else {
+            viewHolder.profilePictureView.setBackgroundResource(R.drawable.blank_profile);
+            viewHolder.profile_item_progressBar.setVisibility(View.GONE);
         }
 
         // Feed image
@@ -230,7 +257,7 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
             feedItems.addAll(arraylist);
         } else {
             for (FeedItem fi : arraylist) {
-                if (fi.getPost_title().toLowerCase(Locale.getDefault()).contains(charText) ||fi.getPost_title_mm().toLowerCase(Locale.getDefault()).contains(charText) ) {
+                if (fi.getPost_title().toLowerCase(Locale.getDefault()).contains(charText) || fi.getPost_title_mm().toLowerCase(Locale.getDefault()).contains(charText)) {
                     feedItems.add(fi);
                 }
             }

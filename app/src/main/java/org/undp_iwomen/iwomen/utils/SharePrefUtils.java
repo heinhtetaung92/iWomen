@@ -19,6 +19,8 @@ package org.undp_iwomen.iwomen.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import org.undp_iwomen.iwomen.CommonConfig;
+
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,6 +33,9 @@ public class SharePrefUtils {
 
     public SharedPreferences fbSharePreferences;
     protected SharedPreferences.Editor fEditor;
+
+    private SharedPreferences mSharedPreferencesUserInfo;
+    private SharedPreferences.Editor mEditorUserInfo;
 
 
 
@@ -58,6 +63,10 @@ public class SharePrefUtils {
 
         fbSharePreferences = context.getSharedPreferences("FB", 0);
         fEditor = fbSharePreferences.edit();
+
+
+        mSharedPreferencesUserInfo = context.getSharedPreferences(CommonConfig.SHARE_PREFERENCE_USER_INFO, Context.MODE_PRIVATE);
+        mEditorUserInfo = mSharedPreferencesUserInfo.edit();
     }
 
     public static SharePrefUtils getInstance(Context context) {
@@ -152,6 +161,12 @@ public class SharePrefUtils {
         // Clearing all data from Shared Preferences
         fEditor.clear();
         fEditor.commit();
+
+
+    }
+    public void ClearLogOut(){
+        mEditorUserInfo.clear();
+        mEditorUserInfo.commit();
     }
 
 

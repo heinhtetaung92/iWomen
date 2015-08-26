@@ -1,63 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/settings_language_setting_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:title="Change Language"
-        android:layout_margin="16dp" />
-
-    <RadioGroup
-        android:id="@+id/settings_language"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="16dp">
-
-        <RadioButton
-            android:id="@+id/settings_english_language"
+        <TextView
+            android:id="@+id/settings_language_setting_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ENGLISH"
-            android:checked="true"/>
+            android:layout_margin="16dp"
+            android:title="Change Language" />
 
-        <RadioButton
-            android:id="@+id/settings_myanmar_language"
+        <RadioGroup
+            android:id="@+id/settings_language"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MYANMAR"/>
+            android:layout_margin="16dp"
+            android:orientation="vertical">
 
-    </RadioGroup>
+            <RadioButton
+                android:id="@+id/settings_english_language"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="ENGLISH" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000"
-        android:layout_margin="16dp"/>
+            <RadioButton
+                android:id="@+id/settings_myanmar_language"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MYANMAR" />
 
-    <CheckBox
-        android:id="@+id/settings_getnotification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Get Notification"
-        android:layout_margin="16dp"/>
+        </RadioGroup>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="16dp"
+            android:background="#c3c3c3" />
+
+        <CheckBox
+            android:id="@+id/settings_getnotification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Get Notification" />
 
 
-    <TextView
-        android:id="@+id/settings_changeTheme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Change Theme"
-        android:layout_margin="16dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="16dp"
+            android:background="#c3c3c3" />
+
+        <TextView
+            android:id="@+id/settings_changeTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_marginLeft="18dp"
+            android:text="Change Theme"
+            android:textColor="@color/black" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <!--<TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text=""/>-->
+
+            <View
+                android:id="@+id/setting_color_blue"
+                android:layout_width="@dimen/theme_color_icon_size_small"
+                android:layout_height="@dimen/theme_color_icon_size_small"
+                android:background="@drawable/color_chooser_shape_drawable_blue" />
+
+            <View
+                android:id="@+id/setting_color_yellow"
+                android:layout_width="@dimen/theme_color_icon_size_small"
+                android:layout_height="@dimen/theme_color_icon_size_small"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/color_chooser_shape_drawable_yellow" />
+
+            <View
+                android:id="@+id/setting_color_pink"
+                android:layout_width="@dimen/theme_color_icon_size_small"
+                android:layout_height="@dimen/theme_color_icon_size_small"
+                android:background="@drawable/color_chooser_shape_drawable" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="16dp"
+            android:background="#c3c3c3" />
+
 
     </LinearLayout>
 

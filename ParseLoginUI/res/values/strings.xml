@@ -137,4 +137,8 @@
     <string name="i_agree">I agree to all the <a href="https://www.facebook.com/UndpMyanmar">Terms and Conditions</a></string>
     <string name="i_agree_mm">မွတ္ပံုုတင္အခ်က္ အလက္မ်ားကိုုသေဘာတူပါသည္ <a href="http://gobus.asia/terms-and-conditions/"></a></string>
 
+    <string name="action_photo_camera">Take Photo</string>
+    <string name="action_photo_gallery">Choose Existing</string>
+    <string name="select_picture">Select Picture</string>
+
 </resources>

@@ -21,7 +21,7 @@
     <string name="login_fb_appid">909633732437583</string>
     <string name="action_refresh">Refresh</string>
     <string name="title_activity_post_detail">PostDetailActivity</string>
-    <string name="title_activity_about_us_eng">Abous Us</string>
+    <string name="title_activity_about_us_eng">About Us</string>
     <string name="title_activity_about_us_mm">ကြ်ႏုုပ္တိုု ့အေၾကာင္း</string>
     <string name="title_activity_post_news">News</string>
 
@@ -35,7 +35,27 @@
     <string name="about_us_eng">About</string>
 
     <string name="leadership_mm">ေခါင္းေဆာင္မႈသင္ခန္းစာမ်ား</string>
-    <string name="leadership_eng">About</string>
+    <string name="leadership_eng">Leadership Lessons</string>
+
+    <string name="title_activity_new_post_eng">New Post</string>
+    <string name="title_activity_new_post_mm">ပိုု ့စ္အသစ္တင္မည္</string>
+
+    <string name="new_post_mm">ပိုု ့စ္အသစ္တင္မည္</string>
+    <string name="new_post_eng">Post New Story</string>
+
+    <string name="character_count_placeholder">0/400</string>
+
+    <string name="new_post_hint_title_mm">ေခါင္းစဥ္</string>
+    <string name="new_post_hint_title_eng">Tile</string>
+
+    <string name="new_post_hint_body_mm">ပိုု ့စ္အသစ္</string>
+    <string name="new_post_hint_body_eng">Story</string>
+
+    <string name="new_post_upload_photo_mm">ပံုုတင္ရန္</string>
+    <string name="new_post_upload_photo_eng">Upload Image</string>
+
+    <string name="post_detail_comment_mm">မွတ္ ခ်က္ (သိုု ့မဟုုတ္) ေကာမန္ ့ေရးရန္</string>
+    <string name="post_detail_comment_eng">Enter your Comment</string>
 
     <string name="com_parse_ui_username_input_hint_mm">အမည္</string>
     <string name="com_parse_ui_password_input_hint_mm">လွ်ိဳ ့၀ွက္ စာလံုုး</string>
@@ -48,4 +68,16 @@
     <string name="com_parse_ui_create_account_button_label_mm">၀င္မည္</string>
     <string name="com_parse_ui_edit_account_button_label_mm">ၿပင္ဆင္မည္</string>
     <string name="i_agree_mm">မွတ္ပံုုတင္အခ်က္ အလက္မ်ားကိုုသေဘာတူပါသည္ <a href="http://gobus.asia/terms-and-conditions/"></a></string>
+
+    <string name="success">Success</string>
+    <string name="successfully_posted_post">Post ID: %1$s</string>
+    <string name="error">Error</string>
+    <string name="status_update">Updating status for %1$s at %2$s</string>
+    <string name="ok">OK</string>
+    <string name="post">Post</string>
+    <string name="prompt_post">Post</string>
+    <string name="error_dialog_title">Error!</string>
+        <string name="native_share_error">Native sharing requires the Facebook for Android
+        application.</string>
+
 </resources>

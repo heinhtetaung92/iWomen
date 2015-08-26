@@ -82,6 +82,8 @@ public class ParseLoginActivity extends ActionBarActivity implements
     private static final String USER_NAME = "username";
     public static final String USER_NRC = "nrc";
     public static final String USER_PH = "ph";
+    public static final String USER_FBID_INCLUDE = "FbId_Include";
+    public static final String USER_FBID = "FbId";
     public static final String USER_PASSPORT = "passport";
     public static final String USER_DOC_TYPE = "doc_type";
 
@@ -189,6 +191,16 @@ public class ParseLoginActivity extends ActionBarActivity implements
 
             //String nrc = user.getString("NRC");
             String ph = user.getString("phoneNo");
+            Boolean userFbIdInclude;
+            String userFbId;
+
+            if(user.get("facebookId") != null){
+                userFbIdInclude = true;
+                userFbId = user.getString("facebookId");
+                mDashBoradIntent.putExtra(USER_FBID,userFbId);
+            }else{
+                userFbIdInclude = false;
+            }
             //String doc_type = user.getString("DocType");
             //String passport = user.getString("Passport");
 
@@ -198,7 +210,11 @@ public class ParseLoginActivity extends ActionBarActivity implements
             mDashBoradIntent.putExtra(USER_OBJ_ID, objectId);
             mDashBoradIntent.putExtra(USER_NAME, username);
             mDashBoradIntent.putExtra(USER_PH, ph);
+            mDashBoradIntent.putExtra(USER_FBID_INCLUDE,userFbIdInclude);
+
+
             if(lang.equals(Utils.ENG_LANG)){
+
 
                 mDashBoradIntent.putExtra(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
             }
@@ -313,5 +329,21 @@ public class ParseLoginActivity extends ActionBarActivity implements
         }
 
         return mergedOptions;
+    }
+    //For Back Case
+    @Override
+    public void onBackPressed() {
+
+         try {
+             Intent intent  = new Intent(this, Class.forName("org.undp_iwomen.iwomen.ui.activity.DrawerMainActivity"));
+             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+             intent.putExtra("Exit me", true);
+             startActivity(intent);
+             finish();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }

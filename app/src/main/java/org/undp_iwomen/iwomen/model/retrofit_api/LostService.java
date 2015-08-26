@@ -11,7 +11,7 @@ import retrofit.http.Query;
  */
 public interface LostService {
 
-    @GET(CommonConfig.LOST_URL)
+    @GET(CommonConfig.COMMENT_URL)
     public void getLostInfo(@Query("order") String s, Callback<String> callback);
 
 
