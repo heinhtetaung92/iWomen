@@ -1,6 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
@@ -258,13 +257,14 @@
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/activity_vertical_margin">
 
-                <TextView
-                    android:id="@+id/postdetail_smile_img_upload"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <ImageView
+                    android:id="@+id/toggleEmojiIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/smiley"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="8dp"/>
 
-
-                    android:background="@drawable/ic_mood_white_18dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -273,14 +273,13 @@
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/activity_vertical_margin">
 
-                <com.rockerhieu.emojicon.EmojiconEditText
+                <com.algo.hha.emojiicon.EmojiconEditText
                     android:id="@+id/postdetail_et_comment_upload"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:hint="@string/post_detail_comment_eng"
                     android:singleLine="false"
-                    emojicon:emojiconSize="28sp"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white" />
             </LinearLayout>
@@ -304,12 +303,12 @@
 
         </LinearLayout>
 
-        <FrameLayout
+        <!--<FrameLayout
             android:id="@+id/emojicons"
             android:visibility="gone"
             android:layout_below="@+id/bottom_bar"
             android:layout_width="match_parent"
-            android:layout_height="250dp"/>
+            android:layout_height="250dp"/>-->
     </LinearLayout>
 
 

@@ -13,19 +13,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.algo.hha.emojiicon.EmojiconEditText;
+import com.algo.hha.emojiicon.EmojiconGridView;
+import com.algo.hha.emojiicon.EmojiconsPopup;
+import com.algo.hha.emojiicon.emoji.Emojicon;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -46,10 +53,6 @@ import com.parse.ParseACL;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
-import com.rockerhieu.emojicon.EmojiconEditText;
-import com.rockerhieu.emojicon.EmojiconGridFragment;
-import com.rockerhieu.emojicon.EmojiconsFragment;
-import com.rockerhieu.emojicon.emoji.Emojicon;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -79,7 +82,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class PostDetailActivity extends AppCompatActivity implements View.OnClickListener, EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener {
+public class PostDetailActivity extends AppCompatActivity implements View.OnClickListener{
 
     TextView mPostTile;
 
@@ -107,9 +110,9 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     private ImageView img_like;
     private TextView txt_like_count;
     private String postId, like_status;
-    private TextView txt_simile_emoji_icon;
+    //private TextView txt_simile_emoji_icon;
     private EmojiconEditText et_comment;
-    FrameLayout et_comment_frame;
+    //FrameLayout et_comment_frame;
     private TextView txt_comment_submit;
 
     private ImageView img_viber_share;
@@ -132,6 +135,12 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         POST_PHOTO,
         POST_STATUS_UPDATE
     }
+
+
+    //Emoji Keyboard
+    public ImageView emojiIconToggle;
+
+
     private ShareDialog shareDialog;
     private static final String PERMISSION = "publish_actions";
     private boolean canPresentShareDialog;
@@ -195,6 +204,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         Bundle bundle = getIntent().getExtras();
         postId = bundle.getString("post_id");
         init();
+        initEmojiIcon();
 
 
 
@@ -241,15 +251,17 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         img_like = (ImageView) findViewById(R.id.postdetail_like_img);
         txt_like_count = (TextView) findViewById(R.id.postdetail_like_count);
 
-        txt_simile_emoji_icon = (TextView) findViewById(R.id.postdetail_smile_img_upload);
+        //txt_simile_emoji_icon = (TextView) findViewById(R.id.postdetail_smile_img_upload);
         et_comment = (EmojiconEditText) findViewById(R.id.postdetail_et_comment_upload);
-        et_comment_frame = (FrameLayout) findViewById(R.id.emojicons);
+        //et_comment_frame = (FrameLayout) findViewById(R.id.emojicons);
         txt_comment_submit = (TextView) findViewById(R.id.postdetail_submit_comment);
 
         img_viber_share = (ImageView)findViewById(R.id.postdetail_viber_img);
         ly_postdetail_share_button = (LinearLayout)findViewById(R.id.postdetail_share_button);
 
         shareButton = (ShareButton)findViewById(R.id.postdetail_fb_share_button);
+
+        emojiIconToggle = (ImageView) findViewById(R.id.toggleEmojiIcon);
 
 
 
@@ -264,7 +276,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         shareButton.setShareContent(getLinkContent());
 
         ly_likes_button.setOnClickListener(this);
-        txt_simile_emoji_icon.setOnClickListener(this);
+        //txt_simile_emoji_icon.setOnClickListener(this);
         txt_comment_submit.setOnClickListener(this);
         img_viber_share.setOnClickListener(this);
         ly_postdetail_share_button.setOnClickListener(this);
@@ -281,16 +293,132 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
             @Override
             public void afterTextChanged(Editable s) {
-                et_comment_frame.setVisibility(View.GONE);
+                //et_comment_frame.setVisibility(View.GONE);
 
             }
         });
 
-        setEmojiconFragment(false);
 
 
         getTestCommentList();
 
+    }
+
+    public void initEmojiIcon(){
+        boolean isLargerLollipop = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
+
+        int reduceheight = 0;
+        if(isLargerLollipop){
+            reduceheight = (int) getResources().getDimension(R.dimen.reduceeheight);
+        }
+        // Give the topmost view of your activity layout hierarchy. This will be used to measure soft keyboard height
+        final EmojiconsPopup popup = new EmojiconsPopup(getWindow().getDecorView().getRootView(), this, reduceheight);
+
+
+        //Will automatically set size according to the soft keyboard size
+        popup.setSizeForSoftKeyboard();
+
+
+        //If the emoji popup is dismissed, change emojiButton to smiley icon
+        popup.setOnDismissListener(new PopupWindow.OnDismissListener() {
+
+
+            @Override
+            public void onDismiss() {
+                changeEmojiKeyboardIcon(emojiIconToggle, R.drawable.smiley);
+            }
+        });
+
+
+        //If the text keyboard closes, also dismiss the emoji popup
+        popup.setOnSoftKeyboardOpenCloseListener(new EmojiconsPopup.OnSoftKeyboardOpenCloseListener() {
+
+            @Override
+            public void onKeyboardOpen(int keyBoardHeight) {
+
+
+            }
+
+            @Override
+            public void onKeyboardClose() {
+                if (popup.isShowing())
+                    popup.dismiss();
+            }
+        });
+
+
+        //On emoji clicked, add it to edittext
+        popup.setOnEmojiconClickedListener(new EmojiconGridView.OnEmojiconClickedListener() {
+
+
+            @Override
+            public void onEmojiconClicked(Emojicon emojicon) {
+                if (et_comment == null || emojicon == null) {
+                    return;
+                }
+
+
+                int start = et_comment.getSelectionStart();
+                int end = et_comment.getSelectionEnd();
+                if (start < 0) {
+                    et_comment.append(emojicon.getEmoji());
+                } else {
+                    et_comment.getText().replace(Math.min(start, end),
+                            Math.max(start, end), emojicon.getEmoji(), 0,
+                            emojicon.getEmoji().length());
+                }
+            }
+        });
+
+
+        //On backspace clicked, emulate the KEYCODE_DEL key event
+        popup.setOnEmojiconBackspaceClickedListener(new EmojiconsPopup.OnEmojiconBackspaceClickedListener() {
+
+
+            @Override
+            public void onEmojiconBackspaceClicked(View v) {
+                KeyEvent event = new KeyEvent(
+                        0, 0, 0, KeyEvent.KEYCODE_DEL, 0, 0, 0, 0, KeyEvent.KEYCODE_ENDCALL);
+                et_comment.dispatchKeyEvent(event);
+            }
+        });
+
+
+
+        emojiIconToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //If popup is not showing => emoji keyboard is not visible, we need to show it
+                if (!popup.isShowing()) {
+
+                    //If keyboard is visible, simply show the emoji popup
+                    if (popup.isKeyBoardOpen()) {
+                        popup.showAtBottom();
+                        changeEmojiKeyboardIcon(emojiIconToggle, R.drawable.ic_action_keyboard);
+                    }
+
+                    //else, open the text keyboard first and immediately after that show the emoji popup
+                    else {
+                        et_comment.setFocusableInTouchMode(true);
+                        et_comment.requestFocus();
+                        popup.showAtBottomPending();
+                        final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        inputMethodManager.showSoftInput(et_comment, InputMethodManager.SHOW_IMPLICIT);
+                        changeEmojiKeyboardIcon(emojiIconToggle, R.drawable.ic_action_keyboard);
+                    }
+                }
+
+                //If popup is showing, simply dismiss it to show the undelying text keyboard
+                else {
+                    popup.dismiss();
+
+                }
+            }
+        });
+    }
+
+    private void changeEmojiKeyboardIcon(ImageView iconToBeChanged, int drawableResourceId){
+        iconToBeChanged.setImageResource(drawableResourceId);
     }
 
     public void getTestCommentList() {
@@ -748,10 +876,11 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
                 break;
 
-            case R.id.postdetail_smile_img_upload:
+            /*case R.id.postdetail_smile_img_upload:
                 //Utils.doToastEng(getApplicationContext(),"Smile");
-                et_comment_frame.setVisibility(View.VISIBLE);
-                break;
+                //et_comment_frame.setVisibility(View.VISIBLE);
+
+                break;*/
             case R.id.postdetail_viber_img:
                 /*Uri uri = Uri.parse("http://www.google.com"); // missing 'http://' will cause crashed
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -898,16 +1027,16 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         listView.requestLayout();
     }
 
-    private void setEmojiconFragment(boolean useSystemDefault) {
+    /*private void setEmojiconFragment(boolean useSystemDefault) {
 
 
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.emojicons, EmojiconsFragment.newInstance(useSystemDefault))
                 .commit();
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onEmojiconClicked(Emojicon emojicon) {
         EmojiconsFragment.input(et_comment, emojicon);
     }
@@ -915,7 +1044,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onEmojiconBackspaceClicked(View v) {
         EmojiconsFragment.backspace(et_comment);
-    }
+    }*/
 
     //Share URL
     // Method to share either text or URL.

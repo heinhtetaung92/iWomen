@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/res/values/colors.xml -->
+    <!-- From: file:/Users/Admin/AndroidStudioProjects/iWomen/ParseLoginUI/res/values/colors.xml -->
     <eat-comment/>
     <color name="body_text_1">#de000000</color>
     <color name="body_text_1_inverse">#deffffff</color>
@@ -29,7 +29,7 @@
     <color name="theme_primary_dark">#C2185B</color>
     <color name="theme_primary_light">#F8BBD0</color>
     <color name="theme_window_background">#fff</color>
-    <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/res/values/dimens.xml -->
+    <!-- From: file:/Users/Admin/AndroidStudioProjects/iWomen/ParseLoginUI/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="com_parse_ui_horizontal_margin">16dp</dimen>
     <dimen name="com_parse_ui_large_vertical_spacing">24dp</dimen>
@@ -39,7 +39,7 @@
     <dimen name="com_parse_ui_vertical_spacing">16dp</dimen>
     <dimen name="com_parse_ui_xlarge_vertical_spacing">36dp</dimen>
     <dimen name="feed_item_profile_pic">50dp</dimen>
-    <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/res/values/strings.xml -->
+    <!-- From: file:/Users/Admin/AndroidStudioProjects/iWomen/ParseLoginUI/res/values/strings.xml -->
     <eat-comment/>
     <plurals name="com_parse_ui_password_too_short_toast">
         <item quantity="one">Password must be at least %d character long</item>
@@ -151,7 +151,7 @@
     <string name="select_picture">Select Picture</string>
     <string name="your_name_error">Your name is required</string>
     <string name="your_name_error_mm">အမည္ ရိုုက္ထည့္ရန္လိုုအပ္ပါသည္</string>
-    <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/res/values/styles.xml -->
+    <!-- From: file:/Users/Admin/AndroidStudioProjects/iWomen/ParseLoginUI/res/values/styles.xml -->
     <eat-comment/>
     <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light"/>
     <style name="ActionBarThemeOverlay" parent="">

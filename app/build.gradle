@@ -79,6 +79,6 @@ dependencies {
 
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile project(':library')
-
+    compile project(':emojiicon')
 
 }
