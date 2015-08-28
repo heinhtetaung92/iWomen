@@ -99,6 +99,7 @@ public class DrawerMainActivity extends AppCompatActivity {
         // Initialize the SDK before executing any other operations,
         // especially, if you're using Facebook UI elements.
 
+        org.undp_iwomen.iwomen.utils.Utils.onActivityCreateSetTheme(this);
         setContentView(R.layout.main_drawer_material);
 
         //Back from LoginActivity Control
@@ -315,6 +316,21 @@ public class DrawerMainActivity extends AppCompatActivity {
                 //Log.e("Load Adapter===","==runRunnable=" );
             }
         };
+
+
+    }
+
+    public void setThemeToApp(){
+        sharePrefLanguageUtil = getSharedPreferences(Utils.PREF_SETTING_LANG, MODE_PRIVATE);
+        int theme = sharePrefLanguageUtil.getInt(org.undp_iwomen.iwomen.utils.Utils.PREF_THEME, org.undp_iwomen.iwomen.utils.Utils.THEME_PINK);
+
+        if(theme == org.undp_iwomen.iwomen.utils.Utils.THEME_BLUE){
+            setTheme(R.style.AppTheme_Blue);
+        }else if(theme == org.undp_iwomen.iwomen.utils.Utils.THEME_PINK){
+            setTheme(R.style.AppTheme);
+        }else if(theme == org.undp_iwomen.iwomen.utils.Utils.THEME_YELLOW){
+            setTheme(R.style.AppTheme_Yellow);
+        }
 
 
     }

@@ -47,6 +47,9 @@
     <color name="vi_color">#8f5db7</color>
     <color name="fb_color">#3b5998</color>
 
+    <color name="yellow_700">#FBC02D</color>
+    <color name="blue_700">#1976D2</color>
+
     <color name="red_500">#f44336</color>
     <color name="pink_500">#e91e63</color>
     <color name="purple_500">#9c27b0</color>

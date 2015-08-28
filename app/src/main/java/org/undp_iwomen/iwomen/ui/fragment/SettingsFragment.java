@@ -1,6 +1,7 @@
 package org.undp_iwomen.iwomen.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
+import org.undp_iwomen.iwomen.ui.activity.DrawerMainActivity;
 import org.undp_iwomen.iwomen.ui.activity.SettingActivity;
 import org.undp_iwomen.iwomen.utils.Utils;
 
@@ -34,6 +36,7 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
     private Context mContext;
     private CheckBox chk_settings_getnotification;
     private TextView settings_changeTheme;
+    RadioButton color_blue, color_pink, color_yellow;
 
     public void SettingsFragment(Context context){
 
@@ -62,6 +65,10 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
         settings_changeTheme = (TextView)rootView.findViewById(R.id.settings_changeTheme);
         chk_settings_getnotification = (CheckBox)rootView.findViewById(R.id.settings_getnotification);
 
+        color_blue = (RadioButton) rootView.findViewById(R.id.setting_color_blue);
+        color_pink = (RadioButton) rootView.findViewById(R.id.setting_color_pink);
+        color_yellow = (RadioButton) rootView.findViewById(R.id.setting_color_yellow);
+
         String lang = sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
         rd_lang_en.setOnCheckedChangeListener(this);
         rd_lang_mm.setOnCheckedChangeListener(this);
@@ -74,6 +81,34 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
             setMyanmarFont();
         }
 
+        setSelectedTheme();
+
+    }
+
+    public void setSelectedTheme(){
+        int selected_theme = sharePrefLanguageUtil.getInt(Utils.PREF_THEME, Utils.THEME_PINK);
+
+        if(selected_theme == Utils.THEME_PINK){
+            color_pink.setChecked(true);
+        }else if(selected_theme == Utils.THEME_BLUE){
+            color_blue.setChecked(true);
+        }else if(selected_theme == Utils.THEME_YELLOW){
+            color_yellow.setChecked(true);
+        }
+
+    }
+
+
+    public void setThemeToApp(int theme){
+
+
+        if(theme == Utils.THEME_BLUE){
+            getActivity().setTheme(R.style.AppTheme_Blue);
+        }else if(theme == Utils.THEME_PINK){
+            getActivity().setTheme(R.style.AppTheme);
+        }else if(theme == Utils.THEME_YELLOW){
+            getActivity().setTheme(R.style.AppTheme_Yellow);
+        }
 
 
     }
@@ -81,26 +116,51 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
         SharedPreferences.Editor editor = sharePrefLanguageUtil.edit();
 
-
-        if(isChecked) {
-            if (buttonView.getId() == R.id.settings_english_language) {
-
-                editor.putString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
-
-                setEnglishFont();
-
-
-            } else if (buttonView.getId() == R.id.settings_myanmar_language) {
-                editor.putString(Utils.PREF_SETTING_LANG, Utils.MM_LANG);
-
-                setMyanmarFont();
-
+        if(buttonView.getId() == R.id.setting_color_blue){
+            if(isChecked){
+                editor.putInt(Utils.PREF_THEME, Utils.THEME_BLUE);
+                editor.commit();
+                Utils.changeToTheme(getActivity());
             }
 
+        }else if(buttonView.getId() == R.id.setting_color_pink){
+            if(isChecked){
+                editor.putInt(Utils.PREF_THEME, Utils.THEME_PINK);
+                editor.commit();
+                Utils.changeToTheme(getActivity());
+            }
+        }else if(buttonView.getId() == R.id.setting_color_yellow){
+            if(isChecked){
+                editor.putInt(Utils.PREF_THEME, Utils.THEME_YELLOW);
+                editor.commit();
+                Utils.changeToTheme(getActivity());
+            }
+        }else {
+
+
+
+
+            if (isChecked) {
+                if (buttonView.getId() == R.id.settings_english_language) {
+
+                    editor.putString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
+
+                    setEnglishFont();
+
+
+                } else if (buttonView.getId() == R.id.settings_myanmar_language) {
+                    editor.putString(Utils.PREF_SETTING_LANG, Utils.MM_LANG);
+
+                    setMyanmarFont();
+
+                }
+
+            }
+            editor.commit();
         }
-        editor.commit();
     }
 
     public void setEnglishFont(){
