@@ -1,11 +1,14 @@
 package org.undp_iwomen.iwomen.ui.activity;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.BaseColumns;
@@ -60,15 +63,20 @@ import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.data.CommentItem;
 import org.undp_iwomen.iwomen.data.FeedItem;
 import org.undp_iwomen.iwomen.database.TableAndColumnsName;
+import org.undp_iwomen.iwomen.model.Helper;
+import org.undp_iwomen.iwomen.model.ISO8601Utils;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
 import org.undp_iwomen.iwomen.model.TextWatcherAdapter;
+import org.undp_iwomen.iwomen.model.TimeDiff;
 import org.undp_iwomen.iwomen.model.parse.Comment;
 import org.undp_iwomen.iwomen.model.retrofit_api.CommentAPI;
 import org.undp_iwomen.iwomen.provider.IwomenProviderData;
 import org.undp_iwomen.iwomen.ui.adapter.CommentAdapter;
+import org.undp_iwomen.iwomen.ui.widget.ProgressWheel;
 import org.undp_iwomen.iwomen.utils.Connection;
 import org.undp_iwomen.iwomen.utils.Utils;
 
+import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -113,25 +121,36 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     private TextView txt_comment_submit;
 
     private ImageView img_viber_share;
+    private ImageView img_download;
+    private ImageView img_player;
+    private TextView txt_player;
+    private TextView txt_download;
 
     private LinearLayout ly_postdetail_share_button;
-    ListView listView;
+    private LinearLayout ly_postdetail_download;
+    private LinearLayout ly_postdetail_audio;
+    private LinearLayout ly_media_main;
+    ListView listView_Comment;
     List<CommentItem> listComment;
 
     Comment commentParse;
     String share_data;
     String share_img_url_data;
+
+    String str_comment_time_long;
     //FOR FB SHARE
     private ShareButton shareButton;
     private CallbackManager callbackManager;
     private final String PENDING_ACTION_BUNDLE_KEY =
             "org.undp_iwomen.iwomen.app:PendingAction";
     private PendingAction pendingAction = PendingAction.NONE;
+
     private enum PendingAction {
         NONE,
         POST_PHOTO,
         POST_STATUS_UPDATE
     }
+
     private ShareDialog shareDialog;
     private static final String PERMISSION = "publish_actions";
     private boolean canPresentShareDialog;
@@ -139,6 +158,14 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
     public static final int MENU_Search = Menu.FIRST;
     public static final int MENU_Share = Menu.FIRST + 1;
+    MediaPlayer mMedia;
+    private boolean isPlaying;
+    private String mstrPostType;
+    private Context mContext;
+
+    private ProgressDialog mProgressDialog;
+    private ProgressWheel progressWheel;
+    private String mstr_lang;
     private FacebookCallback<Sharer.Result> shareCallback = new FacebookCallback<Sharer.Result>() {
         @Override
         public void onCancel() {
@@ -176,6 +203,10 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mContext = getApplicationContext();
+        mProgressDialog = new ProgressDialog(PostDetailActivity.this);
+        mProgressDialog.setCancelable(false);
         //FB SHARE
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
@@ -192,10 +223,11 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_post_detail);
         sharePrefLanguageUtil = getSharedPreferences(com.parse.utils.Utils.PREF_SETTING, Context.MODE_PRIVATE);
 
+        mstr_lang = sharePrefLanguageUtil.getString(com.parse.utils.Utils.PREF_SETTING_LANG, com.parse.utils.Utils.ENG_LANG);
+
         Bundle bundle = getIntent().getExtras();
         postId = bundle.getString("post_id");
         init();
-
 
 
     }
@@ -224,6 +256,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
         }
 
+
         profile = (RoundedImageView) findViewById(R.id.postdetail_profilePic_rounded);
         mPostTile = (TextView) findViewById(R.id.postdetail_title);
         post_content = (TextView) findViewById(R.id.postdetail_content);
@@ -236,7 +269,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         feed_item_progressBar = (ProgressBar) findViewById(R.id.postdetail_feed_item_progressBar);
         profile_item_progressBar = (ProgressBar) findViewById(R.id.postdetail_progressBar_profile_item);
 
-        listView = (ListView) findViewById(R.id.postdetail_comment_listview);
+        listView_Comment = (ListView) findViewById(R.id.postdetail_comment_listview);
         ly_likes_button = (LinearLayout) findViewById(R.id.postdetail_like_button);
         img_like = (ImageView) findViewById(R.id.postdetail_like_img);
         txt_like_count = (TextView) findViewById(R.id.postdetail_like_count);
@@ -246,12 +279,18 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         et_comment_frame = (FrameLayout) findViewById(R.id.emojicons);
         txt_comment_submit = (TextView) findViewById(R.id.postdetail_submit_comment);
 
-        img_viber_share = (ImageView)findViewById(R.id.postdetail_viber_img);
-        ly_postdetail_share_button = (LinearLayout)findViewById(R.id.postdetail_share_button);
+        img_viber_share = (ImageView) findViewById(R.id.postdetail_viber_img);
+        ly_postdetail_share_button = (LinearLayout) findViewById(R.id.postdetail_share_button);
 
-        shareButton = (ShareButton)findViewById(R.id.postdetail_fb_share_button);
+        ly_postdetail_download = (LinearLayout) findViewById(R.id.detail_ly_download);
+        ly_postdetail_audio = (LinearLayout) findViewById(R.id.detail_ly_listen_now);
+        ly_media_main = (LinearLayout) findViewById(R.id.detail_ly_media_main);
 
+        img_player = (ImageView) findViewById(R.id.postdetail_img_player);
+        txt_player = (TextView) findViewById(R.id.postdetail_player_text);
 
+        shareButton = (ShareButton) findViewById(R.id.postdetail_fb_share_button);
+        progressWheel = (ProgressWheel)findViewById(R.id.postdetail_progress_wheel_comment);
 
 
         if (postId != null) {
@@ -268,7 +307,35 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         txt_comment_submit.setOnClickListener(this);
         img_viber_share.setOnClickListener(this);
         ly_postdetail_share_button.setOnClickListener(this);
+        postIMg.setOnClickListener(this);
 
+        ly_postdetail_audio.setOnClickListener(this);
+        ly_postdetail_download.setOnClickListener(this);
+
+
+        if (mstrPostType != null) {
+
+
+            if (mstrPostType.equalsIgnoreCase("Video")) {
+                img_player.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(mContext, YouTubeWebviewActivity.class);
+
+                        //intent.putExtra("post_id", feedItems.get(position).getPost_obj_id());
+
+                        //intent.putExtra("ImgUrl", mImgurl.get(getPosition()));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mContext.startActivity(intent);
+
+
+                    }
+                });
+            } else {
+                // Utils.doToastEng(mContext, "not video");
+            }
+        }
 
 
         et_comment.addTextChangedListener(new TextWatcherAdapter() {
@@ -286,10 +353,16 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
+        progressWheel.bringToFront();
+        progressWheel.spin();
+        //progress_wheel.setBarColor(Color.RED);
+        progressWheel.setRimColor(Color.LTGRAY);
+        progressWheel.setVisibility(View.VISIBLE);
         setEmojiconFragment(false);
 
 
         getTestCommentList();
+
 
     }
 
@@ -298,66 +371,151 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
         listComment = new ArrayList<>();
 
+        if (Connection.isOnline(mContext)) {
 
-        //TODO data from server
-        CommentAPI.getInstance().getService().getCommentByPostId("{\"postId\":{\"__type\":\"Pointer\",\"className\":\"Post\",\"objectId\":\"" + postId + "\"}}", new Callback<String>() {
-            @Override
-            public void success(String s, Response response) {
+            progressWheel.setVisibility(View.VISIBLE);
 
-                Log.e("Comments>>>", ">>>>" + s);
-                String comment;
-                String comment_created_time;
-                String comment_user_name;
+            //TODO data from server
+            CommentAPI.getInstance().getService().getCommentByPostId("{\"postId\":{\"__type\":\"Pointer\",\"className\":\"Post\",\"objectId\":\"" + postId + "\"}}", "-createdAt", new Callback<String>() {
+                @Override
+                public void success(String s, Response response) {
 
-                try {
-                    JSONObject whole_body = new JSONObject(s);
-                    JSONArray result = whole_body.getJSONArray("results");
-                    for (int i = 0; i < result.length(); i++) {
-                        JSONObject each_object = result.getJSONObject(i);
+                    //Log.e("Comments>>>", ">>>>" + s);
+                    String comment;
+                    String comment_created_time;
+                    String comment_user_name;
+
+                    try {
+                        JSONObject whole_body = new JSONObject(s);
+                        JSONArray result = whole_body.getJSONArray("results");
+                        for (int i = 0; i < result.length(); i++) {
+                            JSONObject each_object = result.getJSONObject(i);
 
 
-                        if (each_object.isNull("comment_contents")) {
-                            comment = "null";
-                        } else {
-                            comment = each_object.getString("comment_contents");
-                        }
-                        Log.e("Comments>>>", ">>>>" + comment);
+                            if (each_object.isNull("comment_contents")) {
+                                comment = "null";
+                            } else {
+                                comment = each_object.getString("comment_contents");
+                            }
+                            //Log.e("Comments>>>", ">>>>" + comment);
 
                        /* if (each_object.isNull("comment_created_time")) {
                             comment_created_time = "null";
                         } else {
                             comment_created_time = each_object.getString("comment_created_time");
                         }*/
-                        if (each_object.isNull("user_name")) {
-                            comment_user_name = "null";
-                        } else {
-                            comment_user_name = each_object.getString("user_name");
+                            if (each_object.isNull("user_name")) {
+                                comment_user_name = "null";
+                            } else {
+                                comment_user_name = each_object.getString("user_name");
+                            }
+
+                            //Calculate Date Difference
+                            Date d1 = new Date();
+                        /*try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            //Ingnore
+                        }*/
+                            //Date d0 = null; // About 3 days ago
+                            try {
+                                ParsePosition pp = new ParsePosition(0);
+                                Date d0 = ISO8601Utils.parse(each_object.getString("createdAt"), pp);//2015-08-26T10:34:52.429Z
+
+
+                                //Log.e("ISO date","==>" + d0);
+                                long[] diff = TimeDiff.getTimeDifference(d0, d1);
+
+
+                                //Log.e("Time difference", "==>" + diff[0] + "/" + diff[1] + "/" + diff[2] + "/" + diff[3] + "/" + diff[4]);
+
+                                //Log.e("Just the number of day", "" + TimeDiff.getTimeDifference(d0, d1, TimeDiff.TimeField.DAY));
+
+                                str_comment_time_long = "";
+                                if (diff[0] != 0) {
+                                    if (diff[0] == 1) {
+                                        str_comment_time_long = diff[0] + " day";
+
+                                    } else {
+                                        if (diff[0] > 365) {
+                                            str_comment_time_long = diff[0] / 365 + " year";
+                                        } else {
+
+
+                                            str_comment_time_long = diff[0] + " days";
+                                        }
+
+                                    }
+                                }
+                                if (diff[1] != 0) {
+                                    if (diff[1] < 24) {
+                                        str_comment_time_long += " " + diff[1] + " hr";
+                                    }
+
+                                }
+                                if (diff[2] != 0) {
+                                    if (diff[2] < 60) {
+                                        str_comment_time_long += " " + diff[2] + " min";
+                                    }
+                                }
+
+                                if (diff[2] == 0) {
+                                    str_comment_time_long += " " + diff[3] + " seconds ago";
+                                } else {
+                                    str_comment_time_long += " ago";
+                                }
+
+
+                            } catch (java.text.ParseException e) {
+                                e.printStackTrace();
+                                Log.e("Date ParseException", "==>" + e.toString() + d1);
+                            }
+                         /*System.out.printf("Time difference is %d day(s), %d hour(s), %d minute(s), %d second(s) and %d millisecond(s)\n",
+                                diff[0], diff[1], diff[2], diff[3], diff[4]);
+                        System.out.printf("Just the number of days = %d\n",
+                                TimeDiff.getTimeDifference(d0, d1, TimeDiff.TimeField.DAY));*/
+
+
+                            listComment.add(new CommentItem("", comment_user_name, comment, str_comment_time_long));
+                            str_comment_time_long = "";
                         }
-                        listComment.add(new CommentItem("", comment_user_name, comment, "30 min ago"));
+
+
+                        CommentAdapter adapter = new CommentAdapter(PostDetailActivity.this, listComment);
+                        listView_Comment.setAdapter(adapter);
+
+                        mProgressDialog.dismiss();
+                        View padding = new View(PostDetailActivity.this);
+                        padding.setMinimumHeight(20);
+                        listView_Comment.addFooterView(padding);
+
+                        Helper.getListViewSize(listView_Comment);
+                        //setListViewHeightBasedOnChildren(listView_Comment);
+
+                    } catch (JSONException e) {
+
+                        progressWheel.setVisibility(View.INVISIBLE);
+                        mProgressDialog.dismiss();
+                        e.printStackTrace();
+                        Log.e("Comments>>>", ">>>>JSONERR" + e.toString());
+
                     }
-
-
-                    CommentAdapter adapter = new CommentAdapter(PostDetailActivity.this, listComment);
-                    listView.setAdapter(adapter);
-
-
-                    setListViewHeightBasedOnChildren(listView);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.e("Comments>>>", ">>>>JSONERR" + e.toString());
-
                 }
-            }
 
-            @Override
-            public void failure(RetrofitError error) {
-                Log.e("Comments>>>", ">>>>ERR" + error);
-            }
-        });
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.e("Comments>>>", ">>>>ERR" + error);
+                }
+            });
+        } else {
 
-        //list.add(new CommentItem("", "Khin Khin", "Thanks you for your post", "30 min ago"));
-        //listComment.add(new CommentItem("", "Phyu Hnin", "Nice place to visit", "30 min ago"));
+            if (mstr_lang.equals(Utils.ENG_LANG)) {
+                Utils.doToastEng(mContext, "Internet Connection need!");
+            } else {
+
+                Utils.doToastMM(mContext, getResources().getString(R.string.open_internet_warning_mm));
+            }
+        }
 
 
     }
@@ -486,14 +644,35 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         post_content_user_name.setText(item.getPost_content_user_name());
 
 
+        mstrPostType = item.getPost_content_type();
         if (strLang.equals(com.parse.utils.Utils.ENG_LANG)) {
             postdetail_username.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
 
 
             if (item.getPost_content_type().equalsIgnoreCase("Letter")) {
                 postdetail_username.setText("Dear " + user_name);
-            } else {
+                ly_media_main.setVisibility(View.GONE);
+                isPlaying = true;
+                postIMg.setClickable(false);
+            } else if (item.getPost_content_type().equalsIgnoreCase("Audio")) {
                 postdetail_username.setText("");
+                ly_media_main.setVisibility(View.VISIBLE);
+                isPlaying = false;
+                img_player.setImageResource(R.drawable.ic_headset_grey600_48dp);
+                txt_player.setText(R.string.detail_listen_text_eng);
+
+            } else if (item.getPost_content_type().equalsIgnoreCase("Video")) {
+                postdetail_username.setText("");
+                ly_media_main.setVisibility(View.VISIBLE);
+
+                img_player.setImageResource(R.drawable.ic_watch_now);
+                txt_player.setText(R.string.detail_play_text_eng);
+
+                isPlaying = true;
+            } else if (item.getPost_content_type().equalsIgnoreCase("Storie")) {
+                postdetail_username.setText("");
+                ly_media_main.setVisibility(View.GONE);
+                isPlaying = true;
             }
 
 
@@ -509,9 +688,28 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
             if (item.getPost_content_type().equalsIgnoreCase("Letter")) {
                 postdetail_username.setText(" ခ်စ္လွစြာေသာ " + user_name);
-
-            } else {
+                ly_media_main.setVisibility(View.GONE);
+                isPlaying = true;
+                postIMg.setClickable(false);
+            } else if (item.getPost_content_type().equalsIgnoreCase("Audio")) {
                 postdetail_username.setText("");
+                ly_media_main.setVisibility(View.VISIBLE);
+                isPlaying = false;
+                img_player.setImageResource(R.drawable.ic_headset_grey600_48dp);
+                txt_player.setText(R.string.detail_listen_text_mm);
+
+            } else if (item.getPost_content_type().equalsIgnoreCase("Video")) {
+                postdetail_username.setText("");
+                ly_media_main.setVisibility(View.VISIBLE);
+
+                img_player.setImageResource(R.drawable.ic_watch_now);
+                txt_player.setText(R.string.detail_play_text_mm);
+
+                isPlaying = true;
+            } else if (item.getPost_content_type().equalsIgnoreCase("Storie")) {
+                postdetail_username.setText("");
+                ly_media_main.setVisibility(View.GONE);
+                isPlaying = true;
             }
 
             //post_timestamp.setText(item.getCreated_at());
@@ -766,7 +964,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 //FLAG_ACTIVITY_NEW_TASK
                 //intent.setData(uri);
-                intent.putExtra(Intent.EXTRA_SUBJECT, post_content.getText().toString().substring(0,12)+"...");//Title Of The Post
+                intent.putExtra(Intent.EXTRA_SUBJECT, post_content.getText().toString().substring(0, 12) + "...");//Title Of The Post
                 intent.putExtra(Intent.EXTRA_TEXT, CommonConfig.SHARE_URL);
                 intent.setType("text/plain");
                 getApplicationContext().startActivity(intent);
@@ -779,6 +977,8 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
 
                 if (Connection.isOnline(getApplicationContext())) {
+
+                    mProgressDialog.show();
                     Utils.doToastEng(getApplicationContext(), "Comment");
                     commentParse = new Comment();
 
@@ -809,11 +1009,16 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
                                 et_comment.setText("");
 
+                                mProgressDialog.dismiss();
 
+
+                                getTestCommentList();
                                 //TODO comment adapter notrifieddatasetchange
 
 
                             } else {
+
+                                mProgressDialog.dismiss();
 
 
                                 Utils.doToastEng(getApplicationContext(), "Error saving: \" + e.getMessage()");
@@ -826,6 +1031,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                         }
                     });
                 } else {
+
                     if (strLang.equals(Utils.ENG_LANG)) {
                         Utils.doToastEng(getApplicationContext(), "Internet Connection need!");
                     } else {
@@ -834,10 +1040,65 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                     }
                 }
                 break;
+            case R.id.postdetail_content_img:
+
+                if (!isPlaying) {
+
+                    mMedia = MediaPlayer.create(this, R.raw.wai_wai_audio);
+
+                    mMedia.start();
+
+                    isPlaying = true;
+                } else {
+                    Utils.doToastEng(getApplicationContext(), "Is playing ");
+                }
+
+                break;
+
+            case R.id.detail_ly_listen_now:
+
+
+                if (mstrPostType.equalsIgnoreCase("Video")) {
+                    Intent video_intent = new Intent(mContext, YouTubeWebviewActivity.class);
+
+                    //intent.putExtra("post_id", feedItems.get(position).getPost_obj_id());
+
+                    //intent.putExtra("ImgUrl", mImgurl.get(getPosition()));
+                    video_intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    video_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(video_intent);
+                    break;
+                } else if (mstrPostType.equalsIgnoreCase("Audio")) {
+                    /*Intent audio_intent = new Intent();
+                    audio_intent.setAction(android.content.Intent.ACTION_VIEW);
+                    //Uri uri = Uri.parse("android.resource://org.undp_iwomen.iwomen/" + R.raw.wai_wai_audio);
+                    String uri = "android.resource://" + getPackageName() + "/raw/wai_wai_audio";//+R.raw.wai_wai_audio;
+                    File file = new File(uri);
+                    audio_intent.setDataAndType(Uri.fromFile(file), "audio*//*");
+                    startActivity(audio_intent);*/
+                    if (!isPlaying) {
+
+                        mMedia = MediaPlayer.create(this, R.raw.wai_wai_audio);
+
+                        mMedia.start();
+
+                        isPlaying = true;
+                    } else {
+                        Utils.doToastEng(getApplicationContext(), "Is playing ");
+                    }
+                    break;
+                }
+                break;
+
+
+            case R.id.detail_ly_download:
+
+                break;
 
         }
 
     }
+
 
     private void updatePostLikeStatus(String postId, int like_count) {
 
@@ -868,6 +1129,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         public void onError() {
 
         }
+
     }
 
 
@@ -928,13 +1190,13 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         // Add data to the intent, the receiving app will decide
         // what to do with it.
         share.putExtra(Intent.EXTRA_SUBJECT, mPostTile.getText().toString());//Title Of The Post
-        if(post_content.getText().length()>20) {
+        if (post_content.getText().length() > 20) {
             share_data = post_content.getText().toString().substring(0, 12) + " ...";
-        }else{
+        } else {
             share_data = post_content.getText().toString();
         }
 
-        share.putExtra(Intent.EXTRA_TEXT, CommonConfig.SHARE_URL );
+        share.putExtra(Intent.EXTRA_TEXT, CommonConfig.SHARE_URL);
 
         share.putExtra(Intent.EXTRA_HTML_TEXT, share_data);
 
@@ -950,6 +1212,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
         outState.putString(PENDING_ACTION_BUNDLE_KEY, pendingAction.name());
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -968,9 +1231,15 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     protected void onDestroy() {
+
+        // TODO Auto-generated method stub
+        if (mMedia != null && mMedia.isPlaying()) {//If music is playing already
+            mMedia.stop();//Stop playing the music
+        }
         super.onDestroy();
         //profileTracker.stopTracking();
     }
+
     private void handlePendingAction() {
         PendingAction previouslyPendingAction = pendingAction;
         // These actions may re-set pendingAction if they are still pending, but we assume they
@@ -988,6 +1257,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 break;
         }
     }
+
     private void showError(int messageId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(PostDetailActivity.this);
         builder.setTitle(R.string.error_dialog_title).
@@ -995,6 +1265,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 setPositiveButton(R.string.ok, null);
         builder.show();
     }
+
     public void shareUsingNativeDialog() {
 
         ShareContent content = getLinkContent();
@@ -1006,14 +1277,16 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             showError(R.string.native_share_error);
         }
     }
+
     private void onClickPostStatusUpdate() {
         performPublish(PendingAction.POST_STATUS_UPDATE, canPresentShareDialog);
     }
+
     private ShareLinkContent getLinkContent() {
 
-        if(post_content.getText().length() > 20) {
+        if (post_content.getText().length() > 20) {
             share_data = post_content.getText().toString().substring(0, 20) + " ...";
-        }else{
+        } else {
             share_data = post_content.getText().toString();
         }
 
@@ -1025,13 +1298,14 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 .setContentDescription(share_data)
                 .build();
     }
+
     //It is not work well in all device
     private void postStatusUpdate() {
         Profile profile = Profile.getCurrentProfile();
 
-        if(post_content.getText().length() > 20) {
+        if (post_content.getText().length() > 20) {
             share_data = post_content.getText().toString().substring(0, 12) + " ...";
-        }else{
+        } else {
             share_data = post_content.getText().toString();
         }
 
@@ -1049,6 +1323,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             pendingAction = PendingAction.POST_STATUS_UPDATE;
         }
     }
+
     private boolean hasPublishPermission() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         return accessToken != null && accessToken.getPermissions().contains("publish_actions");
@@ -1076,7 +1351,6 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             handlePendingAction();
         }
     }
-
 
 
 }

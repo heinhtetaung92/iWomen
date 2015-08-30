@@ -501,7 +501,9 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
 
                         query.whereGreaterThan("postUploadedDate", date);
                         //query.whereLessThan("likes",)
+                        query.whereEqualTo("isAllow", true);
                         query.setLimit(3);
+
 
                         //query.orderByDescending("postUploadedDate"); //Latest date is first
                         query.orderByDescending("likes");
@@ -607,6 +609,7 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
                 ParseQuery<Post> query = Post.getQuery();
                 //query.orderByDescending("createdAt"); //Latest date is first
                 //query.orderByAscending("postUploadedDate");//Very first row Date is first
+                query.whereEqualTo("isAllow", true);
                 query.orderByDescending("likes");//Most likes is first
 
                 query.setLimit(3);

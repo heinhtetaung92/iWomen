@@ -228,11 +228,11 @@
 
     </ScrollView>-->
 
-    <include layout="@layout/activity_post_detail_content" />
 
-    <include
-        android:id="@+id/ly_body"
-        layout="@layout/toolbar_actionbar_translucent" />
+    <include layout="@layout/activity_post_detail_content"
+        />
+    <include layout="@layout/toolbar_actionbar_translucent" />
+
 
     <LinearLayout
         android:orientation="vertical"

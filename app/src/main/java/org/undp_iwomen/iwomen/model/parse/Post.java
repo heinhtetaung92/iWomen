@@ -158,6 +158,13 @@ public class Post extends ParseObject {
         put("suggest_section_eng", suggest_section_eng);
     }
 
+    public void setIsAllow(boolean status){
+        put("isAllow",status);
+    }
+
+    public boolean getIsAllow(){
+        return getBoolean("isAllow");
+    }
     /*public void setBusId(String busId) {
         put("BusId", ParseObject.createWithoutData(Bus.class, busId));
     }

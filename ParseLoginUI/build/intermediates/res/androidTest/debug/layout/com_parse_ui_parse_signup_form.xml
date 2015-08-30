@@ -23,14 +23,14 @@
             android:paddingRight="@dimen/com_parse_ui_horizontal_margin"
             android:paddingTop="@dimen/com_parse_ui_vertical_margin">
 
-            <LinearLayout
-                android:orientation="vertical"
+            <FrameLayout
                 android:id="@+id/register_ly"
                 android:layout_width="match_parent"
-                android:gravity="center_horizontal"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/facebook_login_container"
-                android:layout_marginTop="30dp">
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:layout_gravity="center">
                 <!--<org.undp_iwomen.iwomen.ui.widget.ResizableImageView
                     android:id="@+id/register_profilePic_resizable"
                     android:layout_width="@dimen/feed_item_profile_pic"
@@ -42,24 +42,38 @@
                     android:src="@drawable/camera_icon"
                     android:visibility="visible"
                     ></org.undp_iwomen.iwomen.ui.widget.ResizableImageView>-->
-                <com.makeramen.RoundedImageView
+                <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/register_profilePic_rounded"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:layout_width="@dimen/feed_item_profile_pic"
                     android:layout_height="@dimen/feed_item_profile_pic"
-
                     android:layout_alignParentLeft="true"
+
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+
+                    android:layout_gravity="center"
+
                     android:scaleType="fitXY"
                     android:src="@drawable/camera_icon"
+                    android:visibility="visible"
                     app:riv_border_color="#333333"
                     app:riv_border_width="0dip"
                     app:riv_corner_radius="30dip"
                     app:riv_mutate_background="true"
-                    app:riv_oval="true"
-                    android:visibility="visible"></com.makeramen.RoundedImageView>
-            </LinearLayout>
+                    app:riv_oval="true"></com.makeramen.RoundedImageView>
+                <ProgressBar
+                    android:id="@+id/register_profilePic_progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+
+                    android:layout_gravity="center"
+                    android:visibility="visible" />
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/register_img_upload_textview"

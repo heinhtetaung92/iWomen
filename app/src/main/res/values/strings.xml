@@ -11,7 +11,7 @@
     <string name="action_settings_mm">ၿပင္ဆင္မည္</string>
     <string name="title_action_settings_eng">Language Settings</string>
     <string name="title_action_settings_mm">ဘာသာ စကားေၿပာင္းရန္</string>
-    <string name="title_notrification_eng">Get Notrification</string>
+    <string name="title_notrification_eng">Get Notification</string>
     <string name="title_notrification_mm">အသိေပးအေၾကာင္းၾကားစာလက္ခံရန္</string>
 
     <string name="title_change_theme_eng">Change Theme</string>
@@ -67,7 +67,7 @@
     <string name="com_parse_ui_ph_input_hint_mm">ဖုုန္းနံပါတ္</string>
     <string name="com_parse_ui_create_account_button_label_mm">၀င္မည္</string>
     <string name="com_parse_ui_edit_account_button_label_mm">ၿပင္ဆင္မည္</string>
-    <string name="i_agree_mm">မွတ္ပံုုတင္အခ်က္ အလက္မ်ားကိုုသေဘာတူပါသည္ <a href="http://gobus.asia/terms-and-conditions/"></a></string>
+    <string name="i_agree_mm">မွတ္ပံုုတင္အခ်က္ အလက္မ်ားကိုုသေဘာတူပါသည္ <a href="https://www.facebook.com/UndpMyanmar"></a></string>
 
     <string name="success">Success</string>
     <string name="successfully_posted_post">Post ID: %1$s</string>
@@ -79,5 +79,60 @@
     <string name="error_dialog_title">Error!</string>
         <string name="native_share_error">Native sharing requires the Facebook for Android
         application.</string>
+
+    <!-- Detail -->
+    <string name="detail_download_text_mm">MM</string>
+    <string name="detail_download_text_eng">Download</string>
+
+    <string name="detail_play_text_mm">ဗြီဒီယိုု </string>
+    <string name="detail_play_text_eng">Watch Now</string>
+
+    <string name="detail_listen_text_mm">နားေထာင္ရန္</string>
+    <string name="detail_listen_text_eng">Listen Now</string>
+
+    <string name="sister_app_gen_link_mm">www.gen.org </string>
+    <string name="sister_app_gen_link_eng"> www.gen.org <a href="https://www.gen.org"></a></string>
+
+    <string name="sister_app_undp_link_mm">www.undpmyanmar.org</string>
+    <string name="sister_app_undp_link_eng">www.undpmyanmar.org <a href="https://www.facebook.com/UndpMyanmar"></a></string>
+
+    <!-- TLG Profile -->
+    <string name="tlg_group_name_mm">ေမတိုု ့အားမာန္</string>
+    <string name="tlg_group_name_eng">May Doe Arr Man</string>
+
+    <string name="tlg_group_address_mm">က်ိဳက္လတ္ ၊ ဧရာ၀တီ</string>
+    <string name="tlg_group_address_eng">KyeitLet , Ayeyarwady</string>
+
+    <string name="tlg_leader_name_mm">လွစန္းေထြး</string>
+    <string name="tlg_leader_name_eng">Hla San Htwae</string>
+
+    <string name="tlg_leader_role_mm">အဖြဲ ့ေခါင္းေဆာင္</string>
+    <string name="tlg_leader_role_eng">TLG Leader</string>
+
+    <string name="tlg_who_we_r_mm">အဖြဲ ့အေၾကာင္း</string>
+    <string name="tlg_who_we_r_eng">Who we are</string>
+
+    <string name="tlg_member_lbl_mm">TLG အဖြဲ ့၀င္ အေရအတြက္ </string>
+    <string name="tlg_member_lbl_eng">TLG Member</string>
+    <string name="tlg_member_txt_mm"></string>
+    <string name="tlg_member_txt_eng"></string>
+
+    <string name="tlg_srg_member_lbl_mm">SRG အဖြဲ ့၀င္ အေရအတြက္</string>
+    <string name="tlg_srg_member_lbl_eng">SRG Member</string>
+    <string name="tlg_srg_member_txt_mm"></string>
+    <string name="tlg_srg_member_txt_eng"></string>
+
+    <string name="tlg_key_activity_lbl_mm">လွုုပ္ရွားမွုု မ်ား </string>
+    <string name="tlg_key_activity_lbl_eng">Key Activities</string>
+    <string name="tlg_key_activity_txt_mm"></string>
+    <string name="tlg_key_activity_txt_eng"></string>
+
+    <string name="tlg_key_skill_lbl_mm">စြမ္းရည္မ်ား</string>
+    <string name="tlg_key_skill_lbl_eng">Key Skills</string>
+    <string name="tlg_key_skill_txt_mm"></string>
+    <string name="tlg_key_skill_txt_eng"></string>
+
+
+
 
 </resources>

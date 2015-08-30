@@ -89,7 +89,8 @@ public class TableAndColumnsName {
                 LIKE_STATUS + " Text Not Null," +
                 STATUS + " Text Not Null," +
                 CREATED_DATE + " DateTime Not Null," +
-                UPDATED_DATE + " DateTime Not Null);";
+                UPDATED_DATE + " DateTime Not Null,"+
+                " UNIQUE ("+ POST_OBJ_ID+") On Conflict Ignore);";
 
     }
     public interface CommentUtil{

@@ -135,7 +135,7 @@
     <string name="confirm_password_error_mm">လွ်ိဳ ့၀ွက္ စာလံုုး ေနာက္တစ္ၾကိမ္ၿပန္ရိုုက္ထည့္ရန္လိုုအပ္ပါသည္</string>
     <string name="email_address_error">Email address is required</string>
     <string name="i_agree">I agree to all the <a href="https://www.facebook.com/UndpMyanmar">Terms and Conditions</a></string>
-    <string name="i_agree_mm">မွတ္ပံုုတင္အခ်က္ အလက္မ်ားကိုုသေဘာတူပါသည္ <a href="http://gobus.asia/terms-and-conditions/"/></string>
+    <string name="i_agree_mm">မွတ္ပံုုတင္အခ်က္ အလက္မ်ားကိုုသေဘာတူပါသည္ <a href="https://www.facebook.com/UndpMyanmar"/></string>
     <string name="invalid_mobile_number">Mobile number is invalid</string>
     <string name="invalid_mobile_number_mm">ဖုုန္းနံပါတ္မွားေနပါသည္ ၿပန္လည္ၿပင္ဆင္ပါ။</string>
     <string name="invalid_nrc_number_error">NRC number is invalid. ##/###(N)######</string>

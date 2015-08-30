@@ -28,12 +28,12 @@ public class MyTypeFace {
 
                     if(assetPath.equals(NORMAL)) {
                         Typeface tf = Typeface.createFromAsset(c.getAssets(),
-                                "fonts/proximanova-regular.ttf");
+                                "fonts/roboto-medium.ttf");
 
                         cache.put(assetPath, tf);
                     }else if(assetPath.equals(BOLD)) {
                         Typeface tf = Typeface.createFromAsset(c.getAssets(),
-                                "fonts/proximanova-bold.ttf");
+                                "fonts/roboto-bold.ttf");
 
                         cache.put(assetPath, tf);
                     }

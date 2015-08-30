@@ -373,6 +373,10 @@
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
+    <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="action_photo_camera">Take Photo</string>
+    <string name="action_photo_gallery">Choose Existing</string>
     <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/exploded-aar/com.android.support/design/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
@@ -485,7 +489,7 @@
     <eat-comment/>
     <string name="email_address_error">Email address is required</string>
     <string name="i_agree">I agree to all the <a href="https://www.facebook.com/UndpMyanmar">Terms and Conditions</a></string>
-    <string name="i_agree_mm">မွတ္ပံုုတင္အခ်က္ အလက္မ်ားကိုုသေဘာတူပါသည္ <a href="http://gobus.asia/terms-and-conditions/"/></string>
+    <string name="i_agree_mm">မွတ္ပံုုတင္အခ်က္ အလက္မ်ားကိုုသေဘာတူပါသည္ <a href="https://www.facebook.com/UndpMyanmar"/></string>
     <string name="invalid_mobile_number">Mobile number is invalid</string>
     <string name="invalid_mobile_number_mm">ဖုုန္းနံပါတ္မွားေနပါသည္ ၿပန္လည္ၿပင္ဆင္ပါ။</string>
     <string name="invalid_nrc_number_error">NRC number is invalid. ##/###(N)######</string>
@@ -516,6 +520,7 @@
     <string name="passport_error">Passport number is required</string>
     <string name="password_error">Password is required</string>
     <string name="password_error_mm">လွ်ိဳ ့၀ွက္ စာလံုုးရိုုက္ထည့္ရန္လိုုအပ္ပါသည္</string>
+    <string name="select_picture">Select Picture</string>
     <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>
     <string name="status_bar_notification_info_overflow">999+</string>

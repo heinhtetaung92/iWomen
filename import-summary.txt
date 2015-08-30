@@ -7,9 +7,7 @@ The following files were *not* copied into the new Gradle project; you
 should evaluate whether these are still needed in your project and if
 so manually move them:
 
-* .DS_Store
 * ic_launcher-web.png
-* proguard-project.txt
 
 Replaced Jars with Dependencies:
 --------------------------------
@@ -21,32 +19,31 @@ the .jar file in your project was of an older version than the
 dependency we picked, which could render the project not compileable.
 You can disable the jar replacement in the import wizard and try again:
 
-android-support-v4.jar => com.android.support:support-v4:19.+
+gson-2.3.jar => com.google.code.gson:gson:2.3
+
+Potentially Missing Dependency:
+-------------------------------
+When we replaced the following .jar files with a Gradle dependency, we
+inferred the dependency version number from the filename. This
+specific version may not actually be available from the repository.
+If you get a build error stating that the dependency is missing, edit
+the version number to for example "+" to pick up the latest version
+instead. (This may require you to update your code if the library APIs
+have changed.)
+
+gson-2.3.jar => version 2.3 in com.google.code.gson:gson:2.3
 
 Moved Files:
 ------------
 Android Gradle projects use a different directory structure than ADT
 Eclipse projects. Here's how the projects were restructured:
 
-* AndroidManifest.xml => facebookLikeFeedView/src/main/AndroidManifest.xml
-* assets/ => facebookLikeFeedView/src/main/assets
-* libs/volley.jar => facebookLikeFeedView/libs/volley.jar
-* res/ => facebookLikeFeedView/src/main/res/
-* src/ => facebookLikeFeedView/src/main/java/
-
-Missing Android Support Repository:
------------------------------------
-Some useful libraries, such as the Android Support Library, are
-installed from a special Maven repository, which should be installed
-via the SDK manager.
-
-It looks like this library is missing from your SDK installation at:
-null
-
-To install it, open the SDK manager, and in the Extras category,
-select "Android Support Repository". You may also want to install the
-"Google Repository" if you want to use libraries like Google Play
-Services.
+* AndroidManifest.xml => iwomen/src/main/AndroidManifest.xml
+* libs/eventbus.jar => iwomen/libs/eventbus.jar
+* libs/okhttp-1.5.4.jar => iwomen/libs/okhttp-1.5.4.jar
+* libs/retrofit-1.5.0.jar => iwomen/libs/retrofit-1.5.0.jar
+* res/ => iwomen/src/main/res/
+* src/ => iwomen/src/main/java/
 
 Next Steps:
 -----------

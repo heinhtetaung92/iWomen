@@ -28,15 +28,16 @@ import com.facebook.FacebookSdk;
 import com.parse.ParseUser;
 import com.parse.ui.ParseLoginBuilder;
 import com.parse.utils.Utils;
-import com.squareup.picasso.Picasso;
 
 import org.undp_iwomen.iwomen.CommonConfig;
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
 import org.undp_iwomen.iwomen.ui.adapter.DrawerListViewAdapter;
+import org.undp_iwomen.iwomen.ui.fragment.BeTogetherFragment;
 import org.undp_iwomen.iwomen.ui.fragment.MainMaterialTab;
 import org.undp_iwomen.iwomen.ui.fragment.ResourcesFragment;
 import org.undp_iwomen.iwomen.ui.fragment.SettingsFragment;
+import org.undp_iwomen.iwomen.ui.fragment.SisterAppFragment;
 import org.undp_iwomen.iwomen.ui.widget.ProfilePictureView;
 import org.undp_iwomen.iwomen.utils.SharePrefUtils;
 
@@ -326,10 +327,10 @@ public class DrawerMainActivity extends AppCompatActivity {
 
         if(mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)){
             DrawerListName = new String[]
-                    {"Stories",  "Resources", "Setting","AboutUs"};
+                    {"Be Inspired", "Be Together", "Be Knowledgeable", "Setting","AboutUs", "Sister Apps"};
 
             DrawerListIcon = new int[]
-                    {R.drawable.ic_stories, R.drawable.ic_resources, R.drawable.ic_setting,R.drawable.about_us};
+                    {R.drawable.ic_stories,R.drawable.be_together, R.drawable.ic_resources, R.drawable.ic_setting,R.drawable.about_us,R.drawable.sister_app};
 
             // R.drawable.ic_community, R.drawable.ic_news
 
@@ -343,10 +344,10 @@ public class DrawerMainActivity extends AppCompatActivity {
         }
         else if(mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG)){
             DrawerListName = new String[]
-                    {"စာလ\u103Cာမ\u103Aား",  "နည္းလမ္းမ\u103Aား", "\u107Fပင္ဆင္ရန္","က\u103C\u103A\u108Fုုပ္တိုု ့အေ\u107Eကာင္း"};
+                    {"စိတ္ခ\u103Cန္အား\u107Fဖည့္ ရန္","အတူတက\u103Cေပ\u102Bင္းစည္းရန္",  "နည္းလမ္းမ\u103Aား", "\u107Fပင္ဆင္ရန္","က\u103C\u103A\u108Fုုပ္တိုု ့အေ\u107Eကာင္း"," Sister Apps"};
 
             DrawerListIcon = new int[]
-                    {R.drawable.ic_stories, R.drawable.ic_resources, R.drawable.ic_setting,R.drawable.about_us};
+                    {R.drawable.ic_stories,R.drawable.be_together, R.drawable.ic_resources, R.drawable.ic_setting,R.drawable.about_us,R.drawable.sister_app};
 
             // R.drawable.ic_community, R.drawable.ic_news
 
@@ -414,16 +415,24 @@ public class DrawerMainActivity extends AppCompatActivity {
 
         SettingsFragment settingsFragment = new SettingsFragment();
 
+        BeTogetherFragment beTogetherFragment = new BeTogetherFragment();
+
+        SisterAppFragment sisterAppFragment = new SisterAppFragment();
+
         switch (position) {
             case 0://Categories 1
                 fragmentManager.beginTransaction().replace(R.id.content_frame, mainMaterialTab).commit();
                 setTitle(DrawerListName[position]);
                 break;
             case 1:
-                fragmentManager.beginTransaction().replace(R.id.content_frame, resourcesFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.content_frame, beTogetherFragment).commit();
                 setTitle(DrawerListName[position]);
                 break;
             case 2:
+                fragmentManager.beginTransaction().replace(R.id.content_frame, resourcesFragment).commit();
+                setTitle(DrawerListName[position]);
+                break;
+            case 3:
 
                 Intent intent = new Intent(this, SettingActivity.class);
                 startActivity(intent);
@@ -432,10 +441,15 @@ public class DrawerMainActivity extends AppCompatActivity {
 
                 setTitle(DrawerListName[position]);
                 break;
-            case 3:
+            case 4:
                 Intent intent2 = new Intent(this, AboutUsWebActivity.class);
                 startActivity(intent2);
                 break;
+            case 5:
+                fragmentManager.beginTransaction().replace(R.id.content_frame, sisterAppFragment).commit();
+                setTitle(DrawerListName[position]);
+
+                break;//Sister apps
         }
 
         // update selected item and title, then close the drawer

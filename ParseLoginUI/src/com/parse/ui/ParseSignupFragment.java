@@ -22,18 +22,16 @@
 package com.parse.ui;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
@@ -52,6 +50,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.camera.CropImageIntentBuilder;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -61,10 +60,16 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.kbeanie.imagechooser.api.ChooserType;
+import com.kbeanie.imagechooser.api.ChosenImage;
+import com.kbeanie.imagechooser.api.ImageChooserListener;
+import com.kbeanie.imagechooser.api.ImageChooserManager;
 import com.makeramen.RoundedImageView;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.ProgressCallback;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 import com.parse.model.MyTypeFace;
 import com.parse.utils.Utils;
@@ -81,7 +86,7 @@ import java.util.regex.Pattern;
 /**
  * Fragment for the user signup screen.
  */
-public class ParseSignupFragment extends ParseLoginFragmentBase implements OnClickListener {
+public class ParseSignupFragment extends ParseLoginFragmentBase implements OnClickListener, ImageChooserListener {
 
     /**
      * *******My Update Code***********
@@ -141,7 +146,7 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
     private static final String REQUEST_FIELDS =
             TextUtils.join(",", new String[]{ID, NAME, PICTURE});
 
-    private String user_fb_id , user_fb_email;
+    private String user_fb_id, user_fb_email;
     private Context mContext;
 
     private static final float MAX_TEXTURE_SIZE = 1024f;
@@ -171,7 +176,16 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
 
     private Uri tempUri = null;
     //private File imageFile;
-
+    //For Image Chooser
+    private ImageChooserManager imageChooserManager;
+    String crop_file_name, crop_file_path;
+    private int chooserType;
+    private String filePath;
+    private String capture_filePath;
+    File croppedImageFile = null;
+    private ChosenImage chosenImage;
+    private static int REQUEST_PICTURE = 1;
+    private static int REQUEST_CROP_PICTURE = 2;
 
 
     /**
@@ -208,7 +222,6 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         }
 
         //et_user_name = (EditText)v.findViewById(R.id.signup_username_input);//et_user_name_login
-
 
 
         mContext = getActivity().getApplicationContext();
@@ -258,7 +271,7 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
 
         // mNrcTextInputLayout.setError(getResources().getString(R.string.nrc_number_helper));
         createAccountButton = (Button) v.findViewById(R.id.create_account);
-        editAccountButton = (Button)v.findViewById(R.id.register_edit_account);
+        editAccountButton = (Button) v.findViewById(R.id.register_edit_account);
 
         if (config.getParseSignupSubmitButtonText() != null) {
             createAccountButton.setText(config.getParseSignupSubmitButtonText());
@@ -279,8 +292,8 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
 
         btnLoginWithFacebook = (LoginButton) v.findViewById(R.id.facebook_login);
 
-        profile_rounded = (RoundedImageView)v.findViewById(R.id.register_profilePic_rounded);
-        register_profilePic_progressBar = (ProgressBar)v.findViewById(R.id.register_profilePic_progressBar);
+        profile_rounded = (RoundedImageView) v.findViewById(R.id.register_profilePic_rounded);
+        register_profilePic_progressBar = (ProgressBar) v.findViewById(R.id.register_profilePic_progressBar);
         register_profilePic_progressBar.setVisibility(View.GONE);
         profile_rounded.setAdjustViewBounds(true);
         profile_rounded.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -289,12 +302,19 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
             @Override
             public void onClick(View v) {
                 //Utils.doToastEng(getActivity().getApplicationContext(),"Coming soon pls !");
-                showPhotoChoice();
+                takePicture();
 
             }
         });
 
-        img_upload_textview = (TextView)v.findViewById(R.id.register_img_upload_textview);
+        img_upload_textview = (TextView) v.findViewById(R.id.register_img_upload_textview);
+
+        img_upload_textview.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseImage();
+            }
+        });
 
 
         //btnLoginWithFacebook.setText("Connect with facebook");
@@ -331,11 +351,10 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
 
         lang = sharePref.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
 
-        if(lang.equals(Utils.ENG_LANG)){
+        if (lang.equals(Utils.ENG_LANG)) {
 
             setEnglishFont();
-        }
-        else if(lang.equals(Utils.MM_LANG)){
+        } else if (lang.equals(Utils.MM_LANG)) {
 
             setMyanmarFont();
         }
@@ -407,11 +426,11 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         //clearError();
 
         //showToast(et_ph.getText().toString() + et_nrc.getText().toString()+et_address.getText().toString());
-        String username = usernameField.getText().toString().trim();
+        final String username = usernameField.getText().toString().trim();
 
-        String password = passwordField.getText().toString();
-        String passwordAgain = confirmPasswordField.getText().toString();
-        String mobileNoForNrc = mobileNoForNrcField.getText().toString().trim();
+        final String password = passwordField.getText().toString();
+        final String passwordAgain = confirmPasswordField.getText().toString();
+        final String mobileNoForNrc = mobileNoForNrcField.getText().toString().trim();
 
         /*String email = emailField.getText().toString().trim();
         String mobileNoForPassport = mobileNoForPassportField.getText().toString().trim();
@@ -421,10 +440,9 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         if (TextUtils.isEmpty(username)) {
             mUserNameTextInputLayout.setError(getResources().getString(R.string.your_name_error));
 
-            if(lang.equals(Utils.ENG_LANG)){
+            if (lang.equals(Utils.ENG_LANG)) {
                 doToast(getResources().getString(R.string.your_name_error));
-            }
-            else if(lang.equals(Utils.MM_LANG)){
+            } else if (lang.equals(Utils.MM_LANG)) {
 
                 Utils.doToastMM(mContext, getResources().getString(R.string.your_name_error_mm));
             }
@@ -453,10 +471,9 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         if (TextUtils.isEmpty(passwordAgain)) {
             mConfirmPasswordTextInputLayout.setError(getResources().getString(R.string.confirm_password_error));
 
-            if(lang.equals(Utils.ENG_LANG)){
+            if (lang.equals(Utils.ENG_LANG)) {
                 doToast(getResources().getString(R.string.confirm_password_error));
-            }
-            else if(lang.equals(Utils.MM_LANG)){
+            } else if (lang.equals(Utils.MM_LANG)) {
 
                 Utils.doToastMM(mContext, getResources().getString(R.string.confirm_password_error_mm));
             }
@@ -467,13 +484,12 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
 
         if (password.length() < minPasswordLength) {
 
-            if(lang.equals(Utils.ENG_LANG)){
+            if (lang.equals(Utils.ENG_LANG)) {
 
                 showToast(getResources().getQuantityString(
                         R.plurals.com_parse_ui_password_too_short_toast,
                         minPasswordLength, minPasswordLength));
-            }
-            else if(lang.equals(Utils.MM_LANG)){
+            } else if (lang.equals(Utils.MM_LANG)) {
 
                 Utils.doToastMM(mContext, getResources().getQuantityString(
                         R.plurals.com_parse_ui_password_too_short_toast_mm,
@@ -484,10 +500,9 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
 
         if (!password.equals(passwordAgain)) {
             //showToast(R.string.com_parse_ui_mismatch_confirm_password_toast);
-            if(lang.equals(Utils.ENG_LANG)){
+            if (lang.equals(Utils.ENG_LANG)) {
                 doToast(getResources().getString(R.string.com_parse_ui_mismatch_confirm_password_toast));
-            }
-            else if(lang.equals(Utils.MM_LANG)){
+            } else if (lang.equals(Utils.MM_LANG)) {
 
                 Utils.doToastMM(mContext, getResources().getString(R.string.com_parse_ui_mismatch_confirm_password_toast_mm));
             }
@@ -500,10 +515,9 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         if (TextUtils.isEmpty(mobileNoForNrc)) {
             mMobileNoForNrcTextInputLayout.setError(getResources().getString(R.string.mobile_number_error));
             //doToast(getResources().getString(R.string.mobile_number_error));
-            if(lang.equals(Utils.ENG_LANG)){
+            if (lang.equals(Utils.ENG_LANG)) {
                 doToast(getResources().getString(R.string.mobile_number_error));
-            }
-            else if(lang.equals(Utils.MM_LANG)){
+            } else if (lang.equals(Utils.MM_LANG)) {
 
                 Utils.doToastMM(mContext, getResources().getString(R.string.mobile_number_error_mm));
             }
@@ -512,10 +526,9 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         } else if (!ValidatorUtils.isValidMobileNo(mobileNoForNrc)) {
             mMobileNoForNrcTextInputLayout.setError(getResources().getString(R.string.invalid_mobile_number));
             //doToast(getResources().getString(R.string.invalid_mobile_number));
-            if(lang.equals(Utils.ENG_LANG)){
+            if (lang.equals(Utils.ENG_LANG)) {
                 doToast(getResources().getString(R.string.invalid_mobile_number));
-            }
-            else if(lang.equals(Utils.MM_LANG)){
+            } else if (lang.equals(Utils.MM_LANG)) {
 
                 Utils.doToastMM(mContext, getResources().getString(R.string.invalid_mobile_number_mm));
             }
@@ -526,238 +539,26 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
             mMobileNoForNrcTextInputLayout.setErrorEnabled(false);
         }
 
-        // do validation for nrc
-        /*if (mDocType == DocType.NRC) {
-            boolean inputNrcOk = true;
-            boolean inputMobileOk = true;
-            if (TextUtils.isEmpty(nrcNo)) {
-                mNrcTextInputLayout.setError(getResources().getString(R.string.nrc_number_error));
-                doToast(getResources().getString(R.string.nrc_number_error));
-                inputNrcOk = false;
-                return;
-            } else if (!ValidatorUtils.isValidNrc(nrcNo)) {
-                mNrcTextInputLayout.setError(getResources().getString(R.string.invalid_nrc_number_error));
-                doToast(getResources().getString(R.string.invalid_nrc_number_error));
-                inputNrcOk = false;
-                return;
-            }
-
-            if (inputNrcOk) {
-                mNrcTextInputLayout.setErrorEnabled(false);
-            }
-
-            if (TextUtils.isEmpty(mobileNoForNrc)) {
-                mMobileNoForNrcTextInputLayout.setError(getResources().getString(R.string.mobile_number_error));
-                doToast(getResources().getString(R.string.mobile_number_error));
-                inputMobileOk = false;
-                return;
-            } else if (!ValidatorUtils.isValidMobileNo(mobileNoForNrc)) {
-                mMobileNoForNrcTextInputLayout.setError(getResources().getString(R.string.invalid_mobile_number));
-                doToast(getResources().getString(R.string.invalid_mobile_number));
-                inputMobileOk = false;
-                return;
-            }
-            if (inputMobileOk) {
-                mMobileNoForNrcTextInputLayout.setErrorEnabled(false);
-            }
-        } else {
-            boolean inputNrcOk = true;
-            boolean inputMobileOk = true;
-
-            if (TextUtils.isEmpty(passportNo)) {
-                mPassportTextInputLayout.setError(getResources().getString(R.string.passport_error));
-                doToast(getResources().getString(R.string.passport_error));
-                inputNrcOk = false;
-                return;
-            } else if (!ValidatorUtils.isValidPassportNo(passportNo)) {
-                mPassportTextInputLayout.setError(getResources().getString(R.string.invalid_passport_error));
-                doToast(getResources().getString(R.string.invalid_passport_error));
-                inputNrcOk = false;
-                return;
-            }
-
-            if (inputNrcOk) {
-                mPassportTextInputLayout.setErrorEnabled(false);
-            }
-
-            if (TextUtils.isEmpty(mobileNoForPassport)) {
-                mMobileNoForPassportTextInputLayout.setError(getResources().getString(R.string.mobile_number_error));
-                doToast(getResources().getString(R.string.mobile_number_error));
-                inputMobileOk = false;
-                return;
-            }else if(mobileNoForPassport.length() < 6 || mobileNoForPassport.length() > 15){
-                mMobileNoForPassportTextInputLayout.setError(getResources().getString(R.string.invalid_mobile_number));
-                doToast(getResources().getString(R.string.invalid_mobile_number));
-                inputMobileOk = false;
-                return;
-            }
-
-            if (inputMobileOk) {
-                mMobileNoForPassportTextInputLayout.setErrorEnabled(false);
-            }
-        }*/
 
         // prepare mobile number
-        if (mobileNoForNrc.startsWith("09")) {
+        /*if (mobileNoForNrc.startsWith("09")) {
             mobileNoForNrc = mobileNoForNrc.substring(2, mobileNoForNrc.length());
-        }
-        mobileNoForNrc = "+959" + mobileNoForNrc;
-
-        // input validation ok -- do saving
-        final ParseUser user = new ParseUser();
-
-        // Set standard fields
-        //TODO username and email replace bcoz of avoiding duplicate
-        user.setUsername(username);//username
-        user.setPassword(password);
-
-        //user.setEmail(email);
-
-        user.put("username", username);
-        user.put("phoneNo", mobileNoForNrc);
-        //TODO:
-       /* if (mDocType == DocType.NRC) {
-            user.put("DocType", DocType.NRC.toString());
-            user.put("NRC", nrcNo);
-            user.put("Phone", mobileNoForNrc);
-        } else {
-            user.put("DocType", DocType.PASSPORT.toString());
-            user.put("Passport", passportNo);
-            user.put("Phone", mobileNoForPassport);
         }*/
+        //mobileNoForNrc = "+959" + mobileNoForNrc;
 
 
+        if (crop_file_path != null) {
 
-
-        if(photoUri != null) {
-
-           /* File photoFile = null;
-            String photoUriString = photoUri.toString();
-            if (photoUriString.startsWith("file://")) {
-                photoFile = new File(photoUri.getPath());
-            } else if (photoUriString.startsWith("content://")) {
-                FileOutputStream photoOutputStream = null;
-                InputStream contentInputStream = null;
-                try {
-                    Uri photoUri = Uri.parse(photoUriString);
-                    photoFile = new File(
-                            getTempPhotoStagingDirectory(),
-                            URLEncoder.encode(UUID.randomUUID().toString(), "UTF-8"));
-
-                    photoOutputStream = new FileOutputStream(photoFile);
-                    contentInputStream = getActivity()
-                            .getContentResolver().openInputStream(photoUri);
-
-
-                    Log.e("Sing up==","==>" + photoFile.getPath() + "/111119999" + photoFile.length());
-                    byte[] buffer = new byte[512];
-                    int len;
-                    while ((len = contentInputStream.read(buffer)) > 0) {
-                        photoOutputStream.write(buffer, 0, len);
-                    }
-
-                    Log.e("Sing up photofile","==" +buffer.length);
-                    ParseFile ParsephotoFile = new ParseFile("photo.jpg", buffer);
-                    user.put("user_profile_img", ParsephotoFile);
-
-                } catch (FileNotFoundException fnfe) {
-                    Log.e(TAG, "photo not found", fnfe);
-                } catch (UnsupportedEncodingException uee) {
-                    Log.e(TAG, "bad photo name", uee);
-                } catch (IOException ioe) {
-                    Log.e(TAG, "can't copy photo", ioe);
-                } finally {
-                    try {
-                        if (photoOutputStream != null) {
-                            photoOutputStream.close();
-                        }
-                        if (contentInputStream != null) {
-                            contentInputStream.close();
-                        }
-                    } catch (IOException ioe) {
-                        Log.e(TAG, "can't close streams");
-                    }
-                }
-            }
-
-            if (photoFile != null) {
-                InputStream is = null;
-                try {
-                    is = new FileInputStream(photoFile);
-
-                    // We only want to get the bounds of the image, rather than load the whole thing.
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inJustDecodeBounds = true;
-                    BitmapFactory.decodeStream(is, null, options);
-
-                    *//*return new Pair<>(
-                            photoFile, Math.min(options.outWidth, options.outHeight));*//*
-                } catch (Exception e) {
-                    *//*return null;*//*
-                    e.printStackTrace();
-                } finally {
-                    Utility.closeQuietly(is);
-                }
-            }*/
-            //content://com.android.providers.media.documents/document/image%3A32761
-            File photoFile = null;
-            String photoUriString = photoUri.toString();
-            if (photoUriString.startsWith("file://")) {
-                photoFile = new File(photoUri.getPath());
-                Log.e("=PhotFIle==>","==>" + photoUriString);
-            } else if (photoUriString.startsWith("content://")) {
-
-                Log.e("===>","==>" + photoUriString);
-
-
-
-
-
-
-
-
-            }
-            Log.e("","" + photoUriString);
+            File photo = new File(crop_file_path);
 
             FileInputStream fileInputStream = null;
-            File file = new File(getPath(tempUri));
-            if(file.exists()) {
-
-                Log.e("Sing up file", "==>" + Uri.fromFile(file) +"/00/" + file.length());
-                byte[] bFile = new byte[(int) file.length()];
-
-                try {
-                    //convert file into array of bytes
-                    fileInputStream = new FileInputStream(file);
-                    fileInputStream.read(bFile);
-                    fileInputStream.close();
-
-                    for (int i = 0; i < bFile.length; i++) {
-                        //System.out.print((char)bFile[i]);
-                    }
-
-                    //System.out.println("Done");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e("ParseFile Excect","===>>" + e.toString() + file.getAbsolutePath() );
-                }
-/*                ParseFile ParsephotoFile = new ParseFile("photo.jpg", bFile);
-                user.put("user_profile_img", ParsephotoFile);*/
-
-            }
-            else {
-                Log.e("Sing up file", "//>" + Uri.parse(photoUri.getPath()));
-            }
 
 
-            /*FileInputStream fileInputStream = null;
-
-
-            byte[] bFile = new byte[(int) photoFile.length()];
+            byte[] bFile = new byte[(int) photo.length()];
 
             try {
                 //convert file into array of bytes
-                fileInputStream = new FileInputStream(photoFile);
+                fileInputStream = new FileInputStream(photo);
                 fileInputStream.read(bFile);
                 fileInputStream.close();
 
@@ -765,78 +566,188 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
                     //System.out.print((char)bFile[i]);
                 }
 
+
                 //System.out.println("Done");
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.e("ParseFile Excect","===>>" + e.toString() + photoFile.getAbsolutePath() );
+                Log.e("Image Upload Sing up", "==>" + e.toString());
             }
-            ParseFile ParsephotoFile = new ParseFile("photo.jpg", bFile);
-            user.put("user_profile_img", ParsephotoFile);
-*/
 
 
-        }
+            final ParseFile ParsephotoFile = new ParseFile("photo.jpg", bFile);
 
-        user.put("searchName", username.toLowerCase());
-
-        //user.put("Address", "");//addressField.getText().toString());
-
-        if (user_fb_id != null) {
-            user.put("facebookId", user_fb_id);
-        }
-        if( user_fb_email != null){
-            user.put("email",user_fb_email);
-        }
-
-        loadingStart();
-        user.signUpInBackground(new SignUpCallback() {
-
-            @Override
-            public void done(ParseException e) {
-                if (isActivityDestroyed()) {
-                    return;
-                }
-
-                if (e == null) {
-                    loadingFinish();
-                    signupSuccess(user);
-                } else {
-                    loadingFinish();
+            //System.out.println("PARSE FILE NAME : " + picturePath);
+            ParsephotoFile.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
                     if (e != null) {
-                        debugLog(getString(R.string.com_parse_ui_login_warning_parse_signup_failed) +
-                                e.toString());
-                        switch (e.getCode()) {
-                            case ParseException.INVALID_EMAIL_ADDRESS:
-                                showToast(R.string.com_parse_ui_invalid_email_toast);
-                                break;
-                            case ParseException.USERNAME_TAKEN:
-                                if(lang.equals(Utils.ENG_LANG)){
-                                    showToast(R.string.com_parse_ui_username_taken_toast);
+                        //btSignup.setText(e.getMessage());
+                    }
+                }
+            }, new ProgressCallback() {
+                @Override
+                public void done(Integer integer) {
+
+
+                    // input validation ok -- do saving
+                    final ParseUser user = new ParseUser();
+
+                    // Set standard fields
+                    //TODO username and email replace bcoz of avoiding duplicate
+                    user.setUsername(username);//username
+                    user.setPassword(password);
+
+                    //user.setEmail(email);
+
+                    user.put("username", username);
+                    user.put("phoneNo", mobileNoForNrc);
+                    //TODO:
+
+
+                    user.put("user_profile_img", ParsephotoFile);
+
+                    user.put("searchName", username.toLowerCase());
+
+                    //user.put("Address", "");//addressField.getText().toString());
+
+                    if (user_fb_id != null) {
+                        user.put("facebookId", user_fb_id);
+                    }
+                    if (user_fb_email != null) {
+                        user.put("email", user_fb_email);
+                    }
+
+                    loadingStart();
+                    user.signUpInBackground(new SignUpCallback() {
+
+                        @Override
+                        public void done(ParseException e) {
+                            if (isActivityDestroyed()) {
+                                return;
+                            }
+
+                            if (e == null) {
+                                loadingFinish();
+                                signupSuccess(user);
+                            } else {
+                                loadingFinish();
+                                if (e != null) {
+                                    debugLog(getString(R.string.com_parse_ui_login_warning_parse_signup_failed) +
+                                            e.toString());
+                                    switch (e.getCode()) {
+                                        case ParseException.INVALID_EMAIL_ADDRESS:
+                                            showToast(R.string.com_parse_ui_invalid_email_toast);
+                                            break;
+                                        case ParseException.USERNAME_TAKEN:
+                                            if (lang.equals(Utils.ENG_LANG)) {
+                                                showToast(R.string.com_parse_ui_username_taken_toast);
+                                            } else if (lang.equals(Utils.MM_LANG)) {
+
+                                                Utils.doToastMM(mContext, getResources().getString(R.string.com_parse_ui_username_taken_toast_mm));
+                                            }
+
+
+                                            break;
+                                        case ParseException.EMAIL_TAKEN:
+                                            showToast(R.string.com_parse_ui_email_taken_toast);
+                                            break;
+                                        default:
+                                            if (lang.equals(Utils.ENG_LANG)) {
+                                                showToast(R.string.com_parse_ui_signup_failed_unknown_toast);
+                                            } else if (lang.equals(Utils.MM_LANG)) {
+
+                                                Utils.doToastMM(mContext, getResources().getString(R.string.com_parse_ui_signup_failed_unknown_toast_mm));
+                                            }
+
+                                    }
                                 }
-                                else if(lang.equals(Utils.MM_LANG)){
+                            }
+                        }
+                    });
+                }
+            });
+        } else { //TODO End of Cross file path if null case
 
-                                    Utils.doToastMM(mContext, getResources().getString(R.string.com_parse_ui_username_taken_toast_mm));
-                                }
+            // input validation ok -- do saving
+            final ParseUser user = new ParseUser();
+
+            // Set standard fields
+            //TODO username and email replace bcoz of avoiding duplicate
+            user.setUsername(username);//username
+            user.setPassword(password);
+
+            //user.setEmail(email);
+
+            user.put("username", username);
+            user.put("phoneNo", mobileNoForNrc);
 
 
-                                break;
-                            case ParseException.EMAIL_TAKEN:
-                                showToast(R.string.com_parse_ui_email_taken_toast);
-                                break;
-                            default:
-                                if(lang.equals(Utils.ENG_LANG)){
-                                    showToast(R.string.com_parse_ui_signup_failed_unknown_toast);
-                                }
-                                else if(lang.equals(Utils.MM_LANG)){
 
-                                    Utils.doToastMM(mContext, getResources().getString(R.string.com_parse_ui_signup_failed_unknown_toast_mm));
-                                }
+            //mage No selected
+            //user.put("user_profile_img", ParsephotoFile);
 
+            user.put("searchName", username.toLowerCase());
+
+            //user.put("Address", "");//addressField.getText().toString());
+
+            if (user_fb_id != null) {
+                user.put("facebookId", user_fb_id);
+            }
+            if (user_fb_email != null) {
+                user.put("email", user_fb_email);
+            }
+
+            loadingStart();
+            user.signUpInBackground(new SignUpCallback() {
+
+                @Override
+                public void done(ParseException e) {
+                    if (isActivityDestroyed()) {
+                        return;
+                    }
+
+                    if (e == null) {
+                        loadingFinish();
+                        signupSuccess(user);
+                    } else {
+                        loadingFinish();
+                        if (e != null) {
+                            debugLog(getString(R.string.com_parse_ui_login_warning_parse_signup_failed) +
+                                    e.toString());
+                            switch (e.getCode()) {
+                                case ParseException.INVALID_EMAIL_ADDRESS:
+                                    showToast(R.string.com_parse_ui_invalid_email_toast);
+                                    break;
+                                case ParseException.USERNAME_TAKEN:
+                                    if (lang.equals(Utils.ENG_LANG)) {
+                                        showToast(R.string.com_parse_ui_username_taken_toast);
+                                    } else if (lang.equals(Utils.MM_LANG)) {
+
+                                        Utils.doToastMM(mContext, getResources().getString(R.string.com_parse_ui_username_taken_toast_mm));
+                                    }
+
+
+                                    break;
+                                case ParseException.EMAIL_TAKEN:
+                                    showToast(R.string.com_parse_ui_email_taken_toast);
+                                    break;
+                                default:
+                                    if (lang.equals(Utils.ENG_LANG)) {
+                                        showToast(R.string.com_parse_ui_signup_failed_unknown_toast);
+                                    } else if (lang.equals(Utils.MM_LANG)) {
+
+                                        Utils.doToastMM(mContext, getResources().getString(R.string.com_parse_ui_signup_failed_unknown_toast_mm));
+                                    }
+
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+
+
+        }
+
 
     }
 
@@ -847,14 +758,13 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         return photoDir;
     }
 
-    public String getPath(Uri uri)
-    {
-        String[] projection = { MediaStore.Images.Media.DATA };
-        Cursor cursor =getActivity(). getContentResolver().query(uri, projection, null, null, null);
+    public String getPath(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
         if (cursor == null) return null;
-        int column_index =             cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
-        String s=cursor.getString(column_index);
+        String s = cursor.getString(column_index);
         cursor.close();
         return s;
     }
@@ -868,27 +778,6 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         onLoginSuccessListener.onLoginSuccess(user);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == Activity.RESULT_OK && requestCode >= 0 ) {
-            //listElements.get(requestCode).onActivityResult(data);
-            if (tempUri != null) {
-                photoUri = tempUri;
-            } else if (data != null) {
-                photoUri = data.getData();
-            }
-            setPhotoThumbnail();
-
-
-
-        } else {
-            callbackManager.onActivityResult(requestCode, resultCode, data);
-        }
-        //callbackManager.onActivityResult(requestCode, resultCode, data);
-
-    }
 
     private void updateUI() {
         boolean enableButtons = AccessToken.getCurrentAccessToken() != null;
@@ -908,14 +797,14 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
                             //Toast.makeText(getApplicationContext(), "ID" + user.optString("id") + "Name" + user.optString("name") + "Email " +user.optString("email"), Toast.LENGTH_LONG).show();
 
                             if (user.optString("id") != null) {
-                                //Toast.makeText(getActivity().getApplicationContext(), "Log In Successful." + user.optString("name") + user.optString("email").toString() + user.optString("id"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity().getApplicationContext(), "Log In Successful." + user.optString("name") + user.optString("email").toString() + user.optString("id"), Toast.LENGTH_LONG).show();
 
                                 usernameField.setText(user.optString("name"));
                                 //emailField.setText(user.optString("email").toString());
 
                                 user_fb_email = user.optString("email").toString();
                                 user_fb_id = user.optString("id");
-                                String fb_path = "https://graph.facebook.com/"+user_fb_id+"/picture";
+                                String fb_path = "https://graph.facebook.com/" + user_fb_id + "/picture";
 
                                 /*Uri uri =  Uri.parse(fb_path  );
                                 profile_rounded.setImageURI(uri);*/
@@ -942,7 +831,6 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
                                 }
 
 
-
                             } else {
                                 Toast.makeText(getActivity().getApplicationContext(), "Please Log In", Toast.LENGTH_LONG).show();
                             }
@@ -955,7 +843,7 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
             request.setParameters(parameters);
             GraphRequest.executeBatchAsync(request);
         } else {
-            //Toast.makeText(getApplicationContext(), "accessToken Null Case ", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity().getApplicationContext(), "accessToken Null Case ", Toast.LENGTH_LONG).show();
 
             user = null;
         }
@@ -996,10 +884,11 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         return formattedNrcNo;
     }
 
-    private void doToast(String toast){
+    private void doToast(String toast) {
         Toast.makeText(getActivity(), toast, Toast.LENGTH_SHORT).show();
     }
-    public void setEnglishFont(){
+
+    public void setEnglishFont() {
         img_upload_textview.setText(getResources().getString(R.string.com_parse_ui_parse_signup_img_upload_label_eng));
         usernameField.setHint(getResources().getString(R.string.com_parse_ui_name_input_hint));
         passwordField.setHint(getResources().getString(R.string.com_parse_ui_password_input_hint));
@@ -1017,7 +906,8 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         createAccountButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
         editAccountButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
     }
-    public void setMyanmarFont(){
+
+    public void setMyanmarFont() {
 
         img_upload_textview.setText(getResources().getString(R.string.com_parse_ui_parse_signup_img_upload_label_mm));
         usernameField.setHint(getResources().getString(R.string.com_parse_ui_username_input_hint_mm));
@@ -1040,7 +930,7 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
 
     }
 
-    private void showPhotoChoice() {
+    /*private void showPhotoChoice() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         CharSequence camera = getResources().getString(R.string.action_photo_camera);
         CharSequence gallery = getResources().getString(R.string.action_photo_gallery);
@@ -1082,7 +972,7 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
     private void startGalleryActivity() {
         tempUri = null;
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
+        intent.setType("image*//*");
         String selectPicture = getResources().getString(R.string.select_picture);
         startActivityForResult(Intent.createChooser(intent, selectPicture), 0);
     }
@@ -1097,15 +987,16 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
                 imgFileName);
         return Uri.fromFile(image);
-    }
-
-   /* private void setPhotoText() {
-        if (photoUri == null) {
-            setText2(getResources().getString(R.string.action_photo_default));
-        } else {
-            setText2(getResources().getString(R.string.action_photo_ready));
-        }
     }*/
+
+
+    /* private void setPhotoText() {
+         if (photoUri == null) {
+             setText2(getResources().getString(R.string.action_photo_default));
+         } else {
+             setText2(getResources().getString(R.string.action_photo_ready));
+         }
+     }*/
     //Image Set Up
     private class ScaleAndSetImageTask extends AsyncTask<Void, Void, Bitmap> {
         private final Uri uri;
@@ -1168,6 +1059,7 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
 
         }
     }
+
     //Get File Path
     /*private String getRealPathFromURI(Uri contentURI) {
         String result;
@@ -1185,8 +1077,8 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
     public String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
+            String[] proj = {MediaStore.Images.Media.DATA};
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             return cursor.getString(column_index);
@@ -1198,6 +1090,182 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
     }
 
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt("chooser_type", chooserType);
+        outState.putString("media_path", filePath);
+        super.onSaveInstanceState(outState);
+
+
+    }
+
+    /**
+     * *****************Image Chooser***************
+     */
+    private void takePicture() {
+        chooserType = ChooserType.REQUEST_CAPTURE_PICTURE;
+        imageChooserManager = new ImageChooserManager(this,
+                ChooserType.REQUEST_CAPTURE_PICTURE, "myfolder", true);
+        imageChooserManager.setImageChooserListener(this);
+        try {
+            //progress_wheel.setVisibility(View.VISIBLE);
+            capture_filePath = imageChooserManager.choose();
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void chooseImage() {
+        chooserType = ChooserType.REQUEST_PICK_PICTURE;
+        imageChooserManager = new ImageChooserManager(this,
+                ChooserType.REQUEST_PICK_PICTURE, "myfolder", true);
+        imageChooserManager.setImageChooserListener(this);
+        try {
+            //progress_wheel.setVisibility(View.VISIBLE);
+            filePath = imageChooserManager.choose();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /*@Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK && requestCode >= 0 ) {
+            //listElements.get(requestCode).onActivityResult(data);
+            if (tempUri != null) {
+                photoUri = tempUri;
+            } else if (data != null) {
+                photoUri = data.getData();
+            }
+            setPhotoThumbnail();
+
+
+
+        } else {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+        //callbackManager.onActivityResult(requestCode, resultCode, data);
+
+    }*/
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == getActivity().RESULT_OK && (requestCode == ChooserType.REQUEST_PICK_PICTURE || requestCode == ChooserType.REQUEST_CAPTURE_PICTURE)) {
+            if (imageChooserManager == null) {
+                reinitializeImageChooser();
+            }
+            imageChooserManager.submit(requestCode, data);
+            //startActivityForResult(MediaStoreUtils.getPickImageIntent(getActivity().getApplicationContext()),REQUEST_PICTURE );
+        } else {
+            register_profilePic_progressBar.setVisibility(View.GONE);
+        }
+        if ((requestCode == REQUEST_CROP_PICTURE) && (resultCode == getActivity().RESULT_OK)) {
+            // When we are done cropping, display it in the ImageView.
+
+            profile_rounded.setVisibility(View.VISIBLE);
+            profile_rounded.setImageBitmap(BitmapFactory.decodeFile(croppedImageFile.getAbsolutePath()));
+            //img_job.setMaxWidth(300);
+            profile_rounded.setMaxHeight(400);
+            crop_file_name = Uri.fromFile(croppedImageFile).getLastPathSegment().toString();
+            crop_file_path = Uri.fromFile(croppedImageFile).getPath();
+
+            //Toast.makeText(getActivity().getApplicationContext(), "File Name & PATH are:" + crop_file_name + "\n" + crop_file_path, Toast.LENGTH_LONG).show();
+
+
+        }
+        //Toast.makeText(getActivity().getApplicationContext(), "Image"+crop_file_name +"Path \n"+ crop_file_path, Toast.LENGTH_SHORT).show();
+
+
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+
+
+        /*if(crop_file_path != null ){
+
+            Intent intent = new Intent(MainReportActivity.this, MainPhotoReportActivity.class);
+            intent.putExtra("ImageName" ,crop_file_name);
+            intent.putExtra("ImagePath",crop_file_path);
+            intent.putExtra("ImageAbsolutePath" ,croppedImageFile.getAbsolutePath());
+
+
+            startActivity(intent);*//*
+
+            *//*MainReportFragment mainReportFragment = new MainReportFragment();
+            Bundle b = new Bundle();
+
+            b.putString("ImageName",crop_file_name);
+            b.putString("ImagePath",crop_file_path);
+            b.putString("ImageAbsolutePath",croppedImageFile.getAbsolutePath());
+
+            mainReportFragment.setArguments(b);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, mainReportFragment)
+                    .commit();
+        }*/
+    }
+
+
+    @Override
+    public void onImageChosen(final ChosenImage image) {
+
+        getActivity().runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                register_profilePic_progressBar.setVisibility(View.GONE);
+                if (image != null) {
+                    //textViewFile.setText(image.getFilePathOriginal());
+                    croppedImageFile = new File(image.getFilePathOriginal());
+
+                    // When the user is done picking a picture, let's start the CropImage Activity,
+                    // setting the output image file and size to 200x200 pixels square.
+
+                    Uri croppedImage = Uri.fromFile(croppedImageFile);
+                    CropImageIntentBuilder cropImage = new CropImageIntentBuilder(512, 512, croppedImage);
+                    cropImage.setSourceImage(croppedImage);
+                    startActivityForResult(cropImage.getIntent(getActivity().getApplicationContext()), REQUEST_CROP_PICTURE);
+
+
+                    chosenImage = image;
+
+
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onError(final String reason) {
+        getActivity().runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                register_profilePic_progressBar.setVisibility(View.GONE);
+                Toast.makeText(getActivity().getApplicationContext(), reason,
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+
+    // Should be called if for some reason the ImageChooserManager is null (Due
+    // to destroying of activity for low memory situations)
+    private void reinitializeImageChooser() {
+        imageChooserManager = new ImageChooserManager(this, chooserType,
+                "myfolder", true);
+        imageChooserManager.setImageChooserListener(this);
+        imageChooserManager.reinitialize(filePath);
+    }
 
 
 }

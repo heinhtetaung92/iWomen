@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="#FFF"
-    android:layout_height="fill_parent">
+    android:background="@color/white"
+    android:layout_height="fill_parent"
+    xmlns:wheel="http://schemas.android.com/apk/res-auto"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,13 +39,70 @@
         </FrameLayout>
 
 
+        <LinearLayout
+
+            android:id="@+id/detail_ly_media_main"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:background="@color/video_button_bg"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/detail_ly_download"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_file_download_grey600_48dp"
+                    android:id="@+id/postdetail_img_download" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/detail_download_text_eng"
+                    android:id="@+id/postdetail_download_text"
+                    android:paddingLeft="8dp" />
+            </LinearLayout>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="45dp"
+                android:background="@color/border_color"
+                android:layout_margin="8dp"/>
+
+            <LinearLayout
+                android:id="@+id/detail_ly_listen_now"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_headset_grey600_48dp"
+                    android:id="@+id/postdetail_img_player" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/detail_listen_text_eng"
+                    android:id="@+id/postdetail_player_text"
+                    android:paddingLeft="8dp" />
+            </LinearLayout>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/postdetail_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textSize="18sp"
+            android:textSize="25sp"
             android:text="Title"
             android:layout_margin="16dp"/>
 
@@ -52,7 +111,8 @@
             android:id="@+id/postdetail_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp" />
+            android:layout_margin="18dp"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/postdetail_content"
@@ -233,14 +293,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Questions for discussion"
+            android:visibility="gone"
             android:layout_margin="16dp"/>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#000"
+            android:layout_height="1dp"
+            android:background="@color/border_color"
             android:layout_margin="8dp"/>
 
+        <org.undp_iwomen.iwomen.ui.widget.ProgressWheel
+            android:id="@+id/postdetail_progress_wheel_comment"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            wheel:matProg_barColor="@color/theme_primary"
+            wheel:matProg_progressIndeterminate="true"/>
         <ListView
             android:id="@+id/postdetail_comment_listview"
             android:layout_width="match_parent"
@@ -248,7 +317,10 @@
             android:background="@color/list_background"
             android:choiceMode="singleChoice"
             android:divider="@android:color/transparent"
-            android:layout_marginBottom="56dp"/>
+            android:clipToPadding="false"
+            android:layout_marginBottom="100dp"
+            android:paddingBottom="10dp"/>
+
 
 
 

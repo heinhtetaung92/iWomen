@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -36,6 +39,13 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
     private TextView settings_changeTheme;
 
     public void SettingsFragment(Context context){
+
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
     }
 
@@ -130,5 +140,27 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
         settings_changeTheme.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
 
 
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+
+        inflater.inflate(R.menu.menu_post_news, menu);
+
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+
+            return false;
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

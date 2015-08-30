@@ -3,14 +3,18 @@ package org.undp_iwomen.iwomen.ui.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,6 +137,7 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
     private Context mContext;
     private EditText new_post_et_title;
     private EditText new_post_et_story;
+
     public MainPhotoPostFragment() {
 
 
@@ -185,7 +190,7 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
         mstr_lang = sharePrefLanguageUtil.getString(com.parse.utils.Utils.PREF_SETTING_LANG, com.parse.utils.Utils.ENG_LANG);
 
         img_photo = (ResizableImageView) rootView.findViewById(R.id.new_post_img);
-        new_post_et_title = (EditText)rootView.findViewById(R.id.new_post_et_title);
+        new_post_et_title = (EditText) rootView.findViewById(R.id.new_post_et_title);
 
 
         //img_camera = (ImageView)rootView.findViewById(R.id.img_camera);
@@ -207,13 +212,12 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
         });
 
 
-
         characterCountTextView = (TextView) rootView.findViewById(R.id.character_count_textview);
 
         postButton = (Button) rootView.findViewById(R.id.new_post_btn);
 
-        txt_img_upload = (TextView)rootView.findViewById(R.id.new_post_txt_img_upload);
-        txt_camera = (TextView)rootView.findViewById(R.id.new_post_camera_img_upload);
+        txt_img_upload = (TextView) rootView.findViewById(R.id.new_post_txt_img_upload);
+        txt_camera = (TextView) rootView.findViewById(R.id.new_post_camera_img_upload);
 
 
         txt_camera.setOnClickListener(new View.OnClickListener() {
@@ -259,7 +263,7 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
             txt_img_upload.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
             postButton.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
 
-        }else {
+        } else {
             new_post_et_title.setHint(R.string.new_post_hint_title_mm);
             postEditText.setHint(R.string.new_post_hint_body_mm);
             txt_img_upload.setText(R.string.new_post_upload_photo_mm);
@@ -364,7 +368,7 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
             postParse = new Post();
 
             postParse.setContent(postEditText.getText().toString());
-            postParse.setContentTypes("");
+            //postParse.setContentTypes("Story");
 
             postParse.setUserId(user_obj_id);
             if (mstr_lang.equals(com.parse.utils.Utils.ENG_LANG)) {
@@ -373,10 +377,12 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
                 postParse.setTitle(new_post_et_title.getText().toString());
 
 
-            }else{
+            } else {
                 postParse.setContentMm(postEditText.getText().toString());
                 postParse.setTitleMm(new_post_et_title.getText().toString());
             }
+
+            postParse.setIsAllow(false);
 
             postParse.setLikes(0);
             postParse.setContentTypes("Story");
@@ -422,7 +428,6 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
                         Intent intent = new Intent(getActivity(), DrawerMainActivity.class);
 
 
-
                         startActivity(intent);
 
                     } else {
@@ -442,7 +447,7 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
             postParse = new Post();
 
             postParse.setContent(postEditText.getText().toString());
-            postParse.setContentTypes("");
+            //postParse.setContentTypes("");
 
             postParse.setUserId(user_obj_id);
             if (mstr_lang.equals(com.parse.utils.Utils.ENG_LANG)) {
@@ -451,10 +456,11 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
                 postParse.setTitle(new_post_et_title.getText().toString());
 
 
-            }else{
+            } else {
                 postParse.setContentMm(postEditText.getText().toString());
                 postParse.setTitleMm(new_post_et_title.getText().toString());
             }
+            postParse.setIsAllow(false);
 
             postParse.setLikes(0);
             postParse.setContentTypes("Story");
@@ -465,9 +471,6 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
 
             //TODO images null case allow post
             //postParse.setImageFile(photoFile);
-
-
-
 
 
             /**Very Important */
@@ -500,7 +503,6 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
                                 "Post Success  ",
                                 Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getActivity(), DrawerMainActivity.class);
-
 
 
                         startActivity(intent);
@@ -667,11 +669,8 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
             crop_file_name = Uri.fromFile(croppedImageFile).getLastPathSegment().toString();
             crop_file_path = Uri.fromFile(croppedImageFile).getPath();
 
-            //Toast.makeText(getActivity().getApplicationContext(), "File Name & PATH are:" + crop_file_name + "\n" + crop_file_path, Toast.LENGTH_LONG).show();
-
 
         }
-        //Toast.makeText(getActivity().getApplicationContext(), "Image"+crop_file_name +"Path \n"+ crop_file_path, Toast.LENGTH_SHORT).show();
 
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -715,15 +714,15 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
                     //textViewFile.setText(image.getFilePathOriginal());
                     croppedImageFile = new File(image.getFilePathOriginal());
 
+
                     // When the user is done picking a picture, let's start the CropImage Activity,
                     // setting the output image file and size to 200x200 pixels square.
+
 
                     Uri croppedImage = Uri.fromFile(croppedImageFile);
                     CropImageIntentBuilder cropImage = new CropImageIntentBuilder(512, 512, croppedImage);
                     cropImage.setSourceImage(croppedImage);
                     startActivityForResult(cropImage.getIntent(getActivity().getApplicationContext()), REQUEST_CROP_PICTURE);
-
-
 
 
                     chosenImage = image;
@@ -756,5 +755,117 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
         imageChooserManager.setImageChooserListener(this);
         imageChooserManager.reinitialize(filePath);
     }
+
+    //Check Image Rotate
+
+    public static Bitmap decodeFile(String path) {
+
+        int orientation;
+
+        try {
+
+            if (path == null) {
+
+                return null;
+            }
+            // decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+
+            // Find the correct scale value. It should be the power of 2.
+            final int REQUIRED_SIZE = 1024;
+            //int width_tmp = o.outWidth, height_tmp = o.outHeight;
+            int width_tmp = 512, height_tmp = 512;
+            int scale = 1;
+            while (true) {
+                if (width_tmp / 2 < REQUIRED_SIZE || height_tmp / 2 < REQUIRED_SIZE)
+                    break;
+                width_tmp /= 2;
+                height_tmp /= 2;
+                scale++;
+            }
+            // decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            Bitmap bm = BitmapFactory.decodeFile(path, o2);
+
+
+            Bitmap bitmap = bm;
+
+            ExifInterface exif = new ExifInterface(path);
+            orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+            Log.e("orientation", "" + orientation);
+            Matrix m = new Matrix();
+
+            if ((orientation == 3)) {
+
+                m.postRotate(180);
+                m.postScale((float) bm.getWidth(), (float) bm.getHeight());
+
+//               if(m.preRotate(90)){
+                Log.e("in orientation", "" + orientation);
+
+                bitmap = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), m, true);
+                return bitmap;
+            } else if (orientation == 6) {
+
+                m.postRotate(90);
+
+                Log.e("in orientation", "" + orientation);
+
+                bitmap = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), m, true);
+                return bitmap;
+            } else if (orientation == 8) {
+
+                m.postRotate(270);
+
+                Log.e("in orientation", "" + orientation);
+
+                bitmap = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), m, true);
+                return bitmap;
+            }
+            return bitmap;
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    public static Bitmap checkifImageRotated(File file) {
+        ExifInterface exif;
+        try {
+            exif = new ExifInterface(file.getAbsolutePath());
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            int rotate = 0;
+
+            Log.e("checkifImageRotated","==>"+orientation);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotate = -90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotate = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotate = 90;
+                    break;
+
+
+
+
+
+            }
+            Bitmap bmp = BitmapFactory.decodeStream(new FileInputStream(file), null, null);
+            if (rotate != 0) {
+                Matrix matrix = new Matrix();
+                matrix.setRotate(rotate);
+                bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, false);
+                return bmp;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 }

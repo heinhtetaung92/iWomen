@@ -53,15 +53,20 @@ public class AboutUsWebActivity extends AppCompatActivity {
         mWebView.getSettings().setBuiltInZoomControls(true);
         mWebView.getSettings().setDisplayZoomControls(true);
 
+
+
+
         strLang = sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
 
         if(strLang.equals(Utils.ENG_LANG)){
 
             mWebView.loadUrl("file:///android_asset/tos/About-Us-Eng.html");
+
         }
         else if(strLang.equals(Utils.MM_LANG)){
 
             mWebView.loadUrl("file:///android_asset/tos/About-Us-MM.html");
+
         }
         mWebView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {

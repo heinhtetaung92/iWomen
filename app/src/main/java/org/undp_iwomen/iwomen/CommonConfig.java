@@ -24,7 +24,7 @@ public class CommonConfig {
     public static final String COMMENT_URL = "/classes/Comment";
 
 
-    public static final String SHARE_URL ="https://www.facebook.com/LostAndFoundHelper";
+    public static final String SHARE_URL ="https://www.facebook.com/testingmobileapp";
     public int getPostMaxCharacterCount () {
         int value = 140;
         return value;

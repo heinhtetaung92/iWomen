@@ -10,6 +10,7 @@ public class ResourceItem {
     private String resourceImgPath;
     private int resourceImg;
 
+
     public ResourceItem(){
 
     }

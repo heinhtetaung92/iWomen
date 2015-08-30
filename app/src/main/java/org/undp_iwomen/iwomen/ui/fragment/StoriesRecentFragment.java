@@ -506,6 +506,7 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
 
                         query.whereGreaterThan("postUploadedDate", date);
                         //query.whereLessThan("likes",)
+                        query.whereEqualTo("isAllow", true);
                         query.setLimit(3);
 
                         query.orderByDescending("postUploadedDate"); //Latest date is first
@@ -613,7 +614,7 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
                 //query.orderByDescending("createdAt"); //Latest date is first
                 query.orderByAscending("postUploadedDate");//Very first row Date is first
                 //query.orderByDescending("likes");//Most likes is first
-
+                query.whereEqualTo("isAllow", true);
                 query.setLimit(3);
                 query.findInBackground(new FindCallback<Post>() {
                     @Override

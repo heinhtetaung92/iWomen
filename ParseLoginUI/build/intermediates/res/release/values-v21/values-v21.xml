@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/exploded-aar/com.shamanland/fab/0.0.8/res/values-v21/values.xml -->
+    <eat-comment/>
+    <dimen name="floating_action_button_margin_mini">20dp</dimen>
+    <dimen name="floating_action_button_margin_mini_minus">-20dp</dimen>
+    <dimen name="floating_action_button_margin_normal">28dp</dimen>
+    <dimen name="floating_action_button_margin_normal_minus">-28dp</dimen>
     <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/exploded-aar/com.android.support/design/22.2.0/res/values-v21/values-v21.xml -->
     <eat-comment/>
     <dimen name="navigation_padding_top_default">24dp</dimen>

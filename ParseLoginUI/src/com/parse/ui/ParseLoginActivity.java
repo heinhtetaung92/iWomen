@@ -278,7 +278,7 @@ public class ParseLoginActivity extends ActionBarActivity implements
     @Override
     public void onLoadingStart(boolean showSpinner) {
         if (showSpinner) {
-            progressDialog = ProgressDialog.show(this, null,
+            progressDialog = ProgressDialog.show(ParseLoginActivity.this, null,
                     getString(R.string.com_parse_ui_progress_dialog_text), true, false);
         }
     }

@@ -38,6 +38,8 @@
 
     <color name="line_color">#c3c3c3</color>
 
+    <color name="video_button_bg">#E1E1E1</color>
+
     <color name="text_bg">#F4F4F4</color>
 
     <color name="fill_color">#F4F4F4</color>
@@ -66,5 +68,6 @@
     <color name="brown_500">#795548</color>
     <color name="grey_500">#9e9e9e</color>
     <color name="blue_grey_500">#607d8b</color>
+    <color name="notification_light">#88ff0000</color>
 
 </resources>

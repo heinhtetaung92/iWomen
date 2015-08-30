@@ -233,6 +233,21 @@
                 android:value=".ui.activity.DrawerMainActivity"/>
         </activity>
         <activity
+            android:name=".ui.activity.YouTubeWebviewActivity"
+            android:label="@string/app_name"
+            android:configChanges="keyboardHidden|orientation|screenSize" > <!-- Prevent Activity restart on such events (specially on orientation change) -->
+
+        </activity>
+        <activity
+            android:name=".ui.activity.TlgProfileActivity"
+            android:label="@string/title_activity_post_detail"
+            android:parentActivityName=".ui.activity.DrawerMainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activity.DrawerMainActivity"/>
+        </activity>
+        <activity
             android:name=".ui.activity.PostNewsActivity"
             android:label="@string/title_activity_post_news" >
         </activity>
