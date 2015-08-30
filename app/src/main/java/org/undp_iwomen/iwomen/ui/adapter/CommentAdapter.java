@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.rockerhieu.emojicon.EmojiconTextView;
+import com.algo.hha.emojiicon.EmojiconTextView;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.data.CommentItem;

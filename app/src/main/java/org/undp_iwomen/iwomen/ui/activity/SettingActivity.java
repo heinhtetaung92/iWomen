@@ -12,6 +12,7 @@ import com.google.android.gms.analytics.Tracker;
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
 import org.undp_iwomen.iwomen.ui.fragment.SettingsFragment;
+import org.undp_iwomen.iwomen.utils.Utils;
 
 
 public class SettingActivity extends AppCompatActivity {
@@ -22,6 +23,7 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Utils.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_fragment);
 
 

@@ -1,10 +1,14 @@
 package org.undp_iwomen.iwomen.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
 
 import java.io.InputStream;
@@ -17,6 +21,12 @@ public class Utils {
     public static String PREF_SETTING_LANG = "language";
     public static String ENG_LANG = "english";
     public static String MM_LANG = "myanmar";
+    public static String PREF_THEME = "themecolor";
+
+    public static int THEME_BLUE = 11;
+    public static int THEME_PINK = 12;
+    public static int THEME_YELLOW = 13;
+
 
     public static void CopyStream(InputStream is, OutputStream os)
     {
@@ -50,6 +60,30 @@ public class Utils {
         toastTV.setTextSize(15);
         toastTV.setTypeface(MyTypeFace.get(context, MyTypeFace.ZAWGYI));
         toast_mm.show();
+    }
+
+    public static void changeToTheme(Activity activity)
+    {
+        activity.finish();
+
+        activity.startActivity(new Intent(activity, activity.getClass()));
+
+    }
+
+    /** Set the theme of the activity, according to the configuration. */
+    public static void onActivityCreateSetTheme(Activity activity)
+    {
+        SharedPreferences sPref = activity.getSharedPreferences(PREF_SETTING, Context.MODE_PRIVATE);
+        int sTheme = sPref.getInt(PREF_THEME, THEME_PINK);
+
+
+        if(sTheme == THEME_PINK){
+            activity.setTheme(R.style.AppTheme);
+        }else if(sTheme == THEME_BLUE){
+            activity.setTheme(R.style.AppTheme_Blue);
+        }else if(sTheme == THEME_YELLOW){
+            activity.setTheme(R.style.AppTheme_Yellow);
+        }
     }
 
 }

@@ -68,7 +68,7 @@
             android:text="Change Theme"
             android:textColor="@color/black" />
 
-        <LinearLayout
+        <RadioGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -81,27 +81,31 @@
                 android:layout_weight="1"
                 android:text=""/>-->
 
-            <View
+            <RadioButton
                 android:id="@+id/setting_color_blue"
                 android:layout_width="@dimen/theme_color_icon_size_small"
                 android:layout_height="@dimen/theme_color_icon_size_small"
-                android:background="@drawable/color_chooser_shape_drawable_blue" />
+                android:layout_margin="8dp"
+                android:background="@drawable/theme_blue_rb_background"
+                android:button="@android:color/transparent" />
 
-            <View
+            <RadioButton
                 android:id="@+id/setting_color_yellow"
                 android:layout_width="@dimen/theme_color_icon_size_small"
                 android:layout_height="@dimen/theme_color_icon_size_small"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:background="@drawable/color_chooser_shape_drawable_yellow" />
+                android:layout_margin="8dp"
+                android:background="@drawable/theme_yellow_rb_background"
+                android:button="@android:color/transparent" />
 
-            <View
+            <RadioButton
                 android:id="@+id/setting_color_pink"
                 android:layout_width="@dimen/theme_color_icon_size_small"
                 android:layout_height="@dimen/theme_color_icon_size_small"
-                android:background="@drawable/color_chooser_shape_drawable" />
+                android:layout_margin="8dp"
+                android:background="@drawable/theme_pink_rb_background"
+                android:button="@android:color/transparent"/>
 
-        </LinearLayout>
+        </RadioGroup>
 
         <View
             android:layout_width="match_parent"
