@@ -208,9 +208,10 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
 
 
 
-            /*String selections = TableAndColumnsName.ParseUtil.PARSE_ID + "!=?";
-            String[] selectionargs = {cityID};*/
-            Cursor cursor = getActivity().getContentResolver().query(IwomenProviderData.PostProvider.CONTETN_URI, null, null, null, BaseColumns._ID + " DESC");
+            //TODO ADMIN ACCOUNT POST FILTER
+            String selections = TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID + "=?";
+            String[] selectionargs = {"P8Q6mhIfOG"};
+            Cursor cursor = getActivity().getContentResolver().query(IwomenProviderData.PostProvider.CONTETN_URI, null, selections, selectionargs, BaseColumns._ID + " DESC");
 
 
             ArrayList<FeedItem> feedItemArrayList = new ArrayList<>();
@@ -463,7 +464,7 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
         cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, "Sun Aug 02 18:07:00 GMT+06:30 2015");
         cv.put(TableAndColumnsName.PostUtil.UPDATED_DATE, "Sun Aug 02 18:07:00 GMT+06:30 2015");
 
-        Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
+        //Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
 
         getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);
 
@@ -520,8 +521,24 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
                                         Log.e("Second time Data", "==>" + post.getObjectId());
                                         final ContentValues cv = new ContentValues();
                                         cv.put(TableAndColumnsName.PostUtil.POST_OBJ_ID, post.getObjectId());
-                                        cv.put(TableAndColumnsName.PostUtil.POST_TITLE, post.getString("title"));
-                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, post.getString("content"));
+
+                                        if (post.get("title") != null) {
+
+                                            cv.put(TableAndColumnsName.PostUtil.POST_TITLE, post.getString("title"));
+                                        } else {
+                                            cv.put(TableAndColumnsName.PostUtil.POST_TITLE, "");
+
+                                        }
+
+                                        if (post.get("content") != null) {
+
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, post.getString("content"));
+
+                                        } else {
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, "");
+
+                                        }
+
                                         cv.put(TableAndColumnsName.PostUtil.POST_LIKES, post.getNumber("likes").intValue());
 
 
@@ -587,7 +604,7 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
                                         cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, post.get("postUploadedDate").toString());// post.get("postUploadedDate").toString() //post.getCreatedAt().toString()
                                         cv.put(TableAndColumnsName.PostUtil.UPDATED_DATE, post.get("postUploadedDate").toString());
 
-                                        Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
+                                        //Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
 
                                         getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);
 
@@ -627,8 +644,22 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
 
                                 final ContentValues cv = new ContentValues();
                                 cv.put(TableAndColumnsName.PostUtil.POST_OBJ_ID, post.getObjectId());
-                                cv.put(TableAndColumnsName.PostUtil.POST_TITLE, post.getString("title"));
-                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, post.getString("content"));
+                                if (post.get("title") != null) {
+
+                                    cv.put(TableAndColumnsName.PostUtil.POST_TITLE, post.getString("title"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_TITLE, "");
+
+                                }
+
+                                if (post.get("content") != null) {
+
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, post.getString("content"));
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, "");
+
+                                }
                                 cv.put(TableAndColumnsName.PostUtil.POST_LIKES, post.getNumber("likes").intValue());
 
                                 if (post.get("image") != null) {
@@ -640,7 +671,7 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
                                 }
                                 cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TYPES, post.getString("contentType"));//
 
-                                if (post.get("image") != null) {
+                                if (post.get("userId") != null) {
                                     cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, post.getParseObject("userId").getObjectId());
                                 } else {
                                     cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, "");
@@ -657,14 +688,7 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
 
                                 }
 
-                                if (post.get("videoId") != null) {
 
-                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID, post.getString("videoId"));
-
-                                } else {
-                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID, "");
-
-                                }
                                 if (post.get("videoId") != null) {
 
                                     cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID, post.getString("videoId"));
@@ -703,7 +727,7 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
                                 cv.put(TableAndColumnsName.PostUtil.UPDATED_DATE, post.get("postUploadedDate").toString());
 
 
-                                Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
+                                //Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
 
 
                                 getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);

@@ -19,6 +19,7 @@ public class IwomenProviderData {
 
     private static final String USER_PATH = "user";
     private static final String  POST_PATH = "post";
+    private static final String  USER_POST_PATH = "user_post";
     private static final String  COMMENT_PATH = "comment";
 
 
@@ -53,6 +54,20 @@ public class IwomenProviderData {
         public static final Uri CONTETN_URI = BASE_CONTENT_URI.buildUpon().appendEncodedPath(COMMENT_PATH).build();
 
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.org.undp_iwomen.comment";
+
+        public static Uri buildContentUri(String id){
+            return CONTETN_URI.buildUpon().appendPath(id).build();
+        }
+
+
+
+
+    }
+
+    public static class UserPostProvider implements TableAndColumnsName.UserPostUtil{
+        public static final Uri CONTETN_URI = BASE_CONTENT_URI.buildUpon().appendEncodedPath(USER_POST_PATH).build();
+
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.org.undp_iwomen.user_post";
 
         public static Uri buildContentUri(String id){
             return CONTETN_URI.buildUpon().appendPath(id).build();

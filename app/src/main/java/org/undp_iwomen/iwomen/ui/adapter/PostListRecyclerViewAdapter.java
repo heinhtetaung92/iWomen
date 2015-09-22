@@ -128,6 +128,7 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
 
         SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd hh:mm:ss Z yyyy", Locale.US);
 
+        //2015-09-16T13:46:34.875Z
 
         //Sun Jun 22 18:32:00 GMT+06:30 2014
         //Log.e("Stories Post Adapter==","Date===>" + item.getCreated_at());
@@ -167,7 +168,8 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
                 outOfMemoryError.printStackTrace();
             }
         } else {
-            viewHolder.profilePictureView.setBackgroundResource(R.drawable.blank_profile);
+            viewHolder.profilePictureView.setVisibility(View.GONE);
+            viewHolder.profile.setImageResource(R.drawable.blank_profile);
             viewHolder.profile_item_progressBar.setVisibility(View.GONE);
         }
 

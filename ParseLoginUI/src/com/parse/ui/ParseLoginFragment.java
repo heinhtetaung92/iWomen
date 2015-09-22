@@ -48,258 +48,268 @@ import com.parse.utils.Utils;
 /**
  * Fragment for the user login screen.
  */
-public class ParseLoginFragment extends ParseLoginFragmentBase implements CompoundButton.OnCheckedChangeListener{
+public class ParseLoginFragment extends ParseLoginFragmentBase implements CompoundButton.OnCheckedChangeListener {
 
 
+    public interface ParseLoginFragmentListener {
+        public void onSignUpClicked(String username, String password);
 
-  public interface ParseLoginFragmentListener {
-    public void onSignUpClicked(String username, String password);
+        public void onLoginHelpClicked();
 
-    public void onLoginHelpClicked();
+        public void onLoginSuccess();
+    }
 
-    public void onLoginSuccess();
-  }
-
-  private static final String LOG_TAG = "ParseLoginFragment";
-  private static final String USER_OBJECT_NAME_FIELD = "username";
+    private static final String LOG_TAG = "ParseLoginFragment";
+    private static final String USER_OBJECT_NAME_FIELD = "username";
     private static final String USER_OBJECT_EMAIL_FIELD = "email";
 
-  private View parseLogin;
-  private ImageView appLogo;
-  private EditText usernameField;
-  private EditText passwordField;
-  private TextView loginMotoTextView;
-  private TextView parseLoginHelpButton;
-  private Button parseLoginButton;
-  private Button parseSignupButton;
-  private Button facebookLoginButton;
-  private Button twitterLoginButton;
-  private ParseLoginFragmentListener loginFragmentListener;
-  private ParseOnLoginSuccessListener onLoginSuccessListener;
+    private View parseLogin;
+    private ImageView appLogo;
+    private EditText usernameField;
+    private EditText passwordField;
+    private TextView loginMotoTextView;
+    private TextView parseLoginHelpButton;
+    private Button parseLoginButton;
+    private Button parseSignupButton;
+    private Button facebookLoginButton;
+    private Button twitterLoginButton;
+    private ParseLoginFragmentListener loginFragmentListener;
+    private ParseOnLoginSuccessListener onLoginSuccessListener;
 
-  private ParseLoginConfig config;
+    private ParseLoginConfig config;
 
-  /*
-   * ****Font Setting*********/
-  RadioButton rd_lang_en, rd_lang_mm;
-  SharedPreferences sharePref;
+    /*
+     * ****Font Setting*********/
+    RadioButton rd_lang_en, rd_lang_mm;
+    SharedPreferences sharePref;
+    String lang;
+    Context mContext;
 
-  public static ParseLoginFragment newInstance(Bundle configOptions) {
-    ParseLoginFragment loginFragment = new ParseLoginFragment();
-    loginFragment.setArguments(configOptions);
-    return loginFragment;
-  }
-
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-  }
-
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup parent,
-                           Bundle savedInstanceState) {
-    config = ParseLoginConfig.fromBundle(getArguments(), getActivity());
-
-    View v = inflater.inflate(R.layout.com_parse_ui_parse_login_fragment,
-        parent, false);
-    appLogo= (ImageView) v.findViewById(R.id.app_logo);
-    parseLogin = v.findViewById(R.id.parse_login);
-    usernameField = (EditText) v.findViewById(R.id.login_username_input);
-    passwordField = (EditText) v.findViewById(R.id.login_password_input);
-    loginMotoTextView = (TextView) v.findViewById(R.id.login_moto_textview);
-    parseLoginHelpButton = (Button) v.findViewById(R.id.parse_login_help);
-    parseLoginButton = (Button) v.findViewById(R.id.parse_login_button);
-    parseSignupButton = (Button) v.findViewById(R.id.parse_signup_button);
-    facebookLoginButton = (Button) v.findViewById(R.id.facebook_login);
-    twitterLoginButton = (Button) v.findViewById(R.id.twitter_login);
-
-    /******Font Setting*********/
-    sharePref = getActivity().getSharedPreferences(Utils.PREF_SETTING, Context.MODE_PRIVATE);
-    rd_lang_en = (RadioButton) v.findViewById(R.id.settings_english_language);
-    rd_lang_mm = (RadioButton) v.findViewById(R.id.settings_myanmar_language);
-
-    String lang = sharePref.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
-    rd_lang_en.setOnCheckedChangeListener(this);
-    rd_lang_mm.setOnCheckedChangeListener(this);
-    if(lang.equals(Utils.ENG_LANG)){
-      rd_lang_en.setChecked(true);
-      setEnglishFont();
-    }
-    else if(lang.equals(Utils.MM_LANG)){
-      rd_lang_mm.setChecked(true);
-      setMyanmarFont();
-    }
-    /******Font Setting*********/
-
-
-
-    if (appLogo != null && config.getAppLogo() != null) {
-      appLogo.setImageResource(config.getAppLogo());
-    }
-    if (allowParseLoginAndSignup()) {
-      setUpParseLoginAndSignup();
-    }
-    if (allowFacebookLogin()) {
-      setUpFacebookLogin();
-    }
-    if (allowTwitterLogin()) {
-      setUpTwitterLogin();
+    public static ParseLoginFragment newInstance(Bundle configOptions) {
+        ParseLoginFragment loginFragment = new ParseLoginFragment();
+        loginFragment.setArguments(configOptions);
+        return loginFragment;
     }
 
-    //loginMotoTextView.setVisibility(View.VISIBLE);
-
-    return v;
-  }
-
-  @Override
-  public void onAttach(Activity activity) {
-    super.onAttach(activity);
-
-    if (activity instanceof ParseLoginFragmentListener) {
-      loginFragmentListener = (ParseLoginFragmentListener) activity;
-    } else {
-      throw new IllegalArgumentException(
-          "Activity must implemement ParseLoginFragmentListener");
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
-    if (activity instanceof ParseOnLoginSuccessListener) {
-      onLoginSuccessListener = (ParseOnLoginSuccessListener) activity;
-    } else {
-      throw new IllegalArgumentException(
-          "Activity must implemement ParseOnLoginSuccessListener");
-    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup parent,
+                             Bundle savedInstanceState) {
+        config = ParseLoginConfig.fromBundle(getArguments(), getActivity());
+        mContext = getActivity().getApplicationContext();
 
-    if (activity instanceof ParseOnLoadingListener) {
-      onLoadingListener = (ParseOnLoadingListener) activity;
-    } else {
-      throw new IllegalArgumentException(
-          "Activity must implemement ParseOnLoadingListener");
-    }
-  }
+        View v = inflater.inflate(R.layout.com_parse_ui_parse_login_fragment,
+                parent, false);
+        appLogo = (ImageView) v.findViewById(R.id.app_logo);
+        parseLogin = v.findViewById(R.id.parse_login);
+        usernameField = (EditText) v.findViewById(R.id.login_username_input);
+        passwordField = (EditText) v.findViewById(R.id.login_password_input);
+        loginMotoTextView = (TextView) v.findViewById(R.id.login_moto_textview);
+        parseLoginHelpButton = (Button) v.findViewById(R.id.parse_login_help);
+        parseLoginButton = (Button) v.findViewById(R.id.parse_login_button);
+        parseSignupButton = (Button) v.findViewById(R.id.parse_signup_button);
+        facebookLoginButton = (Button) v.findViewById(R.id.facebook_login);
+        twitterLoginButton = (Button) v.findViewById(R.id.twitter_login);
 
-  @Override
-  protected String getLogTag() {
-    return LOG_TAG;
-  }
+        /******Font Setting*********/
+        sharePref = getActivity().getSharedPreferences(Utils.PREF_SETTING, Context.MODE_PRIVATE);
+        rd_lang_en = (RadioButton) v.findViewById(R.id.settings_english_language);
+        rd_lang_mm = (RadioButton) v.findViewById(R.id.settings_myanmar_language);
 
-  private void setUpParseLoginAndSignup() {
-    parseLogin.setVisibility(View.VISIBLE);
-
-    if (config.isParseLoginEmailAsUsername()) {
-      //usernameField.setHint(R.string.com_parse_ui_email_input_hint);
-      usernameField.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-    }
-
-    if (config.getParseLoginButtonText() != null) {
-      parseLoginButton.setText(config.getParseLoginButtonText());
-    }
-
-    parseLoginButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        String username = usernameField.getText().toString();
-        String password = passwordField.getText().toString();
-
-        if (username.length() == 0) {
-          if (config.isParseLoginEmailAsUsername()) {
-            showToast(R.string.com_parse_ui_no_email_toast);
-          } else {
-            showToast(R.string.com_parse_ui_no_username_toast);
-          }
-        } else if (password.length() == 0) {
-          showToast(R.string.com_parse_ui_no_password_toast);
-        } else {
-          loadingStart(true);
-          ParseUser.logInInBackground(username, password, new LogInCallback() {
-            @Override
-            public void done(ParseUser user, ParseException e) {
-              if (isActivityDestroyed()) {
-                return;
-              }
-
-              if (user != null) {
-                loadingFinish();
-
-                loginSuccess(user);
-              } else {
-                loadingFinish();
-                if (e != null) {
-                  debugLog(getString(R.string.com_parse_ui_login_warning_parse_login_failed) +
-                      e.toString());
-                  if (e.getCode() == ParseException.OBJECT_NOT_FOUND) {
-                    if (config.getParseLoginInvalidCredentialsToastText() != null) {
-                      showToast(config.getParseLoginInvalidCredentialsToastText());
-                    } else {
-                      showToast(R.string.com_parse_ui_parse_login_invalid_credentials_toast);
-                    }
-                    passwordField.selectAll();
-                    passwordField.requestFocus();
-                  } else {
-                    showToast(R.string.com_parse_ui_parse_login_failed_unknown_toast);
-                  }
-                }
-              }
-            }
-          });
+        lang = sharePref.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
+        rd_lang_en.setOnCheckedChangeListener(this);
+        rd_lang_mm.setOnCheckedChangeListener(this);
+        if (lang.equals(Utils.ENG_LANG)) {
+            rd_lang_en.setChecked(true);
+            setEnglishFont();
+        } else if (lang.equals(Utils.MM_LANG)) {
+            rd_lang_mm.setChecked(true);
+            setMyanmarFont();
         }
-      }
-    });
+        /******Font Setting*********/
 
-    if (config.getParseSignupButtonText() != null) {
-      parseSignupButton.setText(config.getParseSignupButtonText());
+
+        if (appLogo != null && config.getAppLogo() != null) {
+            appLogo.setImageResource(config.getAppLogo());
+        }
+        if (allowParseLoginAndSignup()) {
+            setUpParseLoginAndSignup();
+        }
+        if (allowFacebookLogin()) {
+            setUpFacebookLogin();
+        }
+        if (allowTwitterLogin()) {
+            setUpTwitterLogin();
+        }
+
+        //loginMotoTextView.setVisibility(View.VISIBLE);
+
+        return v;
     }
 
-    parseSignupButton.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        String username = usernameField.getText().toString();
-        String password = passwordField.getText().toString();
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
 
-        loginFragmentListener.onSignUpClicked(username, password);
-      }
-    });
+        if (activity instanceof ParseLoginFragmentListener) {
+            loginFragmentListener = (ParseLoginFragmentListener) activity;
+        } else {
+            throw new IllegalArgumentException(
+                    "Activity must implemement ParseLoginFragmentListener");
+        }
 
-    if (config.getParseLoginHelpText() != null) {
-      parseLoginHelpButton.setText(config.getParseLoginHelpText());
+        if (activity instanceof ParseOnLoginSuccessListener) {
+            onLoginSuccessListener = (ParseOnLoginSuccessListener) activity;
+        } else {
+            throw new IllegalArgumentException(
+                    "Activity must implemement ParseOnLoginSuccessListener");
+        }
+
+        if (activity instanceof ParseOnLoadingListener) {
+            onLoadingListener = (ParseOnLoadingListener) activity;
+        } else {
+            throw new IllegalArgumentException(
+                    "Activity must implemement ParseOnLoadingListener");
+        }
     }
 
-    parseLoginHelpButton.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        loginFragmentListener.onLoginHelpClicked();
-      }
-    });
-  }
-
-  private void setUpFacebookLogin() {
-    facebookLoginButton.setVisibility(View.VISIBLE);
-
-    if (config.getFacebookLoginButtonText() != null) {
-      facebookLoginButton.setText(config.getFacebookLoginButtonText());
+    @Override
+    protected String getLogTag() {
+        return LOG_TAG;
     }
 
-    facebookLoginButton.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        loadingStart(true);
-        ParseFacebookUtils.logIn(config.getFacebookLoginPermissions(),
-            getActivity(), new LogInCallback() {
-          @Override
-          public void done(ParseUser user, ParseException e) {
-            if (isActivityDestroyed()) {
-              return;
+    private void setUpParseLoginAndSignup() {
+        parseLogin.setVisibility(View.VISIBLE);
+
+        if (config.isParseLoginEmailAsUsername()) {
+            //usernameField.setHint(R.string.com_parse_ui_email_input_hint);
+            usernameField.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        }
+
+        if (config.getParseLoginButtonText() != null) {
+            parseLoginButton.setText(config.getParseLoginButtonText());
+        }
+
+        parseLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username = usernameField.getText().toString();
+                String password = passwordField.getText().toString();
+
+                if (username.length() == 0) {
+                    if (config.isParseLoginEmailAsUsername()) {
+                        showToast(R.string.com_parse_ui_no_email_toast);
+                    } else {
+                        showToast(R.string.com_parse_ui_no_username_toast);
+                    }
+                } else if (password.length() == 0) {
+                    showToast(R.string.com_parse_ui_no_password_toast);
+                } else {
+                    loadingStart(true);
+                    ParseUser.logInInBackground(username, password, new LogInCallback() {
+                        @Override
+                        public void done(ParseUser user, ParseException e) {
+                            if (isActivityDestroyed()) {
+                                return;
+                            }
+
+                            if (user != null) {
+                                loadingFinish();
+
+                                loginSuccess(user);
+                            } else {
+                                loadingFinish();
+                                if (e != null) {
+                                    debugLog(getString(R.string.com_parse_ui_login_warning_parse_login_failed) +
+                                            e.toString());
+                                    if (e.getCode() == ParseException.OBJECT_NOT_FOUND) {
+                                        if (config.getParseLoginInvalidCredentialsToastText() != null) {
+                                            showToast(config.getParseLoginInvalidCredentialsToastText());
+                                        } else {
+                                            showToast(R.string.com_parse_ui_parse_login_invalid_credentials_toast);
+                                        }
+                                        passwordField.selectAll();
+                                        passwordField.requestFocus();
+                                    } else {
+
+                                        if (lang.equals(Utils.ENG_LANG)) {
+                                            Utils.doToastEng(mContext, getResources().getString(R.string.open_internet_warning_eng));
+                                        } else if (lang.equals(Utils.MM_LANG)) {
+
+                                            Utils.doToastMM(mContext, getResources().getString(R.string.open_internet_warning_mm));
+                                        } else {
+
+
+                                            showToast(R.string.com_parse_ui_parse_login_failed_unknown_toast);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
             }
+        });
 
-            if (user == null) {
+        if (config.getParseSignupButtonText() != null) {
+            parseSignupButton.setText(config.getParseSignupButtonText());
+        }
 
-              loadingFinish();
-                //loginSuccess(user);
-              if (e != null) {
-                showToast(R.string.com_parse_ui_facebook_login_failed_toast);
-                debugLog(getString(R.string.com_parse_ui_login_warning_facebook_login_failed) +
-                    e.toString());
-              }
-            } else if (user.isNew()) {
+        parseSignupButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username = usernameField.getText().toString();
+                String password = passwordField.getText().toString();
+
+                loginFragmentListener.onSignUpClicked(username, password);
+            }
+        });
+
+        if (config.getParseLoginHelpText() != null) {
+            parseLoginHelpButton.setText(config.getParseLoginHelpText());
+        }
+
+        parseLoginHelpButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginFragmentListener.onLoginHelpClicked();
+            }
+        });
+    }
+
+    private void setUpFacebookLogin() {
+        facebookLoginButton.setVisibility(View.VISIBLE);
+
+        if (config.getFacebookLoginButtonText() != null) {
+            facebookLoginButton.setText(config.getFacebookLoginButtonText());
+        }
+
+        facebookLoginButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadingStart(true);
+                ParseFacebookUtils.logIn(config.getFacebookLoginPermissions(),
+                        getActivity(), new LogInCallback() {
+                            @Override
+                            public void done(ParseUser user, ParseException e) {
+                                if (isActivityDestroyed()) {
+                                    return;
+                                }
+
+                                if (user == null) {
+
+                                    loadingFinish();
+                                    //loginSuccess(user);
+                                    if (e != null) {
+                                        showToast(R.string.com_parse_ui_facebook_login_failed_toast);
+                                        debugLog(getString(R.string.com_parse_ui_login_warning_facebook_login_failed) +
+                                                e.toString());
+                                    }
+                                } else if (user.isNew()) {
               /*Request.newMeRequest(ParseFacebookUtils.getSession(),
                   new Request.GraphUserCallback() {
                     @Override
@@ -332,25 +342,25 @@ public class ParseLoginFragment extends ParseLoginFragmentBase implements Compou
                     }
                   }
               ).executeAsync();*/
-            } else {
-              loginSuccess(user);
+                                } else {
+                                    loginSuccess(user);
+                                }
+                            }
+                        });
+                //which will save any changes to the session token back to the ParseUser and ensure that this session data follows the user wherever it logs in.
+                //ParseUser parseUser = ParseUser.getCurrentUser();
+
+                //ParseFacebookUtils.saveLatestSessionDataInBackground(parseUser);
             }
-          }
         });
-          //which will save any changes to the session token back to the ParseUser and ensure that this session data follows the user wherever it logs in.
-          //ParseUser parseUser = ParseUser.getCurrentUser();
-
-          //ParseFacebookUtils.saveLatestSessionDataInBackground(parseUser);
-      }
-    });
-  }
-
-  private void setUpTwitterLogin() {
-    twitterLoginButton.setVisibility(View.VISIBLE);
-
-    if (config.getTwitterLoginButtonText() != null) {
-      twitterLoginButton.setText(config.getTwitterLoginButtonText());
     }
+
+    private void setUpTwitterLogin() {
+        twitterLoginButton.setVisibility(View.VISIBLE);
+
+        if (config.getTwitterLoginButtonText() != null) {
+            twitterLoginButton.setText(config.getTwitterLoginButtonText());
+        }
 
     /*twitterLoginButton.setOnClickListener(new OnClickListener() {
       @Override
@@ -400,128 +410,132 @@ public class ParseLoginFragment extends ParseLoginFragmentBase implements Compou
         });
       }
     });*/
-  }
-
-  private boolean allowParseLoginAndSignup() {
-    if (!config.isParseLoginEnabled()) {
-      return false;
     }
 
-    if (usernameField == null) {
-      debugLog(R.string.com_parse_ui_login_warning_layout_missing_username_field);
-    }
-    if (passwordField == null) {
-      debugLog(R.string.com_parse_ui_login_warning_layout_missing_password_field);
-    }
-    if (parseLoginButton == null) {
-      debugLog(R.string.com_parse_ui_login_warning_layout_missing_login_button);
-    }
-    if (parseSignupButton == null) {
-      debugLog(R.string.com_parse_ui_login_warning_layout_missing_signup_button);
-    }
-    if (parseLoginHelpButton == null) {
-      debugLog(R.string.com_parse_ui_login_warning_layout_missing_login_help_button);
-    }
+    private boolean allowParseLoginAndSignup() {
+        if (!config.isParseLoginEnabled()) {
+            return false;
+        }
 
-    boolean result = (usernameField != null) && (passwordField != null)
-        && (parseLoginButton != null) && (parseSignupButton != null)
-        && (parseLoginHelpButton != null);
+        if (usernameField == null) {
+            debugLog(R.string.com_parse_ui_login_warning_layout_missing_username_field);
+        }
+        if (passwordField == null) {
+            debugLog(R.string.com_parse_ui_login_warning_layout_missing_password_field);
+        }
+        if (parseLoginButton == null) {
+            debugLog(R.string.com_parse_ui_login_warning_layout_missing_login_button);
+        }
+        if (parseSignupButton == null) {
+            debugLog(R.string.com_parse_ui_login_warning_layout_missing_signup_button);
+        }
+        if (parseLoginHelpButton == null) {
+            debugLog(R.string.com_parse_ui_login_warning_layout_missing_login_help_button);
+        }
 
-    if (!result) {
-      debugLog(R.string.com_parse_ui_login_warning_disabled_username_password_login);
-    }
-    return result;
-  }
+        boolean result = (usernameField != null) && (passwordField != null)
+                && (parseLoginButton != null) && (parseSignupButton != null)
+                && (parseLoginHelpButton != null);
 
-  private boolean allowFacebookLogin() {
-    if (!config.isFacebookLoginEnabled()) {
-      return false;
-    }
-
-    if (facebookLoginButton == null) {
-      debugLog(R.string.com_parse_ui_login_warning_disabled_facebook_login);
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  private boolean allowTwitterLogin() {
-    if (!config.isTwitterLoginEnabled()) {
-      return false;
+        if (!result) {
+            debugLog(R.string.com_parse_ui_login_warning_disabled_username_password_login);
+        }
+        return result;
     }
 
-    if (twitterLoginButton == null) {
-      debugLog(R.string.com_parse_ui_login_warning_disabled_twitter_login);
-      return false;
-    } else {
-      return true;
+    private boolean allowFacebookLogin() {
+        if (!config.isFacebookLoginEnabled()) {
+            return false;
+        }
+
+        if (facebookLoginButton == null) {
+            debugLog(R.string.com_parse_ui_login_warning_disabled_facebook_login);
+            return false;
+        } else {
+            return true;
+        }
     }
-  }
 
-  private void loginSuccess(ParseUser user) {
-    onLoginSuccessListener.onLoginSuccess(user);
-  }
+    private boolean allowTwitterLogin() {
+        if (!config.isTwitterLoginEnabled()) {
+            return false;
+        }
 
-  @Override
-  public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (twitterLoginButton == null) {
+            debugLog(R.string.com_parse_ui_login_warning_disabled_twitter_login);
+            return false;
+        } else {
+            return true;
+        }
+    }
 
-    SharedPreferences.Editor editor = sharePref.edit();
+    private void loginSuccess(ParseUser user) {
+        onLoginSuccessListener.onLoginSuccess(user);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+        SharedPreferences.Editor editor = sharePref.edit();
 
 
-    if(isChecked) {
-      if (buttonView.getId() == R.id.settings_english_language) {
+        if (isChecked) {
+            if (buttonView.getId() == R.id.settings_english_language) {
 
-        editor.putString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
+                editor.putString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
 
-        setEnglishFont();
+                lang = "english";
+                setEnglishFont();
 
 
-      } else if (buttonView.getId() == R.id.settings_myanmar_language) {
-        editor.putString(Utils.PREF_SETTING_LANG, Utils.MM_LANG);
+            } else if (buttonView.getId() == R.id.settings_myanmar_language) {
+                editor.putString(Utils.PREF_SETTING_LANG, Utils.MM_LANG);
 
-        setMyanmarFont();
+                lang = "myanmar";
 
-      }
+                setMyanmarFont();
+
+            }
+
+        }
+        editor.commit();
 
     }
-    editor.commit();
 
-  }
+    public void setEnglishFont() {
+        appLogo.setImageResource(R.drawable.logo_eng);
+        usernameField.setHint(getResources().getString(R.string.com_parse_ui_name_input_hint));
+        passwordField.setHint(getResources().getString(R.string.com_parse_ui_password_input_hint));
+        parseLoginButton.setText(getResources().getString(R.string.com_parse_ui_parse_login_button_label));
+        parseLoginHelpButton.setText(getResources().getString(R.string.com_parse_ui_forgot_password_button_label));
 
-  public void setEnglishFont(){
-    appLogo.setImageResource(R.drawable.logo_eng);
-    usernameField.setHint(getResources().getString(R.string.com_parse_ui_name_input_hint));
-    passwordField.setHint(getResources().getString(R.string.com_parse_ui_password_input_hint));
-    parseLoginButton.setText(getResources().getString(R.string.com_parse_ui_parse_login_button_label));
-    parseLoginHelpButton.setText(getResources().getString(R.string.com_parse_ui_forgot_password_button_label));
+        parseSignupButton.setText(getResources().getString(R.string.com_parse_ui_create_account_button_label));
 
-    parseSignupButton.setText(getResources().getString(R.string.com_parse_ui_create_account_button_label));
+        //Set Type Face
+        usernameField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+        passwordField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+        parseLoginButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+        parseLoginHelpButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+        parseSignupButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
 
-    //Set Type Face
-    usernameField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
-    passwordField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
-    parseLoginButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
-    parseLoginHelpButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
-    parseSignupButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+    }
 
-  }
-  public void setMyanmarFont(){
-    appLogo.setImageResource(R.drawable.logo_mm);
-    usernameField.setHint(getResources().getString(R.string.com_parse_ui_username_input_hint_mm));
-    passwordField.setHint(getResources().getString(R.string.com_parse_ui_password_input_hint_mm));
-    parseLoginButton.setText(getResources().getString(R.string.com_parse_ui_parse_login_button_label_mm));
-    parseLoginHelpButton.setText(getResources().getString(R.string.com_parse_ui_forgot_password_button_mm));
+    public void setMyanmarFont() {
+        appLogo.setImageResource(R.drawable.logo_mm);
+        usernameField.setHint(getResources().getString(R.string.com_parse_ui_username_input_hint_mm));
+        passwordField.setHint(getResources().getString(R.string.com_parse_ui_password_input_hint_mm));
+        parseLoginButton.setText(getResources().getString(R.string.com_parse_ui_parse_login_button_label_mm));
+        parseLoginHelpButton.setText(getResources().getString(R.string.com_parse_ui_forgot_password_button_mm));
 
-    parseSignupButton.setText(getResources().getString(R.string.com_parse_ui_parse_signup_button_label_mm));
+        parseSignupButton.setText(getResources().getString(R.string.com_parse_ui_parse_signup_button_label_mm));
 
-    //Set Type Face
-    usernameField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
-    passwordField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
-    parseLoginButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
-    parseLoginHelpButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
-    parseSignupButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+        //Set Type Face
+        usernameField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+        passwordField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+        parseLoginButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+        parseLoginHelpButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+        parseSignupButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
 
-  }
+    }
 
 }

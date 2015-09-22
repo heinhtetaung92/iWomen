@@ -5,7 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/ParseLoginUI/ParseLoginUI.iml" filepath="$PROJECT_DIR$/ParseLoginUI/ParseLoginUI.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/emojiicon/emojiicon.iml" filepath="$PROJECT_DIR$/emojiicon/emojiicon.iml" />
-      <module fileurl="file://$PROJECT_DIR$/iWomen.iml" filepath="$PROJECT_DIR$/iWomen.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iwomen.iml" filepath="$PROJECT_DIR$/iwomen.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iwomen.iml" filepath="$PROJECT_DIR$/iwomen.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
     </modules>
   </component>

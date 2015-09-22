@@ -97,28 +97,3 @@
 </RelativeLayout>
 
 
-    <!--private void SetPostData() {
-
-    Utils.doToast(mContext, "Post Save");
-
-    ContentValues cv = new ContentValues();
-    cv.put(TableAndColumnsName.PostUtil.POST_OBJ_ID, "POO4");
-    cv.put(TableAndColumnsName.PostUtil.POST_TITLE, "TITLE1");
-    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, "POST CONTENT");
-    cv.put(TableAndColumnsName.PostUtil.POST_LIKES, "1");
-    cv.put(TableAndColumnsName.PostUtil.POST_IMG_PATH, "http://i.imgur.com/ad7uSGY.png");
-    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TYPES, "Letter");//
-
-    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, "U001");
-    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_NAME, "Khin");
-    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "http://www.windowsegis.com/wp-content/uploads/2013/08/100-superb-windows-phone-wallpapers-to-mark-you-niftier-01.jpg");
-
-    cv.put(TableAndColumnsName.UserUtil.STATUS, "0");
-    cv.put(TableAndColumnsName.UserUtil.CREATED_DATE, "Sun Aug 02 18:07:00 GMT+06:30 2015");
-    cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, "Sun Aug 02 18:07:00 GMT+06:30 2015");
-
-    Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
-
-    getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);
-
-    }-->

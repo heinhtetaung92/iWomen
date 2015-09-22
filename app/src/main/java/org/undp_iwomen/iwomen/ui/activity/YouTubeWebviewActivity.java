@@ -118,14 +118,44 @@ public class YouTubeWebviewActivity extends ActionBarActivity {
     @Override
     public void onBackPressed() {
         // Notify the VideoEnabledWebChromeClient, and handle it ourselves if it doesn't handle it
-        if (!webChromeClient.onBackPressed()) {
+
+        webView.loadUrl("");
+        webView.stopLoading();
+
+        finish();
+        super.onBackPressed();
+        /*if (!webChromeClient.onBackPressed()) {
             if (webView.canGoBack()) {
                 webView.goBack();
             } else {
                 // Standard back button implementation (for example this could close the app)
                 super.onBackPressed();
             }
-        }
+        }*/
+    }
+    @Override
+    protected void onPause() {
+        webView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        webView.onResume();
+        super.onResume();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        webView.saveState(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        webView.destroy();
+        webView = null;
+        super.onDestroy();
     }
 
 }

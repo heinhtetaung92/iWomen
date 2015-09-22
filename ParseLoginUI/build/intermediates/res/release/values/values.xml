@@ -147,6 +147,11 @@
     <color name="highlighted_text_material_light">#66009688</color>
     <color name="hint_foreground_material_dark">@color/bright_foreground_disabled_material_dark</color>
     <color name="hint_foreground_material_light">@color/bright_foreground_disabled_material_light</color>
+    <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/res/values/colors.xml -->
+    <eat-comment/>
+    <color name="lime_color">#cddc39</color>
+    <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <eat-comment/>
     <color name="link_text_material_dark">@color/material_deep_teal_200</color>
     <color name="link_text_material_light">@color/material_deep_teal_500</color>
     <color name="material_blue_grey_800">#ff37474f</color>
@@ -684,6 +689,8 @@
     <eat-comment/>
     <string name="nrc_number_error">NRC number is required</string>
     <string name="nrc_number_helper">##/###(N)######</string>
+    <string name="open_internet_warning_eng">Please Open Internet Connection.</string>
+    <string name="open_internet_warning_mm">အင္တာနက္ ခ်ိတ္ဆက္မွုုဖြင္ ့ရန္လိုုအပ္ပါသည္။</string>
     <string name="passport_error">Passport number is required</string>
     <string name="password_error">Password is required</string>
     <string name="password_error_mm">လွ်ိဳ ့၀ွက္ စာလံုုးရိုုက္ထည့္ရန္လိုုအပ္ပါသည္</string>

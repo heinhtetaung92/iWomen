@@ -22,22 +22,27 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.facebook.FacebookSdk;
+import com.makeramen.RoundedImageView;
 import com.parse.ParseUser;
 import com.parse.ui.ParseLoginBuilder;
 import com.parse.utils.Utils;
+import com.squareup.picasso.Picasso;
 
 import org.undp_iwomen.iwomen.CommonConfig;
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
 import org.undp_iwomen.iwomen.ui.adapter.DrawerListViewAdapter;
 import org.undp_iwomen.iwomen.ui.fragment.BeTogetherFragment;
+import org.undp_iwomen.iwomen.ui.fragment.GoogleMapFragment;
 import org.undp_iwomen.iwomen.ui.fragment.MainMaterialTab;
 import org.undp_iwomen.iwomen.ui.fragment.ResourcesFragment;
 import org.undp_iwomen.iwomen.ui.fragment.SettingsFragment;
 import org.undp_iwomen.iwomen.ui.fragment.SisterAppFragment;
+import org.undp_iwomen.iwomen.ui.fragment.TLGUserStoriesRecentFragment;
 import org.undp_iwomen.iwomen.ui.widget.ProfilePictureView;
 import org.undp_iwomen.iwomen.utils.SharePrefUtils;
 
@@ -76,7 +81,11 @@ public class DrawerMainActivity extends AppCompatActivity {
     DrawerListViewAdapter drawer_adapter;
 
     ProfilePictureView userProfilePicture;
+    ProgressBar drawer_progressBar_profile_item;
 
+
+    RoundedImageView drawer_profilePic_rounded;
+    String userprofile_Image_path;
 
     String mstrUserfbId;
     SharePrefUtils sessionManager;
@@ -104,7 +113,7 @@ public class DrawerMainActivity extends AppCompatActivity {
         setContentView(R.layout.main_drawer_material);
 
         //Back from LoginActivity Control
-        if( getIntent().getBooleanExtra("Exit me", false)){
+        if (getIntent().getBooleanExtra("Exit me", false)) {
             finish();
             return; // add this to prevent from doing unnecessary stuffs
         }
@@ -124,13 +133,15 @@ public class DrawerMainActivity extends AppCompatActivity {
 
         drawerLayoutt = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLinearLayout = (LinearLayout) findViewById(R.id.left_drawer);
-        userProfilePicture = (ProfilePictureView)findViewById(R.id.profilePicture);
+        userProfilePicture = (ProfilePictureView) findViewById(R.id.profilePicture);
         mDrawerList = (ListView) findViewById(R.id.left_drawer_lv);
-        txt_user_name = (TextView)findViewById(R.id.txt_user_name);
-        txt_sing_out = (TextView)findViewById(R.id.menu_sing_out);
+        txt_user_name = (TextView) findViewById(R.id.txt_user_name);
+        txt_sing_out = (TextView) findViewById(R.id.menu_sing_out);
+
+        drawer_profilePic_rounded = (RoundedImageView) findViewById(R.id.drawer_profilePic_rounded);
+        drawer_progressBar_profile_item = (ProgressBar) findViewById(R.id.drawer_progressBar_profile_item);
         // set a custom shadow that overlays the main content when the drawer opens
         drawerLayoutt.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-
 
 
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayoutt, toolbar, R.string.app_name, R.string.app_name);
@@ -159,9 +170,9 @@ public class DrawerMainActivity extends AppCompatActivity {
             startActivityForResult(loginBuilder.build(), LOGIN_REQUEST);
 
         }*/
+        Bundle bundle = getIntent().getExtras();
 
-         currentUser = ParseUser.getCurrentUser();
-
+        currentUser = ParseUser.getCurrentUser();
 
 
         if (currentUser != null) {
@@ -170,11 +181,9 @@ public class DrawerMainActivity extends AppCompatActivity {
             if (savedInstanceState == null) {
 
 
-
-
                 if (!mSharedPreferencesUserInfo.getBoolean(CommonConfig.IS_LOGIN, false)) {
 
-                    Bundle bundle = getIntent().getExtras();
+
                     String objectId = bundle.getString(CommonConfig.USER_OBJ_ID);
                     String userName = bundle.getString(CommonConfig.USER_NAME);
                     String userPH = bundle.getString(CommonConfig.USER_PH);
@@ -182,14 +191,12 @@ public class DrawerMainActivity extends AppCompatActivity {
                     Boolean isFbInclude = bundle.getBoolean(CommonConfig.USER_FBID_INCLUDE);
 
 
-
-
                     if (objectId.length() != 0) {
                         mEditorUserInfo = mSharedPreferencesUserInfo.edit();
                         mEditorUserInfo.putBoolean(CommonConfig.IS_LOGIN, true);
                         mEditorUserInfo.putString(CommonConfig.USER_OBJ_ID, objectId);
                         mEditorUserInfo.putString(CommonConfig.USER_NAME, userName);
-                        if(isFbInclude){
+                        if (isFbInclude) {
                             mstrUserfbId = bundle.getString(CommonConfig.USER_FBID);
                             mEditorUserInfo.putString(CommonConfig.USER_FBID, mstrUserfbId);
                         }
@@ -212,43 +219,89 @@ public class DrawerMainActivity extends AppCompatActivity {
 
                     txt_user_name.setText(user_name);
 
-                    if(mstrUserfbId  != null){
+                    if (mstrUserfbId != null) {
 
                         userProfilePicture.setProfileId(mstrUserfbId);
                     }
-                    if( currentUser.get("user_profile_img") != null){
+                    if (currentUser.get("user_profile_img") != null) {
 
-                        Uri uri =  Uri.parse(currentUser.getParseFile("user_profile_img").getUrl());
-                        Log.e("1st profile Path", "==>" + uri);
+
+                        Uri uri = Uri.parse(currentUser.getParseFile("user_profile_img").getUrl());
+                        userprofile_Image_path = currentUser.getParseFile("user_profile_img").getUrl();
+                        Log.e("1st userprofile_Image_path", "==>" + userprofile_Image_path);
                         //userProfilePicture.setD
 
+                        if (userprofile_Image_path != null) {
+
+                            mEditorUserInfo = mSharedPreferencesUserInfo.edit();
+                            mEditorUserInfo.putString(CommonConfig.USER_IMAGE_PATH, userprofile_Image_path);
+
+                            mEditorUserInfo.commit();
+                            try {
+                                drawer_profilePic_rounded.setVisibility(View.VISIBLE);
+                                userProfilePicture.setVisibility(View.GONE);
+                                Picasso.with(getApplicationContext())
+                                        .load(userprofile_Image_path) //"http://cheapandcheerfulshopper.com/wp-content/uploads/2013/08/shopping1257549438_1370386595.jpg" //deal.photo1
+                                        .placeholder(R.drawable.blank_profile)
+                                        .error(R.drawable.blank_profile)
+                                        .into(drawer_profilePic_rounded, new ImageLoadedCallback(drawer_progressBar_profile_item) {
+                                            @Override
+                                            public void onSuccess() {
+                                                if (this.progressBar != null) {
+                                                    this.progressBar.setVisibility(View.GONE);
+                                                } else {
+                                                    this.progressBar.setVisibility(View.VISIBLE);
+                                                }
+                                            }
+
+                                        });
+                            } catch (OutOfMemoryError outOfMemoryError) {
+                                outOfMemoryError.printStackTrace();
+                            }
+                        } else {
+                            drawer_progressBar_profile_item.setVisibility(View.GONE);
+                            drawer_profilePic_rounded.setVisibility(View.GONE);
+                            userProfilePicture.setVisibility(View.VISIBLE);
+                        }
+
                     }
-                    //1st Login==== > user Info parse﹕ GuzTg3T1aWParse :Su:mstrUserfbId >>null
+
                     Log.e("1st Login==== > user Info parse", objectId + "Parse :" + userName + ":mstrUserfbId >>" + mstrUserfbId);
+
                 } else {
                     user_name = mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null);
                     user_obj_id = mSharedPreferencesUserInfo.getString(CommonConfig.USER_OBJ_ID, null);
                     //Toast.makeText(this, "2ndTime(PaymentActivity) You are login as \n " + mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null) + "\n" + sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG), Toast.LENGTH_LONG).show();
 
-                    mstrUserfbId = mSharedPreferencesUserInfo.getString(CommonConfig.USER_FBID,null);
+                    mstrUserfbId = mSharedPreferencesUserInfo.getString(CommonConfig.USER_FBID, null);
                     //2nd Login==== > user Info parse﹕ GuzTg3T1aWParse :Su:mstrUserfbId >>null
                     Log.e("2nd Login==== > user Info parse", user_obj_id + "Parse :" + user_name + ":mstrUserfbId >>" + mstrUserfbId);
 
-                    if(mstrUserfbId  != null){
+                    if (mstrUserfbId != null) {
 
 
                         userProfilePicture.setProfileId(mstrUserfbId);
+                        drawer_progressBar_profile_item.setVisibility(View.GONE);
 
+                    } else {
+                        drawer_progressBar_profile_item.setVisibility(View.GONE);
+                        drawer_profilePic_rounded.setVisibility(View.VISIBLE);
+                        userProfilePicture.setVisibility(View.GONE);
                     }
-                    if( currentUser.get("user_profile_img") != null){
 
-                        /*try {
+                    userprofile_Image_path = mSharedPreferencesUserInfo.getString(CommonConfig.USER_IMAGE_PATH, null);
 
+
+                    if (userprofile_Image_path != null) {
+
+                        try {
+                            drawer_profilePic_rounded.setVisibility(View.VISIBLE);
+                            userProfilePicture.setVisibility(View.GONE);
                             Picasso.with(getApplicationContext())
-                                    .load(currentUser.getParseFile("user_profile_img").getUrl()) //"http://cheapandcheerfulshopper.com/wp-content/uploads/2013/08/shopping1257549438_1370386595.jpg" //deal.photo1
-                                    .placeholder(com.parse.ui.R.drawable.camera_icon)
-                                    .error(com.parse.ui.R.drawable.camera_icon)
-                                    .into(profile_rounded, new ImageLoadedCallback(register_profilePic_progressBar) {
+                                    .load(userprofile_Image_path) //"http://cheapandcheerfulshopper.com/wp-content/uploads/2013/08/shopping1257549438_1370386595.jpg" //deal.photo1
+                                    .placeholder(R.drawable.blank_profile)
+                                    .error(R.drawable.blank_profile)
+                                    .into(drawer_profilePic_rounded, new ImageLoadedCallback(drawer_progressBar_profile_item) {
                                         @Override
                                         public void onSuccess() {
                                             if (this.progressBar != null) {
@@ -261,21 +314,27 @@ public class DrawerMainActivity extends AppCompatActivity {
                                     });
                         } catch (OutOfMemoryError outOfMemoryError) {
                             outOfMemoryError.printStackTrace();
-                        }*/
-
+                        }
+                    } else {
+                        drawer_progressBar_profile_item.setVisibility(View.GONE);
+                        drawer_profilePic_rounded.setVisibility(View.GONE);
+                        userProfilePicture.setVisibility(View.VISIBLE);
                     }
 
 
                     txt_user_name.setText(user_name);
+
                 }
 
-                mstr_lang =sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
+               mstr_lang = sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
 
-                LoadDrawerCustomData();
-                selectItem(0);
+               LoadDrawerCustomData();
+               selectItem(0);
                 drawerLayoutt.openDrawer(mDrawerLinearLayout);
 
             }
+
+
         } else {
 
             // User clicked to log in.
@@ -289,7 +348,7 @@ public class DrawerMainActivity extends AppCompatActivity {
         txt_sing_out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currentUser != null){
+                if (currentUser != null) {
                     ParseUser.logOut();
                     sessionManager.ClearLogOut();
                     // User clicked to log in.
@@ -300,7 +359,6 @@ public class DrawerMainActivity extends AppCompatActivity {
                 }
             }
         });
-
 
 
         run = new Runnable() {
@@ -321,15 +379,15 @@ public class DrawerMainActivity extends AppCompatActivity {
 
     }
 
-    public void setThemeToApp(){
+    public void setThemeToApp() {
         sharePrefLanguageUtil = getSharedPreferences(Utils.PREF_SETTING_LANG, MODE_PRIVATE);
         int theme = sharePrefLanguageUtil.getInt(org.undp_iwomen.iwomen.utils.Utils.PREF_THEME, org.undp_iwomen.iwomen.utils.Utils.THEME_PINK);
 
-        if(theme == org.undp_iwomen.iwomen.utils.Utils.THEME_BLUE){
+        if (theme == org.undp_iwomen.iwomen.utils.Utils.THEME_BLUE) {
             setTheme(R.style.AppTheme_Blue);
-        }else if(theme == org.undp_iwomen.iwomen.utils.Utils.THEME_PINK){
+        } else if (theme == org.undp_iwomen.iwomen.utils.Utils.THEME_PINK) {
             setTheme(R.style.AppTheme);
-        }else if(theme == org.undp_iwomen.iwomen.utils.Utils.THEME_YELLOW){
+        } else if (theme == org.undp_iwomen.iwomen.utils.Utils.THEME_YELLOW) {
             setTheme(R.style.AppTheme_Yellow);
         }
 
@@ -341,16 +399,32 @@ public class DrawerMainActivity extends AppCompatActivity {
         /*DrawerListName = new String[]
                 {"Stories",  "Resources", "Setting","AboutUs"};*/
 
-        if(mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)){
+        if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)) {
             DrawerListName = new String[]
-                    {"Be Inspired", "Be Together", "Be Knowledgeable", "Setting","AboutUs", "Sister Apps"};
+                    {"Be Inspired", "Be Knowledgeable", "Be Together", "Talk Together", "Setting", "AboutUs", "Sister Apps"};
 
             DrawerListIcon = new int[]
-                    {R.drawable.ic_stories,R.drawable.be_together, R.drawable.ic_resources, R.drawable.ic_setting,R.drawable.about_us,R.drawable.sister_app};
+                    {R.drawable.ic_stories, R.drawable.ic_resources, R.drawable.be_together, R.drawable.ic_talk_together, R.drawable.ic_setting, R.drawable.about_us, R.drawable.sister_app};
 
             // R.drawable.ic_community, R.drawable.ic_news
 
-            drawer_adapter = new DrawerListViewAdapter(getApplicationContext(), DrawerListName, DrawerListIcon,mstr_lang);//mCategoriesTitles
+            drawer_adapter = new DrawerListViewAdapter(getApplicationContext(), DrawerListName, DrawerListIcon, mstr_lang);//mCategoriesTitles
+                    /*mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                    R.layout.drawer_list_item, mPlanetTitles));*/
+            drawer_adapter.notifyDataSetChanged();
+            mDrawerList.setAdapter(drawer_adapter);
+            mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+            setListViewHeightBasedOnChildren(mDrawerList);
+        } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG)) {
+            DrawerListName = new String[]
+                    {"စိတ္ဓာတ္ခ\u103Cန္အား\u107Fဖည္ ့ရန္", "ဗဟုုသုုတရရန္", "ေပ\u102Bင္းစည္းေဆာင္ရ\u103Cက္ရန္", "ေမး\u107Fမန္းေဆ\u103Cးေ\u108F\u103Cးရန္", "\u107Fပင္ဆင္ရန္", "က\u103C\u103A\u108Fုုပ္တိုု ့အေ\u107Eကာင္း", " Sister Apps"};
+
+            DrawerListIcon = new int[]
+                    {R.drawable.ic_stories, R.drawable.ic_resources, R.drawable.be_together, R.drawable.ic_talk_together, R.drawable.ic_setting, R.drawable.about_us, R.drawable.sister_app};
+
+            // R.drawable.ic_community, R.drawable.ic_news
+
+            drawer_adapter = new DrawerListViewAdapter(getApplicationContext(), DrawerListName, DrawerListIcon, mstr_lang);//mCategoriesTitles
                     /*mDrawerList.setAdapter(new ArrayAdapter<String>(this,
                     R.layout.drawer_list_item, mPlanetTitles));*/
             drawer_adapter.notifyDataSetChanged();
@@ -358,24 +432,6 @@ public class DrawerMainActivity extends AppCompatActivity {
             mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
             setListViewHeightBasedOnChildren(mDrawerList);
         }
-        else if(mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG)){
-            DrawerListName = new String[]
-                    {"စိတ္ခ\u103Cန္အား\u107Fဖည့္ ရန္","အတူတက\u103Cေပ\u102Bင္းစည္းရန္",  "နည္းလမ္းမ\u103Aား", "\u107Fပင္ဆင္ရန္","က\u103C\u103A\u108Fုုပ္တိုု ့အေ\u107Eကာင္း"," Sister Apps"};
-
-            DrawerListIcon = new int[]
-                    {R.drawable.ic_stories,R.drawable.be_together, R.drawable.ic_resources, R.drawable.ic_setting,R.drawable.about_us,R.drawable.sister_app};
-
-            // R.drawable.ic_community, R.drawable.ic_news
-
-            drawer_adapter = new DrawerListViewAdapter(getApplicationContext(), DrawerListName, DrawerListIcon,mstr_lang);//mCategoriesTitles
-                    /*mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                    R.layout.drawer_list_item, mPlanetTitles));*/
-            drawer_adapter.notifyDataSetChanged();
-            mDrawerList.setAdapter(drawer_adapter);
-            mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-            setListViewHeightBasedOnChildren(mDrawerList);
-        }
-
 
 
     }
@@ -433,22 +489,30 @@ public class DrawerMainActivity extends AppCompatActivity {
 
         BeTogetherFragment beTogetherFragment = new BeTogetherFragment();
 
+        GoogleMapFragment googleMapFragment = new GoogleMapFragment();
+
         SisterAppFragment sisterAppFragment = new SisterAppFragment();
 
+        TLGUserStoriesRecentFragment tlgUserStoriesRecentFragment = new TLGUserStoriesRecentFragment();
         switch (position) {
             case 0://Categories 1
                 fragmentManager.beginTransaction().replace(R.id.content_frame, mainMaterialTab).commit();
                 setTitle(DrawerListName[position]);
                 break;
             case 1:
-                fragmentManager.beginTransaction().replace(R.id.content_frame, beTogetherFragment).commit();
-                setTitle(DrawerListName[position]);
-                break;
-            case 2:
                 fragmentManager.beginTransaction().replace(R.id.content_frame, resourcesFragment).commit();
                 setTitle(DrawerListName[position]);
                 break;
+            case 2:
+                fragmentManager.beginTransaction().replace(R.id.content_frame, googleMapFragment).commit();
+                setTitle(DrawerListName[position]);
+                break;
+
             case 3:
+                fragmentManager.beginTransaction().replace(R.id.content_frame, tlgUserStoriesRecentFragment).commit();
+                setTitle(DrawerListName[position]);
+                break;
+            case 4:
 
                 Intent intent = new Intent(this, SettingActivity.class);
                 startActivity(intent);
@@ -457,11 +521,11 @@ public class DrawerMainActivity extends AppCompatActivity {
 
                 setTitle(DrawerListName[position]);
                 break;
-            case 4:
+            case 5:
                 Intent intent2 = new Intent(this, AboutUsWebActivity.class);
                 startActivity(intent2);
                 break;
-            case 5:
+            case 6:
                 fragmentManager.beginTransaction().replace(R.id.content_frame, sisterAppFragment).commit();
                 setTitle(DrawerListName[position]);
 
@@ -517,6 +581,24 @@ public class DrawerMainActivity extends AppCompatActivity {
 
 
         } catch (NoSuchAlgorithmException e) {
+
+        }
+    }
+
+    private class ImageLoadedCallback implements com.squareup.picasso.Callback {
+        ProgressBar progressBar;
+
+        public ImageLoadedCallback(ProgressBar progBar) {
+            progressBar = progBar;
+        }
+
+        @Override
+        public void onSuccess() {
+
+        }
+
+        @Override
+        public void onError() {
 
         }
     }

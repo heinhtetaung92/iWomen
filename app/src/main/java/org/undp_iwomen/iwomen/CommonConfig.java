@@ -15,6 +15,8 @@ public class CommonConfig {
     public static final String USER_FBID_INCLUDE = "FbId_Include";
     public static final String USER_FBID = "FbId";
 
+    public static final String USER_IMAGE_PATH = "ImagePath";
+
 
 
 
@@ -22,6 +24,15 @@ public class CommonConfig {
     public static final String BASE_URL = "https://api.parse.com/1";
 
     public static final String COMMENT_URL = "/classes/Comment";
+
+    public static final String TLGPROFILE_URL = "/classes/TlgProfile";
+
+
+    public static final String USER_POST_URL = "/classes/Post";
+
+    public static final String RESOURCE_URL = "/classes/Resources";
+
+    public static final String SUB_RESOURCE_URL = "/classes/SubResourceDetail";
 
 
     public static final String SHARE_URL ="https://www.facebook.com/testingmobileapp";

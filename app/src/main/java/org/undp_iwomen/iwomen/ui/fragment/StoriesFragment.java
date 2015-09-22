@@ -457,7 +457,7 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
         cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, "Sun Aug 02 18:07:00 GMT+06:30 2015");
         cv.put(TableAndColumnsName.PostUtil.UPDATED_DATE, "Sun Aug 02 18:07:00 GMT+06:30 2015");
 
-        Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
+        //Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
 
         getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);
 
@@ -580,7 +580,7 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
                                         cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, post.get("postUploadedDate").toString());// post.get("postUploadedDate").toString() //post.getCreatedAt().toString()
                                         cv.put(TableAndColumnsName.PostUtil.UPDATED_DATE, post.get("postUploadedDate").toString());
 
-                                        Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
+                                        //Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
 
                                         getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);
 
@@ -696,7 +696,7 @@ public class StoriesFragment extends Fragment implements View.OnClickListener, S
                                 cv.put(TableAndColumnsName.PostUtil.UPDATED_DATE, post.get("postUploadedDate").toString());
 
 
-                                Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
+                                //Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
 
 
                                 getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);

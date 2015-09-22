@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.undp_iwomen.iwomen.R;
-import org.undp_iwomen.iwomen.ui.activity.TlgProfileActivity;
+import org.undp_iwomen.iwomen.ui.activity.TLGListActivity;
 import org.undp_iwomen.iwomen.ui.widget.ResizableImageView;
 import org.undp_iwomen.iwomen.utils.Utils;
 
@@ -53,14 +53,15 @@ public class BeTogetherFragment extends Fragment {
         imgMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent video_intent = new Intent(mContext, TlgProfileActivity.class);
-
+                Intent intent = new Intent(mContext, TLGListActivity.class);
+                intent.putExtra("TitleEng", R.string.betogether_title_eng);
+                intent.putExtra("TitleMM", R.string.betogether_title_mm);
                 //intent.putExtra("post_id", feedItems.get(position).getPost_obj_id());
 
                 //intent.putExtra("ImgUrl", mImgurl.get(getPosition()));
-                video_intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                video_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(video_intent);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent);
             }
         });
 
@@ -87,6 +88,7 @@ public class BeTogetherFragment extends Fragment {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == android.R.id.home) {
+
 
             return false;
 

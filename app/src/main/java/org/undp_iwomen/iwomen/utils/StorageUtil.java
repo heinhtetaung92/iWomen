@@ -17,6 +17,7 @@
 package org.undp_iwomen.iwomen.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -58,7 +59,7 @@ public class StorageUtil {
       oos.writeObject(list);
       fos.close();
     } catch (Exception e) {
-      //Log.e("Exception", e.toString());
+      Log.e("Exception", e.toString());
     }
   }
 

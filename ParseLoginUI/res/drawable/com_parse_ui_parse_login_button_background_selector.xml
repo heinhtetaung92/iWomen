@@ -2,6 +2,6 @@
 
     <item android:state_pressed="true" android:drawable="@color/theme_accent_1"/>
     <item android:state_focused="true" android:drawable="@color/theme_accent_1"/>
-    <item android:drawable="@color/theme_accent_1_dark"/>
+    <item android:drawable="@color/lime_color"/>
 
 </selector>

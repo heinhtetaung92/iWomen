@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.makeramen.RoundedImageView;
+import com.squareup.picasso.Picasso;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
@@ -29,12 +30,13 @@ public class ResourceDetailActivity extends AppCompatActivity {
     private ProgressBar profileProgressbar;
     private TextView profileName;
 
-    private String title;
-    private String bodyText;
+
     private Context mContext;
     SharedPreferences sharePrefLanguageUtil;
     String strLang;
 
+
+    String mstrTitleEng, mstrTitleMm, mstrContentEng, mstrContentMm, mstrAuthorName , mstrAuthorId, mstrAuthorImgPath, mstrPostDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,8 +56,18 @@ public class ResourceDetailActivity extends AppCompatActivity {
         }
 
         Intent i  =getIntent();
-        bodyText = i.getStringExtra("Text");
-        title = i.getStringExtra("Name");
+
+        mstrTitleEng = i.getStringExtra("TitleEng");
+        mstrTitleMm = i.getStringExtra("TitleMM");
+        mstrContentEng = i.getStringExtra("ContentEng");
+        mstrContentMm = i.getStringExtra("ContentMM");
+        mstrAuthorName = i.getStringExtra("AuthorName");
+        mstrAuthorId = i.getStringExtra("AuthorId");
+        mstrAuthorImgPath = i.getStringExtra("AuthorImgPath");
+        mstrPostDate = i.getStringExtra("PostDate");
+
+
+
 
         txtName = (TextView)findViewById(R.id.tipdetail_title_name);
         txtBody = (TextView)findViewById(R.id.tipdetail_body);
@@ -64,13 +76,14 @@ public class ResourceDetailActivity extends AppCompatActivity {
         profileProgressbar = (ProgressBar)findViewById(R.id.tipdetail_progressBar_profile_item);
 
 
-        txtBody.setText(bodyText);
-        txtName.setText(title);
+
 
         strLang = sharePrefLanguageUtil.getString(com.parse.utils.Utils.PREF_SETTING_LANG, com.parse.utils.Utils.ENG_LANG);
         if(strLang.equals(com.parse.utils.Utils.ENG_LANG)){
 
             textViewTitle.setText(R.string.leadership_eng);
+            txtBody.setText(mstrContentEng);
+            txtName.setText(mstrTitleEng);
 
             textViewTitle.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
 
@@ -79,6 +92,8 @@ public class ResourceDetailActivity extends AppCompatActivity {
             txtBody.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
         }else{
             textViewTitle.setText(R.string.leadership_mm);
+            txtBody.setText(mstrContentMm);
+            txtName.setText(mstrTitleEng);
 
             textViewTitle.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
 
@@ -92,10 +107,39 @@ public class ResourceDetailActivity extends AppCompatActivity {
 
         profileProgressbar.setVisibility(View.GONE);
 
+
+
         profileImg.setAdjustViewBounds(true);
         profileImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        profileImg.setImageResource(R.drawable.astrid);
-        profileName.setText("Dr Astrid Tuminez ");
+
+        if(mstrAuthorImgPath != null && mstrAuthorImgPath != "") {
+
+            try {
+
+                Picasso.with(mContext)
+                        .load(mstrAuthorImgPath) //"http://cheapandcheerfulshopper.com/wp-content/uploads/2013/08/shopping1257549438_1370386595.jpg" //deal.photo1
+                        .placeholder(R.drawable.blank_profile)
+                        .error(R.drawable.blank_profile)
+                        .into(profileImg, new ImageLoadedCallback(profileProgressbar) {
+                            @Override
+                            public void onSuccess() {
+                                if (this.progressBar != null) {
+                                    this.progressBar.setVisibility(View.GONE);
+                                } else {
+                                    this.progressBar.setVisibility(View.VISIBLE);
+                                }
+                            }
+
+                        });
+            } catch (OutOfMemoryError outOfMemoryError) {
+                outOfMemoryError.printStackTrace();
+            }
+        }else{
+            profileProgressbar.setVisibility(View.GONE);
+        }
+
+        //profileImg.setImageResource(R.drawable.astrid);
+        profileName.setText(mstrAuthorName);
 
 
     }
@@ -114,11 +158,32 @@ public class ResourceDetailActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        if(item.getItemId() == android.R.id.home){
+            finish();
+            return true;
+        }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    private class ImageLoadedCallback implements com.squareup.picasso.Callback {
+        ProgressBar progressBar;
+
+        public ImageLoadedCallback(ProgressBar progBar) {
+            progressBar = progBar;
+        }
+
+        @Override
+        public void onSuccess() {
+
+        }
+
+        @Override
+        public void onError() {
+
+        }
     }
 }

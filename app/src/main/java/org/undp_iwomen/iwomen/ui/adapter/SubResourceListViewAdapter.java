@@ -5,52 +5,54 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.makeramen.RoundedImageView;
+import com.squareup.picasso.Picasso;
 
 import org.undp_iwomen.iwomen.R;
+import org.undp_iwomen.iwomen.data.SubResourceItem;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
+
+import java.util.List;
 
 /**
  * Created by khinsandar on 7/29/15.
  */
 public class SubResourceListViewAdapter extends BaseAdapter
 {
-    private String[] listName = null;
+    /*private String[] listName = null;
     private String[] listAuthorName = null;
     private String[] listDate = null;
     private String[] listDataText = null;
     private int[] listicon = null;
-
+*/
     //private Activity activity;
 
     // Declare Variables
+    private List<SubResourceItem> SubResourceItems;
     Context mContext;
     LayoutInflater inflater;
-    public SubResourceListViewAdapter(Context context,String[] listauthorname, String[] listName, String[] listDate,int[] listic) { //
+    String mstr_lang;
+    public SubResourceListViewAdapter(Context context,List<SubResourceItem> resourceItems , String typeFaceName) { //
         super();
         mContext = context;
         inflater = LayoutInflater.from(mContext);
-        //Log.e("BrowseGridviewAdapter Constructor", "" + listCountry.size() +listCountry.toString());
-        this.listName = listName;
-        this.listicon = listic;
-        this.listDate = listDate;
-        this.listAuthorName = listauthorname;
-        //Log.e("BrowseGridviewAdapter Constructor", "" + listShopName.size() +listShopName.toString());
-        //this.activity = activity;
+        mstr_lang = typeFaceName;
+        this.SubResourceItems = resourceItems;
     }
 
 
     public int getCount() {
         // TODO Auto-generated method stub
-        return listName.length;
+        return SubResourceItems.size();
     }
 
 
-    public String getItem(int position) {
+    public Object getItem(int position) {
         // TODO Auto-generated method stub
-        return listName[position];
+        return SubResourceItems.get(position);
     }
 
 
@@ -65,6 +67,7 @@ public class SubResourceListViewAdapter extends BaseAdapter
         public TextView txtName;
         public TextView txtTime;
         public RoundedImageView imgIcon;
+        public ProgressBar progressBar;
         //public TextView txtViewTitle;
     }
 
@@ -87,6 +90,7 @@ public class SubResourceListViewAdapter extends BaseAdapter
             holder.txtName= (TextView)view.findViewById(R.id.sub_resouce_list_item_title);
             holder.txtTime= (TextView)view.findViewById(R.id.sub_resouce_list_item_time);
             holder.imgIcon = (RoundedImageView) view.findViewById(R.id.sub_resouce_list_item_img);
+            holder.progressBar = (ProgressBar) view.findViewById(R.id.sub_resouce_list_item_progressBar);
 
 
 
@@ -98,22 +102,75 @@ public class SubResourceListViewAdapter extends BaseAdapter
             holder = (ViewHolder) view.getTag();
         }
 
-        holder.txtAuthour.setText(listAuthorName[position]);
+        /*holder.txtAuthour.setText(listAuthorName[position]);
 
         holder.txtName.setText(listName[position]);
         holder.txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
 
-        holder.txtTime.setText(listDate[position]);
+        holder.txtTime.setText(listDate[position]);*/
+
+        if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)) {
+            holder.txtName.setText(SubResourceItems.get(position).getSub_resource_title_eng());
+            //holder.txtBodyText.setText(ResourceItems.get(position).getResourceText());
+
+            holder.txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
+        }else{
+            holder.txtName.setText(SubResourceItems.get(position).getSub_resource_title_mm());
+            //holder.txtBodyText.setText(ResourceItems.get(position).getResourceText());
+
+            holder.txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+
+        }
+
+        if(SubResourceItems.get(position).getIcon_img_url() != null && !SubResourceItems.get(position).getIcon_img_url().isEmpty()) {
+
+            try {
+
+                Picasso.with(mContext)
+                        .load(SubResourceItems.get(position).getIcon_img_url()) //"http://cheapandcheerfulshopper.com/wp-content/uploads/2013/08/shopping1257549438_1370386595.jpg" //deal.photo1
+                        .placeholder(R.drawable.blank_profile)
+                        .error(R.drawable.blank_profile)
+                        .into(holder.imgIcon, new ImageLoadedCallback(holder.progressBar) {
+                            @Override
+                            public void onSuccess() {
+                                if (this.progressBar != null) {
+                                    this.progressBar.setVisibility(View.GONE);
+                                } else {
+                                    this.progressBar.setVisibility(View.VISIBLE);
+                                }
+                            }
+
+                        });
+            } catch (OutOfMemoryError outOfMemoryError) {
+                outOfMemoryError.printStackTrace();
+            }
+        }else{
+            holder.progressBar.setVisibility(View.GONE);
+        }
 
 
-        holder.imgIcon.setImageResource(listicon[position]);//listicon[position]
+        //holder.imgIcon.setImageResource(listicon[position]);//listicon[position]
 
-        //For transparent bg alpha 51=20% , 127=50% , 191=75% , 204 = 80%  ,229=90% , 242=95%
-        //holder.txtName.setBackgroundColor (Color.argb(229, 175, 42, 43));// Color.argb(0, 175, 42, 43)); // background transparency
-        //holder.txtName.setTextColor (Color.argb (255, 255, 255, 255));//Color.argb (0, 255, 255, 255)); // transparency of the text
 
 
         return view;
+    }
+    private class ImageLoadedCallback implements com.squareup.picasso.Callback {
+        ProgressBar progressBar;
+
+        public ImageLoadedCallback(ProgressBar progBar) {
+            progressBar = progBar;
+        }
+
+        @Override
+        public void onSuccess() {
+
+        }
+
+        @Override
+        public void onError() {
+
+        }
     }
 
 }

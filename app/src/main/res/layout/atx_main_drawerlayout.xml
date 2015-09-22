@@ -40,8 +40,49 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
+                    <FrameLayout
+                        android:layout_width="@dimen/feed_item_profile_pic"
+                        android:layout_height="@dimen/feed_item_profile_pic">
 
-                    <org.undp_iwomen.iwomen.ui.widget.ProfilePictureView
+                        <org.undp_iwomen.iwomen.ui.widget.ProfilePictureView
+                            android:id="@+id/profilePicture"
+                            android:layout_width="@dimen/feed_item_profile_pic"
+                            android:layout_height="@dimen/feed_item_profile_pic"
+                            android:scaleType="fitXY"
+                            android:visibility="visible"
+                            android:src="@drawable/bonsai"></org.undp_iwomen.iwomen.ui.widget.ProfilePictureView>
+
+                        <com.makeramen.RoundedImageView
+                            android:id="@+id/drawer_profilePic_rounded"
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:layout_width="@dimen/feed_item_profile_pic"
+                            android:layout_height="@dimen/feed_item_profile_pic"
+
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/blank_profile"
+                            app:riv_border_color="#333333"
+                            app:riv_border_width="0dip"
+                            app:riv_corner_radius="30dip"
+                            app:riv_mutate_background="true"
+                            app:riv_oval="true"
+                            android:visibility="gone"></com.makeramen.RoundedImageView>
+                        <ProgressBar
+                            android:id="@+id/drawer_progressBar_profile_item"
+                            style="?android:attr/progressBarStyle"
+                            android:layout_width="@dimen/feed_item_profile_pic"
+                            android:layout_height="@dimen/feed_item_profile_pic"
+
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_gravity="left"
+                            android:visibility="visible" />
+                    </FrameLayout>
+
+                    <!--<org.undp_iwomen.iwomen.ui.widget.ProfilePictureView
                         android:id="@+id/profilePicture"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -53,7 +94,7 @@
                         android:visibility="visible"
                         facebook:preset_size="small">
 
-                    </org.undp_iwomen.iwomen.ui.widget.ProfilePictureView>
+                    </org.undp_iwomen.iwomen.ui.widget.ProfilePictureView>-->
                     <!--
                                         <com.mmplus.myanmadeals.model.RoundedImageView
                                             android:id="@+id/img_profile"
@@ -115,12 +156,12 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_gravity="left">
+                        android:layout_gravity="left"
+                        android:orientation="horizontal">
 
                         <TextView
-                            style="?attr/spinnerDropDownItemStyle"
                             android:id="@+id/menu_user_post_count"
+                            style="?attr/spinnerDropDownItemStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
@@ -135,9 +176,9 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="right"
                         android:gravity="right"
                         android:orientation="horizontal"
-                        android:layout_gravity="right"
                         android:paddingRight="16dp">
 
                         <!--<com.facebook.login.widget.LoginButton

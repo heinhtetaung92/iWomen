@@ -89,7 +89,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class PostDetailActivity extends AppCompatActivity implements View.OnClickListener{
+public class PostDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView mPostTile;
 
@@ -158,7 +158,6 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     public ImageView emojiIconToggle;
 
 
-
     private ShareDialog shareDialog;
     private static final String PERMISSION = "publish_actions";
     private boolean canPresentShareDialog;
@@ -174,6 +173,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     private ProgressDialog mProgressDialog;
     private ProgressWheel progressWheel;
     private String mstr_lang;
+    private ImageView video_icon;
     private FacebookCallback<Sharer.Result> shareCallback = new FacebookCallback<Sharer.Result>() {
         @Override
         public void onCancel() {
@@ -300,9 +300,9 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         emojiIconToggle = (ImageView) findViewById(R.id.toggleEmojiIcon);
 
 
-
         shareButton = (ShareButton) findViewById(R.id.postdetail_fb_share_button);
-        progressWheel = (ProgressWheel)findViewById(R.id.postdetail_progress_wheel_comment);
+        progressWheel = (ProgressWheel) findViewById(R.id.postdetail_progress_wheel_comment);
+        video_icon = (ImageView) findViewById(R.id.postdeail_video_icon);
 
 
         if (postId != null) {
@@ -323,6 +323,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
         ly_postdetail_audio.setOnClickListener(this);
         ly_postdetail_download.setOnClickListener(this);
+        video_icon.setOnClickListener(this);
 
 
         if (mstrPostType != null) {
@@ -378,11 +379,11 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    public void initEmojiIcon(){
+    public void initEmojiIcon() {
         boolean isLargerLollipop = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
 
         int reduceheight = 0;
-        if(isLargerLollipop){
+        if (isLargerLollipop) {
             reduceheight = (int) getResources().getDimension(R.dimen.reduceeheight);
         }
         // Give the topmost view of your activity layout hierarchy. This will be used to measure soft keyboard height
@@ -458,7 +459,6 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         });
 
 
-
         emojiIconToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -491,7 +491,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
-    private void changeEmojiKeyboardIcon(ImageView iconToBeChanged, int drawableResourceId){
+    private void changeEmojiKeyboardIcon(ImageView iconToBeChanged, int drawableResourceId) {
         iconToBeChanged.setImageResource(drawableResourceId);
     }
 
@@ -614,6 +614,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                         listView_Comment.setAdapter(adapter);
 
                         mProgressDialog.dismiss();
+                        progressWheel.setVisibility(View.INVISIBLE);
                         View padding = new View(PostDetailActivity.this);
                         padding.setMinimumHeight(20);
                         listView_Comment.addFooterView(padding);
@@ -634,6 +635,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 @Override
                 public void failure(RetrofitError error) {
                     Log.e("Comments>>>", ">>>>ERR" + error);
+                    progressWheel.setVisibility(View.INVISIBLE);
                 }
             });
         } else {
@@ -780,11 +782,14 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
             if (item.getPost_content_type().equalsIgnoreCase("Letter")) {
                 postdetail_username.setText("Dear " + user_name);
+
+                video_icon.setVisibility(View.GONE);
                 ly_media_main.setVisibility(View.GONE);
                 isPlaying = true;
                 postIMg.setClickable(false);
             } else if (item.getPost_content_type().equalsIgnoreCase("Audio")) {
                 postdetail_username.setText("");
+                video_icon.setVisibility(View.GONE);
                 ly_media_main.setVisibility(View.VISIBLE);
                 isPlaying = false;
                 img_player.setImageResource(R.drawable.ic_headset_grey600_48dp);
@@ -792,6 +797,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
             } else if (item.getPost_content_type().equalsIgnoreCase("Video")) {
                 postdetail_username.setText("");
+                video_icon.setVisibility(View.VISIBLE);
                 ly_media_main.setVisibility(View.VISIBLE);
 
                 img_player.setImageResource(R.drawable.ic_watch_now);
@@ -800,6 +806,12 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 isPlaying = true;
             } else if (item.getPost_content_type().equalsIgnoreCase("Storie")) {
                 postdetail_username.setText("");
+                video_icon.setVisibility(View.GONE);
+                ly_media_main.setVisibility(View.GONE);
+                isPlaying = true;
+            } else {
+                postdetail_username.setText("");
+                video_icon.setVisibility(View.GONE);
                 ly_media_main.setVisibility(View.GONE);
                 isPlaying = true;
             }
@@ -808,6 +820,9 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             //post_timestamp.setText(item.getCreated_at());
             mPostTile.setText(item.getPost_title());
             post_content.setText(item.getPost_content());
+            et_comment.setHint(R.string.post_detail_comment_eng);
+
+            et_comment.setTypeface(MyTypeFace.get(this, MyTypeFace.NORMAL));
             mPostTile.setTypeface(MyTypeFace.get(this, MyTypeFace.NORMAL));
             post_content.setTypeface(MyTypeFace.get(this, MyTypeFace.NORMAL));
             post_suggest_text.setTypeface(MyTypeFace.get(this, MyTypeFace.NORMAL));
@@ -818,11 +833,13 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             if (item.getPost_content_type().equalsIgnoreCase("Letter")) {
                 postdetail_username.setText(" ခ်စ္လွစြာေသာ " + user_name);
                 ly_media_main.setVisibility(View.GONE);
+                video_icon.setVisibility(View.GONE);
                 isPlaying = true;
                 postIMg.setClickable(false);
             } else if (item.getPost_content_type().equalsIgnoreCase("Audio")) {
                 postdetail_username.setText("");
                 ly_media_main.setVisibility(View.VISIBLE);
+                video_icon.setVisibility(View.GONE);
                 isPlaying = false;
                 img_player.setImageResource(R.drawable.ic_headset_grey600_48dp);
                 txt_player.setText(R.string.detail_listen_text_mm);
@@ -830,7 +847,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             } else if (item.getPost_content_type().equalsIgnoreCase("Video")) {
                 postdetail_username.setText("");
                 ly_media_main.setVisibility(View.VISIBLE);
-
+                video_icon.setVisibility(View.VISIBLE);
                 img_player.setImageResource(R.drawable.ic_watch_now);
                 txt_player.setText(R.string.detail_play_text_mm);
 
@@ -838,12 +855,21 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             } else if (item.getPost_content_type().equalsIgnoreCase("Storie")) {
                 postdetail_username.setText("");
                 ly_media_main.setVisibility(View.GONE);
+                video_icon.setVisibility(View.GONE);
+                isPlaying = true;
+            } else {
+                postdetail_username.setText("");
+                ly_media_main.setVisibility(View.GONE);
+                video_icon.setVisibility(View.GONE);
                 isPlaying = true;
             }
 
             //post_timestamp.setText(item.getCreated_at());
             mPostTile.setText(item.getPost_title_mm());
             post_content.setText(item.getPost_content_mm());
+            et_comment.setHint(R.string.post_detail_comment_mm);
+
+            et_comment.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
             mPostTile.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
             post_content.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
             post_suggest_text.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
@@ -882,7 +908,10 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 outOfMemoryError.printStackTrace();
             }
         } else {
-            profilePictureView.setBackgroundResource(R.drawable.blank_profile);
+
+            profile.setImageResource(R.drawable.blank_profile);
+            profilePictureView.setVisibility(View.GONE);
+            //profilePictureView.setBackgroundResource(R.drawable.blank_profile);
             profile_item_progressBar.setVisibility(View.GONE);
         }
 
@@ -1016,7 +1045,13 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        if (id == android.R.id.home) {
 
+            finish();
+            return true;
+
+
+        }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
@@ -1094,7 +1129,12 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 //FLAG_ACTIVITY_NEW_TASK
                 //intent.setData(uri);
-                intent.putExtra(Intent.EXTRA_SUBJECT, post_content.getText().toString().substring(0, 12) + "...");//Title Of The Post
+                if (post_content.getText().length() > 20) {
+                    share_data = post_content.getText().toString().substring(0, 12) + " ...";
+                } else {
+                    share_data = post_content.getText().toString();
+                }
+                intent.putExtra(Intent.EXTRA_SUBJECT, share_data + "...");//Title Of The Post
                 intent.putExtra(Intent.EXTRA_TEXT, CommonConfig.SHARE_URL);
                 intent.setType("text/plain");
                 getApplicationContext().startActivity(intent);
@@ -1108,58 +1148,70 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
                 if (Connection.isOnline(getApplicationContext())) {
 
-                    mProgressDialog.show();
-                    Utils.doToastEng(getApplicationContext(), "Comment");
-                    commentParse = new Comment();
 
-                    commentParse.setcomment_contents(et_comment.getText().toString());
-                    commentParse.setUserId(user_obj_id);
-                    commentParse.setUserName(user_name);
-                    commentParse.setpostId(postId);
-                    commentParse.setcomment_created_time(new Date());
-                    /**Very Important */
-                    ParseACL groupACL = new ParseACL();
-                    // userList is an Iterable<ParseUser> with the users we are sending this message to.
+                    if (et_comment.length() == 0) {
+
+                        if (strLang.equals(Utils.ENG_LANG)) {
+                            Utils.doToastEng(getApplicationContext(), getResources().getString(R.string.post_detail_comment_eng));
+                        } else {
+
+                            Utils.doToastMM(getApplicationContext(), getResources().getString(R.string.post_detail_comment_mm));
+                        }
+                    } else {
+
+                        mProgressDialog.show();
+                        Utils.doToastEng(getApplicationContext(), "Comment");
+                        commentParse = new Comment();
+
+                        commentParse.setcomment_contents(et_comment.getText().toString());
+                        commentParse.setUserId(user_obj_id);
+                        commentParse.setUserName(user_name);
+                        commentParse.setpostId(postId);
+                        commentParse.setcomment_created_time(new Date());
+                        /**Very Important */
+                        ParseACL groupACL = new ParseACL();
+                        // userList is an Iterable<ParseUser> with the users we are sending this message to.
                     /*for (ParseUser user : userList) {
                     groupACL.setReadAccess(user, true);
                     //groupACL.setWriteAccess(user, true);
                     }*/
-                    //groupACL.setRoleReadAccess("");
+                        //groupACL.setRoleReadAccess("");
 
-                    //groupACL.setRoleWriteAccess("");
-
-
-                    groupACL.setPublicReadAccess(true);
-
-                    commentParse.setACL(groupACL);
-                    commentParse.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
-
-                                et_comment.setText("");
-
-                                mProgressDialog.dismiss();
+                        //groupACL.setRoleWriteAccess("");
 
 
-                                getTestCommentList();
-                                //TODO comment adapter notrifieddatasetchange
+                        groupACL.setPublicReadAccess(true);
+
+                        commentParse.setACL(groupACL);
+                        commentParse.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+
+                                    et_comment.setText("");
+
+                                    mProgressDialog.dismiss();
 
 
-                            } else {
+                                    getTestCommentList();
+                                    //TODO comment adapter notrifieddatasetchange
 
-                                mProgressDialog.dismiss();
+
+                                } else {
+
+                                    mProgressDialog.dismiss();
 
 
-                                Utils.doToastEng(getApplicationContext(), "Error saving: \" + e.getMessage()");
-                                //progressbackground.setVisibility(View.INVISIBLE);
-                                Toast.makeText(getApplicationContext(),
-                                        "Error saving: " + e.getMessage(),
-                                        Toast.LENGTH_LONG).show();
+                                    Utils.doToastEng(getApplicationContext(), "Error saving: \" + e.getMessage()");
+                                    //progressbackground.setVisibility(View.INVISIBLE);
+                                    Toast.makeText(getApplicationContext(),
+                                            "Error saving: " + e.getMessage(),
+                                            Toast.LENGTH_LONG).show();
 
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 } else {
 
                     if (strLang.equals(Utils.ENG_LANG)) {
@@ -1223,6 +1275,20 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
             case R.id.detail_ly_download:
 
+                break;
+
+            case R.id.postdeail_video_icon:
+                if (mstrPostType.equalsIgnoreCase("Video")) {
+                    Intent video_intent = new Intent(mContext, YouTubeWebviewActivity.class);
+
+                    //intent.putExtra("post_id", feedItems.get(position).getPost_obj_id());
+
+                    //intent.putExtra("ImgUrl", mImgurl.get(getPosition()));
+                    video_intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    video_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(video_intent);
+                    break;
+                }
                 break;
 
         }
@@ -1420,13 +1486,23 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             share_data = post_content.getText().toString();
         }
 
-        return new ShareLinkContent.Builder()
 
-                .setContentTitle(mPostTile.getText().toString())
-                .setContentUrl(Uri.parse(CommonConfig.SHARE_URL))
-                .setImageUrl(Uri.parse(share_img_url_data))
-                .setContentDescription(share_data)
-                .build();
+        if (share_img_url_data != null) {
+            return new ShareLinkContent.Builder()
+
+                    .setContentTitle(mPostTile.getText().toString())
+                    .setContentUrl(Uri.parse(CommonConfig.SHARE_URL))
+                    .setImageUrl(Uri.parse(share_img_url_data))
+                    .setContentDescription(share_data)
+                    .build();
+        } else {
+            return new ShareLinkContent.Builder()
+
+                    .setContentTitle(mPostTile.getText().toString())
+                    .setContentUrl(Uri.parse(CommonConfig.SHARE_URL))
+                    .setContentDescription(share_data)
+                    .build();
+        }
     }
 
     //It is not work well in all device

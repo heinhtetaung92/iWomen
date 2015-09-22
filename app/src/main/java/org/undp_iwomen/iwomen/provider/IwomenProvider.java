@@ -25,7 +25,11 @@ public class IwomenProvider extends ContentProvider {
     private final int POST = 2000;
     private final int POST_BYID = 2001;
 
+
+
     private final int COMMENT = 3000;
+
+    private final int USER_POST = 4000;
 
     private UriMatcher matcher = buildMatcher();
 
@@ -49,6 +53,8 @@ public class IwomenProvider extends ContentProvider {
             case POST:
                 return IwomenProviderData.PostProvider.CONTENT_TYPE;
 
+            case USER_POST:
+                return IwomenProviderData.UserPostProvider.CONTENT_TYPE;
             case COMMENT:
                 return IwomenProviderData.CommentProvider.CONTENT_TYPE;
 
@@ -103,20 +109,27 @@ public class IwomenProvider extends ContentProvider {
             case POST:
                 id = db.insert(TableAndColumnsName.TableNames.POST, null, contentValues);
                 if (id > 0) {
-                    Log.e(uri.toString(), " complete insert :>  " + id);
+                    Log.e(uri.toString(), " POST complete insert :>  " + id);
                 }
                 return IwomenProviderData.PostProvider.buildContentUri(contentValues.getAsString(TableAndColumnsName.PostUtil.POST_OBJ_ID));
+
+            case USER_POST:
+                id = db.insert(TableAndColumnsName.TableNames.USER_POST, null, contentValues);
+                if (id > 0) {
+                    Log.e(uri.toString(), " USER_POST complete insert :>  " + id);
+                }
+                return IwomenProviderData.UserPostProvider.buildContentUri(contentValues.getAsString(TableAndColumnsName.UserPostUtil.POST_OBJ_ID));
             case USER:
                 id = db.insert(TableAndColumnsName.TableNames.USER, null, contentValues);
                 if (id > 0) {
-                    Log.e(uri.toString(), " complete insert :>  " + id);
+                    Log.e(uri.toString(), "USER complete insert :>  " + id);
                 }
                 return IwomenProviderData.UserProvider.buildContentUri(contentValues.getAsString(TableAndColumnsName.UserUtil.USER_OBJ_ID));
 
             case COMMENT:
                 id = db.insert(TableAndColumnsName.TableNames.COMMENT, null, contentValues);
                 if (id > 0) {
-                    Log.e(uri.toString(), " complete insert :>  " + id);
+                    Log.e(uri.toString(), " COMMENT complete insert :>  " + id);
                 }
                 return IwomenProviderData.CommentProvider.buildContentUri(contentValues.getAsString(TableAndColumnsName.CommentUtil.COMMENT_OBJ_ID));
 
@@ -142,6 +155,9 @@ public class IwomenProvider extends ContentProvider {
 
             case POST:
                 return db.update(TableAndColumnsName.TableNames.POST,contentValues,selection,selectionargs);
+
+            case USER_POST:
+                return db.update(TableAndColumnsName.TableNames.USER_POST,contentValues,selection,selectionargs);
             default:
                 throw new UnsupportedOperationException("Unknown uri : "+uri);
         }
@@ -160,6 +176,10 @@ public class IwomenProvider extends ContentProvider {
         matcher.addURI(CommonConfig.AUTHORITY, "user", USER);
 
         matcher.addURI(CommonConfig.AUTHORITY, "post", POST);
+
+        matcher.addURI(CommonConfig.AUTHORITY, "user_post", USER_POST);
+
+
         matcher.addURI(CommonConfig.AUTHORITY, "post/#", POST_BYID);
 
         matcher.addURI(CommonConfig.AUTHORITY, "comment", COMMENT);
@@ -176,6 +196,9 @@ public class IwomenProvider extends ContentProvider {
                 return sb.table(TableAndColumnsName.TableNames.USER);
             case POST:
                 return sb.table(TableAndColumnsName.TableNames.POST);
+
+            case USER_POST:
+                return sb.table(TableAndColumnsName.TableNames.USER_POST);
 
             case COMMENT:
                 return sb.table(TableAndColumnsName.TableNames.COMMENT);

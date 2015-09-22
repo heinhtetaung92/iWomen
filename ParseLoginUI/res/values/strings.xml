@@ -44,6 +44,8 @@
     <string name="com_parse_ui_parse_login_invalid_credentials_toast">The username and password you entered don\'t match</string>
     <string name="com_parse_ui_parse_login_failed_unknown_toast">Could not log in, please try again later</string>
 
+    <string name="open_internet_warning_eng">Please Open Internet Connection.</string>
+    <string name="open_internet_warning_mm">အင္တာနက္ ခ်ိတ္ဆက္မွုုဖြင္ ့ရန္လိုုအပ္ပါသည္။</string>
 
     <string name="your_name_error_mm">အမည္ ရိုုက္ထည့္ရန္လိုုအပ္ပါသည္</string>
     <string name="password_error_mm">လွ်ိဳ ့၀ွက္ စာလံုုးရိုုက္ထည့္ရန္လိုုအပ္ပါသည္</string>

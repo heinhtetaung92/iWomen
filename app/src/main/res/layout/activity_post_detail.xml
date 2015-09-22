@@ -296,7 +296,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:background="@drawable/ic_speaker_notes_white_18dp" />
+                    android:background="@drawable/ic_comment" />
             </LinearLayout>
 
 

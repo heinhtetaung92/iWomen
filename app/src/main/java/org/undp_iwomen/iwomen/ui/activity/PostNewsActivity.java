@@ -3,7 +3,6 @@ package org.undp_iwomen.iwomen.ui.activity;
 import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -69,7 +68,7 @@ public class PostNewsActivity extends ActionBarActivity implements View.OnClickL
         cv.put(TableAndColumnsName.UserUtil.CREATED_DATE, et_createdate.getText().toString());
         cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, et_updateddate.getText().toString());
 
-        Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
+        //Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
 
         getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);
         finish();

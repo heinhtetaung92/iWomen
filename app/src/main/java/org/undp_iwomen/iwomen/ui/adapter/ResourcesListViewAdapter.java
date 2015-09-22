@@ -6,9 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.makeramen.RoundedImageView;
+import com.squareup.picasso.Picasso;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.data.ResourceItem;
@@ -26,11 +28,13 @@ public class ResourcesListViewAdapter extends BaseAdapter
     private List<ResourceItem> ResourceItems;
     Context mContext;
     LayoutInflater inflater;
-    public ResourcesListViewAdapter(Context context, List<ResourceItem> resourceItems) { //
+    String mstr_lang;
+    public ResourcesListViewAdapter(Context context, List<ResourceItem> resourceItems , String typeFaceName) { //
         super();
         mContext = context;
         inflater = LayoutInflater.from(mContext);
         this.ResourceItems = resourceItems;
+        mstr_lang = typeFaceName;
         //Log.e("BrowseGridviewAdapter Constructor", "" + listCountry.size() +listCountry.toString());
 
     }
@@ -59,6 +63,7 @@ public class ResourcesListViewAdapter extends BaseAdapter
         public TextView txtName;
         //public TextView txtBodyText;
         public RoundedImageView imgIcon;
+        public ProgressBar progressBar;
         //public TextView txtViewTitle;
     }
 
@@ -76,34 +81,85 @@ public class ResourcesListViewAdapter extends BaseAdapter
             holder.txtName= (TextView)view.findViewById(R.id.resource_item_name);
             //holder.txtBodyText= (TextView)view.findViewById(R.id.resource_item_text);
             holder.imgIcon = (RoundedImageView) view.findViewById(R.id.resouce_list_item_img);
+            holder.progressBar = (ProgressBar) view.findViewById(R.id.resouce_list_item_progressBar);
 
 
             view.setTag(holder);
         }
         else
         {
-            //holder = (ViewHolder) view.getTag();
             holder = (ViewHolder) view.getTag();
+        }
+
+        if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)) {
+            holder.txtName.setText(ResourceItems.get(position).getResourceName());
+            //holder.txtBodyText.setText(ResourceItems.get(position).getResourceText());
+
+            holder.txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
+        }else{
+            holder.txtName.setText(ResourceItems.get(position).getResourceNameMM());
+            //holder.txtBodyText.setText(ResourceItems.get(position).getResourceText());
+
+            holder.txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+
         }
 
         holder.imgIcon.setAdjustViewBounds(true);
         holder.imgIcon.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        if(ResourceItems.get(position).getResourceImgPath() != null && !ResourceItems.get(position).getResourceImgPath().isEmpty()) {
 
-        holder.txtName.setText(ResourceItems.get(position).getResourceName());
-        //holder.txtBodyText.setText(ResourceItems.get(position).getResourceText());
+            try {
 
-        holder.txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+                Picasso.with(mContext)
+                        .load(ResourceItems.get(position).getResourceImgPath()) //"http://cheapandcheerfulshopper.com/wp-content/uploads/2013/08/shopping1257549438_1370386595.jpg" //deal.photo1
+                        .placeholder(R.drawable.blank_profile)
+                        .error(R.drawable.blank_profile)
+                        .into(holder.imgIcon, new ImageLoadedCallback(holder.progressBar) {
+                            @Override
+                            public void onSuccess() {
+                                if (this.progressBar != null) {
+                                    this.progressBar.setVisibility(View.GONE);
+                                } else {
+                                    this.progressBar.setVisibility(View.VISIBLE);
+                                }
+                            }
+
+                        });
+            } catch (OutOfMemoryError outOfMemoryError) {
+                outOfMemoryError.printStackTrace();
+            }
+        }else{
+            holder.progressBar.setVisibility(View.GONE);
+        }
+
+
+
+
         //holder.txtBodyText.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
         //holder.txtName.setTypeface(DrawerMainActivity.faceNormal);
 
-        holder.imgIcon.setImageResource(ResourceItems.get(position).getResourceImg());
+        //holder.imgIcon.setImageResource(ResourceItems.get(position).getResourceImg());
 
-        //For transparent bg alpha 51=20% , 127=50% , 191=75% , 204 = 80%  ,229=90% , 242=95%
-        //holder.txtName.setBackgroundColor (Color.argb(229, 175, 42, 43));// Color.argb(0, 175, 42, 43)); // background transparency
-        //holder.txtName.setTextColor (Color.argb (255, 255, 255, 255));//Color.argb (0, 255, 255, 255)); // transparency of the text
 
 
         return view;
+    }
+    private class ImageLoadedCallback implements com.squareup.picasso.Callback {
+        ProgressBar progressBar;
+
+        public ImageLoadedCallback(ProgressBar progBar) {
+            progressBar = progBar;
+        }
+
+        @Override
+        public void onSuccess() {
+
+        }
+
+        @Override
+        public void onError() {
+
+        }
     }
 
 }

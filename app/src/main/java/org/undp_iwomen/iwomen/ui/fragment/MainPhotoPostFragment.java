@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ import org.undp_iwomen.iwomen.model.parse.Post;
 import org.undp_iwomen.iwomen.ui.activity.DrawerMainActivity;
 import org.undp_iwomen.iwomen.ui.widget.ResizableImageView;
 import org.undp_iwomen.iwomen.utils.Connection;
+import org.undp_iwomen.iwomen.utils.ShowKeyboardListener;
 import org.undp_iwomen.iwomen.utils.Utils;
 
 import java.io.File;
@@ -66,7 +68,7 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
     FoundReport foundReport;*/
 
     Post postParse;
-    //View progressbackground;
+    View progressbackground;
 
     ProgressWheel progress_wheel;
     private EditText postEditText;
@@ -130,6 +132,9 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
     ResizableImageView img_photo;
     TextView txt_camera;
 
+    TextView txt_camera_text;
+
+    TextView txt_img_upload_icon;
     TextView txt_img_upload;
 
     SharedPreferences sharePrefLanguageUtil;
@@ -137,6 +142,9 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
     private Context mContext;
     private EditText new_post_et_title;
     private EditText new_post_et_story;
+
+    private LinearLayout ly_title;
+    private LinearLayout ly_body;
 
     public MainPhotoPostFragment() {
 
@@ -164,7 +172,7 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
 
             str_report_type = bundleArgs.getString("ReportType");
         }*/
-        View rootView = inflater.inflate(R.layout.new_post_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.new_post_fragment_new_ui, container, false);
 
         callbackManager = CallbackManager.Factory.create();
         //loginButton = (LoginButton) rootView.findViewById(R.id.login_button_1);
@@ -216,8 +224,12 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
 
         postButton = (Button) rootView.findViewById(R.id.new_post_btn);
 
+        txt_img_upload_icon = (TextView) rootView.findViewById(R.id.new_post_photo_img_upload);
         txt_img_upload = (TextView) rootView.findViewById(R.id.new_post_txt_img_upload);
-        txt_camera = (TextView) rootView.findViewById(R.id.new_post_camera_img_upload);
+
+
+        txt_camera = (TextView) rootView.findViewById(R.id.new_post_camera_img_camera);
+        txt_camera_text= (TextView) rootView.findViewById(R.id.new_post_txt_camera_upload);
 
 
         txt_camera.setOnClickListener(new View.OnClickListener() {
@@ -226,7 +238,20 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
                 takePicture();
             }
         });
+        txt_camera_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePicture();
+            }
+        });
 
+
+        txt_img_upload_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chooseImage();
+            }
+        });
         txt_img_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -240,10 +265,18 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
         characterCountTextView.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));*/
 
         progress_wheel = (ProgressWheel) rootView.findViewById(R.id.new_post_photo_progress_wheel);
-        //progressbackground = rootView.findViewById(R.id.photo_report_save_prowheel_bg);
+        progressbackground = rootView.findViewById(R.id.new_post_progresswheel_background);
+        ly_title = (LinearLayout)rootView.findViewById(R.id.new_post_ly_title);
+        ly_body = (LinearLayout)rootView.findViewById(R.id.new_post_ly_body);
 
 
-        //progressbackground.bringToFront();
+        ly_title.setOnClickListener(new ShowKeyboardListener(getActivity()));
+        ly_body.setOnClickListener(new ShowKeyboardListener(getActivity()));
+
+
+
+
+        progressbackground.bringToFront();
         progress_wheel.bringToFront();
         progress_wheel.spin();
         //progress_wheel.setBarColor(Color.RED);
@@ -257,10 +290,12 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
             postEditText.setHint(R.string.new_post_hint_body_eng);
             txt_img_upload.setText(R.string.new_post_upload_photo_eng);
             postButton.setText(R.string.new_post_eng);
+            txt_camera_text.setText(R.string.new_post_take_photo_eng);
 
             new_post_et_title.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
             postEditText.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
             txt_img_upload.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
+            txt_camera_text.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
             postButton.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
 
         } else {
@@ -268,10 +303,13 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
             postEditText.setHint(R.string.new_post_hint_body_mm);
             txt_img_upload.setText(R.string.new_post_upload_photo_mm);
             postButton.setText(R.string.new_post_mm);
+            txt_camera_text.setText(R.string.new_post_take_photo_mm);
+
 
             new_post_et_title.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
             postEditText.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
             txt_img_upload.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+            txt_camera_text.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
             postButton.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
 
         }
@@ -283,7 +321,7 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
                 if (Connection.isOnline(getActivity())) {
 
                     progress_wheel.setVisibility(View.VISIBLE);
-                    //progressbackground.setVisibility(View.VISIBLE);
+                    progressbackground.setVisibility(View.VISIBLE);
 
 
                     //Session session = Session.getActiveSession();
@@ -292,16 +330,24 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
                                 "Already Log In stage !",
                                 Toast.LENGTH_LONG).show();*/
 
-                        if (postEditText.length() == 0 && crop_file_path == null) {
-                            Toast.makeText(getActivity().getApplicationContext(),
-                                    "Please Type Report in Post Msg And Choose Image!",
-                                    Toast.LENGTH_LONG).show();
-                            progress_wheel.setVisibility(View.GONE);
-
-                        } else {
+                        if (new_post_et_title.length() != 0 || postEditText.length() != 0) {
                             progress_wheel.setVisibility(View.VISIBLE);
+                            progressbackground.setVisibility(View.VISIBLE);
 
                             uploadReportToParse();
+
+                        } else {
+
+                            progress_wheel.setVisibility(View.GONE);
+
+                            if (mstr_lang.equals(com.parse.utils.Utils.ENG_LANG)) {
+                                Utils.doToastEng(mContext, getResources().getString(R.string.upload_post_warning_eng));
+                            } else {
+                                Utils.doToastMM(mContext, getResources().getString(R.string.upload_post_warning_mm));
+
+                            }
+
+
                         }
 
 
@@ -367,22 +413,32 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
 
             postParse = new Post();
 
-            postParse.setContent(postEditText.getText().toString());
+
             //postParse.setContentTypes("Story");
 
             postParse.setUserId(user_obj_id);
             if (mstr_lang.equals(com.parse.utils.Utils.ENG_LANG)) {
 
-                postParse.setContent(postEditText.getText().toString());
-                postParse.setTitle(new_post_et_title.getText().toString());
+                if (postEditText.length() != 0) {
+                    postParse.setContent(postEditText.getText().toString());
+                }
+                if (new_post_et_title.length() != 0) {
+                    postParse.setTitle(new_post_et_title.getText().toString());
+                }
 
 
             } else {
-                postParse.setContentMm(postEditText.getText().toString());
-                postParse.setTitleMm(new_post_et_title.getText().toString());
+
+                if (postEditText.length() != 0) {
+                    postParse.setContentMm(postEditText.getText().toString());
+                }
+                if (new_post_et_title.length() != 0) {
+                    postParse.setTitleMm(new_post_et_title.getText().toString());
+                }
+
             }
 
-            postParse.setIsAllow(false);
+            postParse.setIsAllow(true);
 
             postParse.setLikes(0);
             postParse.setContentTypes("Story");
@@ -419,12 +475,15 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
                     }
                     if (e == null) {
                         progress_wheel.setVisibility(View.INVISIBLE);
-                        //progressbackground.setVisibility(View.INVISIBLE);
+                        progressbackground.setVisibility(View.INVISIBLE);
 
 
-                        Toast.makeText(getActivity().getApplicationContext(),
-                                "Post Upload Success  ",
-                                Toast.LENGTH_LONG).show();
+                        if (mstr_lang.equals(com.parse.utils.Utils.ENG_LANG)) {
+                            Utils.doToastEng(mContext, getResources().getString(R.string.upload_success_toast_eng));
+                        } else {
+                            Utils.doToastMM(mContext, getResources().getString(R.string.upload_success_toast_mm));
+
+                        }
                         Intent intent = new Intent(getActivity(), DrawerMainActivity.class);
 
 
@@ -432,7 +491,7 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
 
                     } else {
                         progress_wheel.setVisibility(View.INVISIBLE);
-                        //progressbackground.setVisibility(View.INVISIBLE);
+                        progressbackground.setVisibility(View.INVISIBLE);
                         Toast.makeText(getActivity().getApplicationContext(),
                                 "Error saving: " + e.getMessage(),
                                 Toast.LENGTH_LONG).show();
@@ -446,21 +505,31 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
 
             postParse = new Post();
 
-            postParse.setContent(postEditText.getText().toString());
-            //postParse.setContentTypes("");
 
             postParse.setUserId(user_obj_id);
             if (mstr_lang.equals(com.parse.utils.Utils.ENG_LANG)) {
 
-                postParse.setContent(postEditText.getText().toString());
-                postParse.setTitle(new_post_et_title.getText().toString());
-
+                if (postEditText.length() != 0) {
+                    postParse.setContent(postEditText.getText().toString());
+                }
+                if (new_post_et_title.length() != 0) {
+                    postParse.setTitle(new_post_et_title.getText().toString());
+                }
 
             } else {
-                postParse.setContentMm(postEditText.getText().toString());
-                postParse.setTitleMm(new_post_et_title.getText().toString());
+
+                if (postEditText.length() != 0) {
+                    postParse.setContentMm(postEditText.getText().toString());
+                }
+                if (new_post_et_title.length() != 0) {
+                    postParse.setTitleMm(new_post_et_title.getText().toString());
+                }
+
             }
-            postParse.setIsAllow(false);
+
+
+
+            postParse.setIsAllow(true);
 
             postParse.setLikes(0);
             postParse.setContentTypes("Story");
@@ -496,12 +565,15 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
                     }
                     if (e == null) {
                         progress_wheel.setVisibility(View.INVISIBLE);
-                        //progressbackground.setVisibility(View.INVISIBLE);
+                        progressbackground.setVisibility(View.INVISIBLE);
 
 
-                        Toast.makeText(getActivity().getApplicationContext(),
-                                "Post Success  ",
-                                Toast.LENGTH_LONG).show();
+                        if (mstr_lang.equals(com.parse.utils.Utils.ENG_LANG)) {
+                            Utils.doToastEng(mContext, getResources().getString(R.string.upload_success_toast_eng));
+                        } else {
+                            Utils.doToastMM(mContext, getResources().getString(R.string.upload_success_toast_mm));
+
+                        }
                         Intent intent = new Intent(getActivity(), DrawerMainActivity.class);
 
 
@@ -509,7 +581,7 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
 
                     } else {
                         progress_wheel.setVisibility(View.INVISIBLE);
-                        //progressbackground.setVisibility(View.INVISIBLE);
+                        progressbackground.setVisibility(View.INVISIBLE);
                         Toast.makeText(getActivity().getApplicationContext(),
                                 "Error saving: " + e.getMessage(),
                                 Toast.LENGTH_LONG).show();
@@ -837,7 +909,7 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
             int rotate = 0;
 
-            Log.e("checkifImageRotated","==>"+orientation);
+            Log.e("checkifImageRotated", "==>" + orientation);
             switch (orientation) {
                 case ExifInterface.ORIENTATION_ROTATE_270:
                     rotate = -90;
@@ -848,9 +920,6 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
                 case ExifInterface.ORIENTATION_ROTATE_90:
                     rotate = 90;
                     break;
-
-
-
 
 
             }

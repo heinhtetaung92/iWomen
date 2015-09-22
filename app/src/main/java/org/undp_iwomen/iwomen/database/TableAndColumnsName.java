@@ -13,6 +13,7 @@ public class TableAndColumnsName {
 
         String USER = "user";
         String POST = "post";
+        String USER_POST = "user_post";
         String COMMENT= "comment";
 
         String PROJECT_USER = "project_user";
@@ -68,6 +69,56 @@ public class TableAndColumnsName {
         String UPDATED_DATE = "updated_at";
 
         String CREATE_POST_TABLE = "Create Table If Not Exists " + TableNames.POST + "(" +
+                BaseColumns._ID + " Integer Primary Key Autoincrement," +
+
+                POST_OBJ_ID + " Text Not Null," +
+                POST_TITLE + " Text Not Null," +
+                POST_CONTENT + " Text Not Null," +
+                POST_CONTENT_MM+ " Text Not Null," +
+                POST_LIKES + " INTEGER Not Null," +
+                POST_IMG_PATH + " Text Not Null," +
+                POST_CONTENT_TYPES + " Text Not Null," +
+
+                POST_CONTENT_USER_ID + " Text Not Null," +
+                POST_CONTENT_USER_NAME + " Text Not Null," +
+                POST_CONTENT_USER_IMG_PATH + " Text Not Null," +
+
+                POST_CONTENT_VIDEO_ID + " Text Not Null," +
+                POST_CONTENT_SUGGEST_TEXT + " Text Not Null," +
+                POST_CONTENT_TITLE_MM + " Text Not Null," +
+
+                LIKE_STATUS + " Text Not Null," +
+                STATUS + " Text Not Null," +
+                CREATED_DATE + " DateTime Not Null," +
+                UPDATED_DATE + " DateTime Not Null,"+
+                " UNIQUE ("+ POST_OBJ_ID+") On Conflict Ignore);";
+
+    }
+    public interface UserPostUtil{
+
+        String POST_OBJ_ID ="post_obj_id";
+        String POST_TITLE ="post_title";
+        String POST_CONTENT ="content";
+        String POST_CONTENT_MM ="content_mm";
+        String POST_LIKES = "post_likes";
+        String POST_IMG_PATH = "post_img_path";
+        String POST_CONTENT_TYPES = "post_content_type";
+
+        String POST_CONTENT_USER_ID = "post_content_user_id";
+        String POST_CONTENT_USER_NAME = "post_content_user_name";
+        String POST_CONTENT_USER_IMG_PATH = "post_content_user_img_path";
+
+
+        String POST_CONTENT_VIDEO_ID = "video_id";
+        String POST_CONTENT_SUGGEST_TEXT= "post_content_suggest_text";
+        String POST_CONTENT_TITLE_MM = "post_title_mm";
+        String LIKE_STATUS = "like_status";
+
+        String STATUS = "status";
+        String CREATED_DATE ="created_at";
+        String UPDATED_DATE = "updated_at";
+
+        String CREATE_USER_POST_TABLE = "Create Table If Not Exists " + TableNames.USER_POST + "(" +
                 BaseColumns._ID + " Integer Primary Key Autoincrement," +
 
                 POST_OBJ_ID + " Text Not Null," +

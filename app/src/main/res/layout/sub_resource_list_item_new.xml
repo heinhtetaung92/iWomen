@@ -19,24 +19,40 @@
         android:orientation="horizontal"
         android:padding="10dp">
 
-        <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/sub_resouce_list_item_img"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_gravity="center"
-            android:gravity="center_horizontal"
-            android:scaleType="fitXY"
-            android:src="@drawable/blank_profile"
-            android:visibility="visible"
-            app:riv_border_color="#333333"
-            app:riv_border_width="0dip"
-            app:riv_corner_radius="30dip"
-            app:riv_mutate_background="true"
-            app:riv_oval="true"></com.makeramen.RoundedImageView>
+            <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/sub_resouce_list_item_img"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:scaleType="fitXY"
+                android:src="@drawable/blank_profile"
+                android:visibility="visible"
+                app:riv_border_color="#333333"
+                app:riv_border_width="0dip"
+                app:riv_corner_radius="30dip"
+                app:riv_mutate_background="true"
+                app:riv_oval="true"></com.makeramen.RoundedImageView>
+            <ProgressBar
+                android:id="@+id/sub_resouce_list_item_progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="left"
+                android:visibility="visible" />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -78,13 +94,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Change Theme" />
+                    android:text="Change Theme"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/sub_resouce_list_item_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Change Theme" />
+                    android:text="Change Theme"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!--<TextView

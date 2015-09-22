@@ -22,6 +22,7 @@ public class SqliteHelper extends SQLiteOpenHelper{
 
         sqLiteDatabase.execSQL(TableAndColumnsName.UserUtil.CREATE_USER_TABLE);
         sqLiteDatabase.execSQL(TableAndColumnsName.PostUtil.CREATE_POST_TABLE);
+        sqLiteDatabase.execSQL(TableAndColumnsName.UserPostUtil.CREATE_USER_POST_TABLE);
         sqLiteDatabase.execSQL(TableAndColumnsName.CommentUtil.CREATE_COMMENT_TABLE);
 
     }
@@ -32,6 +33,7 @@ public class SqliteHelper extends SQLiteOpenHelper{
 
         sqLiteDatabase.execSQL("Drop Table If Exists "+ TableAndColumnsName.TableNames.USER);
         sqLiteDatabase.execSQL("Drop Table If Exists "+ TableAndColumnsName.TableNames.POST);
+        sqLiteDatabase.execSQL("Drop Table If Exists "+ TableAndColumnsName.TableNames.USER_POST);
         sqLiteDatabase.execSQL("Drop Table If Exists "+ TableAndColumnsName.TableNames.COMMENT);
 
     }
