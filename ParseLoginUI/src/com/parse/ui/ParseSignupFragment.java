@@ -892,6 +892,7 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         img_upload_textview.setText(getResources().getString(R.string.com_parse_ui_parse_signup_img_upload_label_eng));
         usernameField.setHint(getResources().getString(R.string.com_parse_ui_name_input_hint));
         passwordField.setHint(getResources().getString(R.string.com_parse_ui_password_input_hint));
+        mMobileNoForNrcTextInputLayout.setHint(getResources().getString(R.string.com_parse_ui_ph_input_hint));
         confirmPasswordField.setHint(getResources().getString(R.string.com_parse_ui_confirm_password_input_hint));
         mTosTextView.setText(getResources().getString(R.string.i_agree));
         createAccountButton.setText(getResources().getString(R.string.com_parse_ui_create_account_button_label_eng));
@@ -912,6 +913,8 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         img_upload_textview.setText(getResources().getString(R.string.com_parse_ui_parse_signup_img_upload_label_mm));
         usernameField.setHint(getResources().getString(R.string.com_parse_ui_username_input_hint_mm));
         passwordField.setHint(getResources().getString(R.string.com_parse_ui_password_input_hint_mm));
+        mMobileNoForNrcTextInputLayout.setHint(getResources().getString(R.string.com_parse_ui_ph_input_hint_mm));
+
         confirmPasswordField.setHint(getResources().getString(R.string.com_parse_ui_confirm_password_input_hint_mm));
         mobileNoForNrcField.setHint(getResources().getString(R.string.com_parse_ui_ph_input_hint_mm));
         createAccountButton.setText(getResources().getString(R.string.com_parse_ui_create_account_button_label_mm));
