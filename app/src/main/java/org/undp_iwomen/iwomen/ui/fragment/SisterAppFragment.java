@@ -96,6 +96,8 @@ public class SisterAppFragment extends Fragment {
         sisterAppItemList.add(new SisterAppItem("Bindez","com.bindez.news",R.drawable.bindez));
         sisterAppItemList.add(new SisterAppItem("TED","com.ted.android",R.drawable.ted_logo));
         //https://play.google.com/store/apps/details?id=com.koekoe.mayonline.myan.app
+        ////https://play.google.com/store/apps/details?id=com.bindez.news
+        //https://play.google.com/store/apps/details?id=com.ted.android
 
 
 

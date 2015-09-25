@@ -74,6 +74,7 @@ import org.undp_iwomen.iwomen.model.parse.Comment;
 import org.undp_iwomen.iwomen.model.retrofit_api.CommentAPI;
 import org.undp_iwomen.iwomen.provider.IwomenProviderData;
 import org.undp_iwomen.iwomen.ui.adapter.CommentAdapter;
+import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 import org.undp_iwomen.iwomen.ui.widget.ProgressWheel;
 import org.undp_iwomen.iwomen.utils.Connection;
 import org.undp_iwomen.iwomen.utils.Utils;
@@ -91,9 +92,9 @@ import retrofit.client.Response;
 
 public class TLGUserPostDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView mPostTile;
+    CustomTextView mPostTile;
 
-    TextView post_content;
+    CustomTextView post_content;
     TextView post_like;
     TextView post_img_path;
     TextView post_content_type;
@@ -267,8 +268,8 @@ public class TLGUserPostDetailActivity extends AppCompatActivity implements View
 
 
         profile = (RoundedImageView) findViewById(R.id.postdetail_profilePic_rounded);
-        mPostTile = (TextView) findViewById(R.id.postdetail_title);
-        post_content = (TextView) findViewById(R.id.postdetail_content);
+        mPostTile = (CustomTextView) findViewById(R.id.postdetail_title);
+        post_content = (CustomTextView) findViewById(R.id.postdetail_content);
         post_content_user_name = (TextView) findViewById(R.id.postdetail_content_username);
         postdetail_username = (TextView) findViewById(R.id.postdetail_username);
         post_suggest_text = (TextView) findViewById(R.id.postdetail_suggest_title);
@@ -870,9 +871,9 @@ public class TLGUserPostDetailActivity extends AppCompatActivity implements View
             et_comment.setHint(R.string.post_detail_comment_mm);
 
             et_comment.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
-            mPostTile.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
+            /*mPostTile.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
             post_content.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
-            post_suggest_text.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
+            post_suggest_text.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));*/
         }
 
         if (like_status.equalsIgnoreCase("0")) {

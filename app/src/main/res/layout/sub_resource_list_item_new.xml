@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                     android:id="@+id/sub_resouce_list_item_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

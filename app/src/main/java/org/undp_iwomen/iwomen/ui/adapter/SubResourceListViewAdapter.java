@@ -14,6 +14,8 @@ import com.squareup.picasso.Picasso;
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.data.SubResourceItem;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
+import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
+import org.undp_iwomen.iwomen.utils.Utils;
 
 import java.util.List;
 
@@ -64,7 +66,7 @@ public class SubResourceListViewAdapter extends BaseAdapter
     public static class ViewHolder
     {
         public TextView txtAuthour;
-        public TextView txtName;
+        public CustomTextView txtName;
         public TextView txtTime;
         public RoundedImageView imgIcon;
         public ProgressBar progressBar;
@@ -87,7 +89,7 @@ public class SubResourceListViewAdapter extends BaseAdapter
 
 
             holder.txtAuthour = (TextView)view.findViewById(R.id.sub_resouce_list_item_author_name);
-            holder.txtName= (TextView)view.findViewById(R.id.sub_resouce_list_item_title);
+            holder.txtName= (CustomTextView)view.findViewById(R.id.sub_resouce_list_item_title);
             holder.txtTime= (TextView)view.findViewById(R.id.sub_resouce_list_item_time);
             holder.imgIcon = (RoundedImageView) view.findViewById(R.id.sub_resouce_list_item_img);
             holder.progressBar = (ProgressBar) view.findViewById(R.id.sub_resouce_list_item_progressBar);
@@ -114,12 +116,14 @@ public class SubResourceListViewAdapter extends BaseAdapter
             //holder.txtBodyText.setText(ResourceItems.get(position).getResourceText());
 
             holder.txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
-        }else{
+        }else if (mstr_lang.equals(Utils.MM_LANG)) {
             holder.txtName.setText(SubResourceItems.get(position).getSub_resource_title_mm());
             //holder.txtBodyText.setText(ResourceItems.get(position).getResourceText());
 
             holder.txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
 
+        }else {//FOR Default and Custom
+            holder.txtName.setText(SubResourceItems.get(position).getSub_resource_title_mm());
         }
 
         if(SubResourceItems.get(position).getIcon_img_url() != null && !SubResourceItems.get(position).getIcon_img_url().isEmpty()) {

@@ -192,7 +192,7 @@ public class GoogleMapFragment extends Fragment {//
                     , {16.78292, 96.153095}};*/
 
             //tlgList = new ArrayList<TlgProfileItem>();
-            TlgProfileAPI.getInstance().getService().getTlgProfile(new Callback<String>() {
+            TlgProfileAPI.getInstance().getService().getTlgProfileList(new Callback<String>() {
                 @Override
                 public void success(String s, Response response) {
                     try {

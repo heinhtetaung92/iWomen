@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +22,7 @@ import org.undp_iwomen.iwomen.data.SubResourceItem;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
 import org.undp_iwomen.iwomen.model.retrofit_api.SubResourceAPI;
 import org.undp_iwomen.iwomen.ui.adapter.SubResourceListViewAdapter;
+import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 import org.undp_iwomen.iwomen.utils.Connection;
 import org.undp_iwomen.iwomen.utils.StorageUtil;
 import org.undp_iwomen.iwomen.utils.Utils;
@@ -37,7 +37,7 @@ import retrofit.client.Response;
 public class SubResourceListActivity extends AppCompatActivity {
 
 
-    private TextView textViewTitle;
+    private CustomTextView textViewTitle;
     private ListView lv;
     private Context mContext;
 
@@ -69,7 +69,7 @@ public class SubResourceListActivity extends AppCompatActivity {
         storageUtil = StorageUtil.getInstance(mContext);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
-        textViewTitle = (TextView) toolbar.findViewById(R.id.title_action2);
+        textViewTitle = (CustomTextView) toolbar.findViewById(R.id.title_action2);
 
 
         if (toolbar != null) {
@@ -92,7 +92,7 @@ public class SubResourceListActivity extends AppCompatActivity {
 
         lv = (ListView) findViewById(R.id.sub_resource_list);
 
-        mstr_lang = sharePrefLanguageUtil.getString(com.parse.utils.Utils.PREF_SETTING_LANG, com.parse.utils.Utils.ENG_LANG);
+        mstr_lang = sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, com.parse.utils.Utils.ENG_LANG);
 
 
         SubResourceItems = (ArrayList<SubResourceItem>) storageUtil.ReadArrayListFromSD("SubResourceArrayList" + mResourceId);
@@ -107,11 +107,11 @@ public class SubResourceListActivity extends AppCompatActivity {
             getSubResourceDataFromSever(mResourceId);
         }
 
-        if (mstr_lang.equals(com.parse.utils.Utils.ENG_LANG)) {
+        if (mstr_lang.equals(Utils.ENG_LANG)) {
             textViewTitle.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
             textViewTitle.setText(mTitleEng);
-        } else {
-            textViewTitle.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+        } else {//FOR Default and Custom
+            //textViewTitle.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
             textViewTitle.setText(mTitleMM);
         }
 

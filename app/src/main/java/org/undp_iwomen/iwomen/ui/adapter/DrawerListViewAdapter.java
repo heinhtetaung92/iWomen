@@ -7,11 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import org.undp_iwomen.iwomen.CommonConfig;
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
+import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 
 /**
  * Created by khinsandar on 7/29/15.
@@ -62,7 +62,7 @@ public class DrawerListViewAdapter extends BaseAdapter {
 
     public static class ViewHolder {
 
-        public TextView txtName;
+        public CustomTextView txtName;
         public ImageView imgIcon;
         //public TextView txtViewTitle;
     }
@@ -77,7 +77,7 @@ public class DrawerListViewAdapter extends BaseAdapter {
         if (view == null) {
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.drawer_list_item, null);//gridview_row //fra_browse_gridview_item
-            holder.txtName = (TextView) view.findViewById(R.id.txt_item_name);
+            holder.txtName = (CustomTextView) view.findViewById(R.id.txt_item_name);
             holder.imgIcon = (ImageView) view.findViewById(R.id.icon);
 
 

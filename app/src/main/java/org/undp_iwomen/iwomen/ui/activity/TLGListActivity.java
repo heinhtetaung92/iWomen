@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +22,7 @@ import org.undp_iwomen.iwomen.data.TlgProfileItem;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
 import org.undp_iwomen.iwomen.model.retrofit_api.TlgProfileAPI;
 import org.undp_iwomen.iwomen.ui.adapter.TLGListViewAdapter;
+import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 import org.undp_iwomen.iwomen.utils.Connection;
 import org.undp_iwomen.iwomen.utils.StorageUtil;
 import org.undp_iwomen.iwomen.utils.Utils;
@@ -37,7 +37,7 @@ import retrofit.client.Response;
 public class TLGListActivity extends AppCompatActivity {
 
 
-    private TextView textViewTitle;
+    private CustomTextView textViewTitle;
     private ListView lv;
     private Context mContext;
 
@@ -69,7 +69,7 @@ public class TLGListActivity extends AppCompatActivity {
         storageUtil = StorageUtil.getInstance(mContext);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
-        textViewTitle = (TextView) toolbar.findViewById(R.id.title_action2);
+        textViewTitle = (CustomTextView) toolbar.findViewById(R.id.title_action2);
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -91,7 +91,7 @@ public class TLGListActivity extends AppCompatActivity {
             textViewTitle.setText(R.string.betogether_title_eng);
 
         } else {
-            textViewTitle.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+            //textViewTitle.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
             textViewTitle.setText(R.string.betogether_title_mm);
 
         }
@@ -145,7 +145,7 @@ public class TLGListActivity extends AppCompatActivity {
                     , {16.78292, 96.153095}};*/
 
             //tlgList = new ArrayList<TlgProfileItem>();
-            TlgProfileAPI.getInstance().getService().getTlgProfile(new Callback<String>() {
+            TlgProfileAPI.getInstance().getService().getTlgProfileList(new Callback<String>() {
                 @Override
                 public void success(String s, Response response) {
                     try {

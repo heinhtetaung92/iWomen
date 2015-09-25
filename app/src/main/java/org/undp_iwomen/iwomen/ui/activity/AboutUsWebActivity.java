@@ -9,12 +9,12 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.widget.TextView;
 
-import com.parse.utils.Utils;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
+import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
+import org.undp_iwomen.iwomen.utils.Utils;
 
 
 public class AboutUsWebActivity extends AppCompatActivity {
@@ -22,7 +22,7 @@ public class AboutUsWebActivity extends AppCompatActivity {
     private WebView mWebView;
     SharedPreferences sharePrefLanguageUtil;
     String strLang;
-    private TextView textViewTitle;
+    private CustomTextView textViewTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.getWindow().requestFeature(Window.FEATURE_PROGRESS);
@@ -39,7 +39,7 @@ public class AboutUsWebActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        textViewTitle = (TextView) toolbar.findViewById(R.id.title_action2);
+        textViewTitle = (CustomTextView) toolbar.findViewById(R.id.title_action2);
 
 
         mWebView = (WebView) findViewById(R.id.tos_webview);
@@ -63,7 +63,8 @@ public class AboutUsWebActivity extends AppCompatActivity {
             mWebView.loadUrl("file:///android_asset/tos/About-Us-Eng.html");
 
         }
-        else if(strLang.equals(Utils.MM_LANG)){
+        //FOR ALL ZAWGYI WILL SHOW
+        else {
 
             mWebView.loadUrl("file:///android_asset/tos/About-Us-MM.html");
 
@@ -89,8 +90,22 @@ public class AboutUsWebActivity extends AppCompatActivity {
                 }
                 else if(strLang.equals(Utils.MM_LANG)){
                     textViewTitle.setText(R.string.loading_mm);
-                    textViewTitle.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
-                    //setTitle(R.string.loading_mm);
+                    //textViewTitle.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
+
+
+
+
+                }else if(strLang.equals(Utils.MM_LANG_UNI)){
+
+                    textViewTitle.setText(R.string.loading_mm);
+
+
+
+
+                }else if(strLang.equals(Utils.MM_LANG_DEFAULT)){
+                    textViewTitle.setText(R.string.loading_mm);
+
+
 
 
 

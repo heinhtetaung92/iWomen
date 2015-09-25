@@ -19,11 +19,18 @@ import com.parse.utils.Utils;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
+import org.undp_iwomen.iwomen.model.retrofit_api.TlgProfileAPI;
+import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
+import org.undp_iwomen.iwomen.utils.Connection;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class TlgProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public TextView textViewTitle;
+    public CustomTextView textViewTitle;
     SharedPreferences sharePrefLanguageUtil;
     String strLang;
 
@@ -55,6 +62,7 @@ public class TlgProfileActivity extends AppCompatActivity implements View.OnClic
     String tlgName;
     String tlgAddress;
     String tlgId;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +73,7 @@ public class TlgProfileActivity extends AppCompatActivity implements View.OnClic
         tlgName = bundle.getString("TLGName");
         tlgId = bundle.getString("TLGID");
         tlgAddress = bundle.getString("TLGAddress");
-
+        mContext = getApplicationContext();
         Log.e("tlgId","===>" +tlgId +"///" + tlgName);
         sharePrefLanguageUtil = getSharedPreferences(Utils.PREF_SETTING, Context.MODE_PRIVATE);
 
@@ -75,7 +83,7 @@ public class TlgProfileActivity extends AppCompatActivity implements View.OnClic
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("");
         }
-        textViewTitle = (TextView) toolbar.findViewById(R.id.title_action2);
+        textViewTitle = (CustomTextView) toolbar.findViewById(R.id.title_action2);
         textViewTitle.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
         //textViewTitle.setText("Myanma\u0020Deals");//"MYANMARDEALS"
         textViewTitle.setText(R.string.app_name);
@@ -121,6 +129,7 @@ public class TlgProfileActivity extends AppCompatActivity implements View.OnClic
         }
 
 
+        getTLGDetailByIdFromSever();
 
     }
 
@@ -252,7 +261,7 @@ public class TlgProfileActivity extends AppCompatActivity implements View.OnClic
         }
 
 
-        textViewTitle.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
+        //textViewTitle.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
         txt_tlg_group_name.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
         txt_tlg_group_address.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
         txt_tlg_leader_name.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
@@ -268,6 +277,31 @@ public class TlgProfileActivity extends AppCompatActivity implements View.OnClic
         txt_tlg_key_skill_txt.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
 
 
+    }
+
+    private void getTLGDetailByIdFromSever() {
+        if (Connection.isOnline(mContext)) {
+            TlgProfileAPI.getInstance().getService().getTlgProfileDetailById("", new Callback<String>() {
+                @Override
+                public void success(String s, Response response) {
+
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+
+                }
+            });
+
+        }else {
+
+            if (strLang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)) {
+                org.undp_iwomen.iwomen.utils.Utils.doToastEng(mContext, "Internet Connection need!");
+            } else {
+
+                org.undp_iwomen.iwomen.utils.Utils.doToastMM(mContext, getResources().getString(R.string.open_internet_warning_mm));
+            }
+        }
     }
 
     @Override

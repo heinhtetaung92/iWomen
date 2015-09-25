@@ -23,6 +23,9 @@ public class Utils {
     public static String MM_LANG = "myanmar";
     public static String PREF_THEME = "themecolor";
 
+    public static String MM_LANG_UNI = "myanmar_uni";
+    public static String MM_LANG_DEFAULT = "myanmar_default";
+
     public static int THEME_BLUE = 11;
     public static int THEME_PINK = 12;
     public static int THEME_YELLOW = 13;

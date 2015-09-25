@@ -61,7 +61,7 @@
             android:layout_height="72dp"
             android:layout_gravity="center">
 
-            <TextView
+            <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                 android:id="@+id/resource_item_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.makeramen.RoundedImageView;
 import com.squareup.picasso.Picasso;
@@ -15,6 +14,7 @@ import com.squareup.picasso.Picasso;
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.data.ResourceItem;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
+import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class ResourcesListViewAdapter extends BaseAdapter
     public static class ViewHolder
     {
 
-        public TextView txtName;
+        public CustomTextView txtName;
         //public TextView txtBodyText;
         public RoundedImageView imgIcon;
         public ProgressBar progressBar;
@@ -78,7 +78,7 @@ public class ResourcesListViewAdapter extends BaseAdapter
         {
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.resources_list_item_view, null);//gridview_row //fra_browse_gridview_item
-            holder.txtName= (TextView)view.findViewById(R.id.resource_item_name);
+            holder.txtName= (CustomTextView)view.findViewById(R.id.resource_item_name);
             //holder.txtBodyText= (TextView)view.findViewById(R.id.resource_item_text);
             holder.imgIcon = (RoundedImageView) view.findViewById(R.id.resouce_list_item_img);
             holder.progressBar = (ProgressBar) view.findViewById(R.id.resouce_list_item_progressBar);
@@ -96,11 +96,11 @@ public class ResourcesListViewAdapter extends BaseAdapter
             //holder.txtBodyText.setText(ResourceItems.get(position).getResourceText());
 
             holder.txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
-        }else{
+        }else{//FOR ALL MM FONT
             holder.txtName.setText(ResourceItems.get(position).getResourceNameMM());
             //holder.txtBodyText.setText(ResourceItems.get(position).getResourceText());
 
-            holder.txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+            //holder.txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
 
         }
 

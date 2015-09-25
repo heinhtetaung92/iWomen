@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+        <org.undp_iwomen.iwomen.ui.widget.CustomTextView
             android:id="@+id/settings_language_setting_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,10 +32,22 @@
                 android:text="ENGLISH" />
 
             <RadioButton
-                android:id="@+id/settings_myanmar_language"
+                android:id="@+id/settings_mm_zawgyi_language"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MYANMAR" />
+                android:text="MYANMAR ZAWGYI" />
+            <RadioButton
+                android:id="@+id/settings_mm_unicode_language"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="MYANMAR UNICODE" />
+
+            <RadioButton
+                android:id="@+id/settings_mm_default_language"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DEFAULT" />
 
         </RadioGroup>
 
@@ -59,7 +71,7 @@
             android:layout_margin="16dp"
             android:background="#c3c3c3" />
 
-        <TextView
+        <org.undp_iwomen.iwomen.ui.widget.CustomTextView
             android:id="@+id/settings_changeTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

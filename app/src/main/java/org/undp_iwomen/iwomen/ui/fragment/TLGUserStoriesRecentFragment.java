@@ -128,7 +128,7 @@ public class TLGUserStoriesRecentFragment extends Fragment implements View.OnCli
 
         progress.setVisibility(View.VISIBLE);
 
-        mstr_lang = sharePrefLanguageUtil.getString(com.parse.utils.Utils.PREF_SETTING_LANG, com.parse.utils.Utils.ENG_LANG);
+        mstr_lang = sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
 
         //When very start this fragment open , need to check db data
         Cursor cursorMain = getActivity().getContentResolver().query(IwomenProviderData.UserPostProvider.CONTETN_URI, null, null, null, BaseColumns._ID + " DESC");

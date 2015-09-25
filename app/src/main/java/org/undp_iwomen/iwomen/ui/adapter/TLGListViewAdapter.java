@@ -126,34 +126,6 @@ public class TLGListViewAdapter extends BaseAdapter
         }
         holder.imgIcon.setImageResource(R.drawable.place_holder);
         holder.progressBar.setVisibility(View.GONE);
-        /*if(SubResourceItems.get(position).getIcon_img_url() != null && !SubResourceItems.get(position).getIcon_img_url().isEmpty()) {
-
-            try {
-
-                Picasso.with(mContext)
-                        .load(SubResourceItems.get(position).getIcon_img_url()) //"http://cheapandcheerfulshopper.com/wp-content/uploads/2013/08/shopping1257549438_1370386595.jpg" //deal.photo1
-                        .placeholder(R.drawable.blank_profile)
-                        .error(R.drawable.blank_profile)
-                        .into(holder.imgIcon, new ImageLoadedCallback(holder.progressBar) {
-                            @Override
-                            public void onSuccess() {
-                                if (this.progressBar != null) {
-                                    this.progressBar.setVisibility(View.GONE);
-                                } else {
-                                    this.progressBar.setVisibility(View.VISIBLE);
-                                }
-                            }
-
-                        });
-            } catch (OutOfMemoryError outOfMemoryError) {
-                outOfMemoryError.printStackTrace();
-            }
-        }else{
-            holder.progressBar.setVisibility(View.GONE);
-        }*/
-
-
-        //holder.imgIcon.setImageResource(listicon[position]);//listicon[position]
 
 
 

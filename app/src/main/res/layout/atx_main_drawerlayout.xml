@@ -197,7 +197,7 @@
                              />-->
 
 
-                        <TextView
+                        <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                             android:id="@+id/menu_sing_out"
                             style="?attr/spinnerDropDownItemStyle"
                             android:layout_width="wrap_content"
@@ -209,7 +209,7 @@
                             android:paddingLeft="16dip"
 
                             android:singleLine="true"
-                            android:text="Sing Out"
+                            android:text="Sign Out"
                             android:textColor="@color/white" />
                     </LinearLayout>
 

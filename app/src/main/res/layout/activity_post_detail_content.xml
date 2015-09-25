@@ -107,7 +107,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
+        <org.undp_iwomen.iwomen.ui.widget.CustomTextView
             android:id="@+id/postdetail_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
             android:layout_margin="18dp"
             android:textStyle="bold"/>
 
-        <TextView
+        <org.undp_iwomen.iwomen.ui.widget.CustomTextView
             android:id="@+id/postdetail_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

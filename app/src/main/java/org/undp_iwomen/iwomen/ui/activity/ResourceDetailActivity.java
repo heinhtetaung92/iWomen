@@ -18,14 +18,16 @@ import com.squareup.picasso.Picasso;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
+import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
+import org.undp_iwomen.iwomen.utils.Utils;
 
 
 public class ResourceDetailActivity extends AppCompatActivity {
 
 
-    private TextView textViewTitle;
-    private TextView txtName;
-    private TextView txtBody;
+    private CustomTextView textViewTitle;
+    private CustomTextView txtName;
+    private CustomTextView txtBody;
     private RoundedImageView profileImg;
     private ProgressBar profileProgressbar;
     private TextView profileName;
@@ -41,14 +43,14 @@ public class ResourceDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_sub_resource);
-        sharePrefLanguageUtil = getSharedPreferences(com.parse.utils.Utils.PREF_SETTING, Context.MODE_PRIVATE);
+        sharePrefLanguageUtil = getSharedPreferences(Utils.PREF_SETTING, Context.MODE_PRIVATE);
 
         mContext = getApplicationContext();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
 
 
-        textViewTitle = (TextView) toolbar.findViewById(R.id.title_action2);
+        textViewTitle = (CustomTextView) toolbar.findViewById(R.id.title_action2);
 
         if(toolbar != null){
             setSupportActionBar(toolbar);
@@ -69,8 +71,8 @@ public class ResourceDetailActivity extends AppCompatActivity {
 
 
 
-        txtName = (TextView)findViewById(R.id.tipdetail_title_name);
-        txtBody = (TextView)findViewById(R.id.tipdetail_body);
+        txtName = (CustomTextView)findViewById(R.id.tipdetail_title_name);
+        txtBody = (CustomTextView)findViewById(R.id.tipdetail_body);
         profileImg = (RoundedImageView)findViewById(R.id.tipdetail_profilePic_rounded);
         profileName = (TextView)findViewById(R.id.tipdetail_content_username);
         profileProgressbar = (ProgressBar)findViewById(R.id.tipdetail_progressBar_profile_item);
@@ -79,7 +81,7 @@ public class ResourceDetailActivity extends AppCompatActivity {
 
 
         strLang = sharePrefLanguageUtil.getString(com.parse.utils.Utils.PREF_SETTING_LANG, com.parse.utils.Utils.ENG_LANG);
-        if(strLang.equals(com.parse.utils.Utils.ENG_LANG)){
+        if(strLang.equals(Utils.ENG_LANG)){
 
             textViewTitle.setText(R.string.leadership_eng);
             txtBody.setText(mstrContentEng);
@@ -90,16 +92,17 @@ public class ResourceDetailActivity extends AppCompatActivity {
 
             txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
             txtBody.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
-        }else{
+        }else //FOR ALl MM FONT
+        {
             textViewTitle.setText(R.string.leadership_mm);
             txtBody.setText(mstrContentMm);
             txtName.setText(mstrTitleEng);
 
-            textViewTitle.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+            //textViewTitle.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
 
 
-            txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
-            txtBody.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+            //txtName.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+            //txtBody.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
 
         }
 

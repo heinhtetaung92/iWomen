@@ -53,7 +53,8 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="Feature Shop" />-->
-        <TextView
+        <org.undp_iwomen.iwomen.ui.widget.CustomTextView
+
             android:id="@+id/txt_item_name"
 
             android:layout_width="match_parent"

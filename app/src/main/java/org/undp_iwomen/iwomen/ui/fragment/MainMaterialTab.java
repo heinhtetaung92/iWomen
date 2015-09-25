@@ -29,6 +29,7 @@ import android.widget.TabHost;
 import com.astuetz.PagerSlidingTabStrip;
 
 import org.undp_iwomen.iwomen.R;
+import org.undp_iwomen.iwomen.model.FontConverter;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
 import org.undp_iwomen.iwomen.utils.Utils;
 
@@ -209,6 +210,17 @@ public class MainMaterialTab extends Fragment {
             adapter = new MyPagerAdapter(getChildFragmentManager(), fragments,mstr_lang);
             tabs.setTypeface(MyTypeFace.get(ctx,MyTypeFace.ZAWGYI),0);
 
+        }else if (mstr_lang.equals(Utils.MM_LANG_UNI)) {
+
+            adapter = new MyPagerAdapter(getChildFragmentManager(), fragments,mstr_lang);
+            //String text = FontConverter.zg12uni51(tabs..toString());
+            tabs.setTypeface(MyTypeFace.get(ctx,MyTypeFace.UNI),0);
+
+        }else if (mstr_lang.equals(Utils.MM_LANG_DEFAULT)) {
+
+            adapter = new MyPagerAdapter(getChildFragmentManager(), fragments,mstr_lang);
+            //tabs.setTypeface(MyTypeFace.get(ctx,MyTypeFace.ZAWGYI),0);
+
         }
 
 
@@ -224,7 +236,7 @@ public class MainMaterialTab extends Fragment {
 		 a tab can stand before it get erased by the ViewPager!*/
         //PagerTabStrip strip = (PagerTabStrip)findViewById(R.id.tabstrip);
         //strip.setTabIndicatorColor(Color.parseColor("#3c5a99"));
-        pager.setOffscreenPageLimit(3);
+        pager.setOffscreenPageLimit(2);
         //pager.setCurrentItem(1);
         //pager.setOnPageChangeListener();
         tabs.setTextColor(getResources().getColor(R.color.drawer_list_item_txt));
@@ -315,6 +327,13 @@ public class MainMaterialTab extends Fragment {
                 return TITLES[position];
 
             } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG)) {
+                return TITLES_MM[position];
+
+            }else if (mstr_lang.equals(Utils.MM_LANG_UNI)) {
+                String uni_text = FontConverter.zg12uni51(TITLES_MM[position]);
+                return uni_text;
+
+            }else if (mstr_lang.equals(Utils.MM_LANG_DEFAULT)) {
                 return TITLES_MM[position];
 
             }

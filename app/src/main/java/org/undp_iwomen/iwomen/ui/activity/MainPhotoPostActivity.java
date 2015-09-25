@@ -7,13 +7,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
-import com.parse.utils.Utils;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
 import org.undp_iwomen.iwomen.ui.fragment.MainPhotoPostFragment;
+import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
+import org.undp_iwomen.iwomen.utils.Utils;
 
 
 public class MainPhotoPostActivity extends ActionBarActivity {
@@ -21,7 +21,7 @@ public class MainPhotoPostActivity extends ActionBarActivity {
     String mstrReportType;
     SharedPreferences sharePrefLanguageUtil;
     String strLang;
-    private TextView textViewTitle;
+    private CustomTextView textViewTitle;
 
 
     @Override
@@ -40,7 +40,7 @@ public class MainPhotoPostActivity extends ActionBarActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        textViewTitle = (TextView) toolbar.findViewById(R.id.title_action2);
+        textViewTitle = (CustomTextView) toolbar.findViewById(R.id.title_action2);
 
         strLang = sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
 
@@ -53,9 +53,18 @@ public class MainPhotoPostActivity extends ActionBarActivity {
         }
         else if(strLang.equals(Utils.MM_LANG)){
             textViewTitle.setText(R.string.title_activity_new_post_mm);
-            textViewTitle.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
-            //setTitle(R.string.loading_mm);
+            //textViewTitle.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
 
+
+
+        }else if(strLang.equals(Utils.MM_LANG_UNI)){
+            textViewTitle.setText(R.string.title_activity_new_post_mm);
+
+
+
+
+        }else if(strLang.equals(Utils.MM_LANG_DEFAULT)){
+            textViewTitle.setText(R.string.title_activity_new_post_mm);
 
 
         }

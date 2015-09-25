@@ -17,6 +17,7 @@ public class MyTypeFace {
     public static final String NORMAL = "normal";
     public static final String ITALIC = "italic";
     public static final String ZAWGYI = "zawgyi";
+    public static final String UNI = "uni";
 
 
     private static Hashtable<String, Typeface> cache = new Hashtable<String, Typeface>();
@@ -46,6 +47,11 @@ public class MyTypeFace {
                     else if(assetPath.equals(ZAWGYI)) {
                         Typeface tf = Typeface.createFromAsset(c.getAssets(),
                                 "fonts/zawgyi.ttf");
+
+                        cache.put(assetPath, tf);
+                    }else if(assetPath.equals(UNI)) {
+                        Typeface tf = Typeface.createFromAsset(c.getAssets(),
+                                "fonts/mm3-multi-os.ttf");
 
                         cache.put(assetPath, tf);
                     }

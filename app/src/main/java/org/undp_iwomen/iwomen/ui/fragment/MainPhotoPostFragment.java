@@ -137,6 +137,9 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
     TextView txt_img_upload_icon;
     TextView txt_img_upload;
 
+    TextView txt_audio_upload;
+    TextView txt_video_upload;
+
     SharedPreferences sharePrefLanguageUtil;
     String mstr_lang;
     private Context mContext;
@@ -231,6 +234,10 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
         txt_camera = (TextView) rootView.findViewById(R.id.new_post_camera_img_camera);
         txt_camera_text= (TextView) rootView.findViewById(R.id.new_post_txt_camera_upload);
 
+        txt_audio_upload = (TextView)rootView.findViewById(R.id.new_post_txt_audio_upload);
+        txt_video_upload = (TextView)rootView.findViewById(R.id.new_post_txt_video_upload);
+
+
 
         txt_camera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,7 +280,7 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
         ly_title.setOnClickListener(new ShowKeyboardListener(getActivity()));
         ly_body.setOnClickListener(new ShowKeyboardListener(getActivity()));
 
-
+        new_post_et_title.setVisibility(View.GONE);
 
 
         progressbackground.bringToFront();
@@ -286,24 +293,31 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
         //Set Type Face and Chnage text
         if (mstr_lang.equals(com.parse.utils.Utils.ENG_LANG)) {
 
-            new_post_et_title.setHint(R.string.new_post_hint_title_eng);
-            postEditText.setHint(R.string.new_post_hint_body_eng);
+            //new_post_et_title.setHint(R.string.new_post_hint_title_eng);
+            postEditText.setHint(R.string.new_post_hint_title_eng);//new_post_hint_body_eng
             txt_img_upload.setText(R.string.new_post_upload_photo_eng);
             postButton.setText(R.string.new_post_eng);
             txt_camera_text.setText(R.string.new_post_take_photo_eng);
+            txt_audio_upload.setText(R.string.new_post_audio_eng);
+            txt_video_upload.setText(R.string.new_post_video_eng);
 
             new_post_et_title.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
             postEditText.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
             txt_img_upload.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
             txt_camera_text.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
             postButton.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
+            txt_video_upload.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
+            txt_audio_upload.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
 
         } else {
-            new_post_et_title.setHint(R.string.new_post_hint_title_mm);
-            postEditText.setHint(R.string.new_post_hint_body_mm);
+            //new_post_et_title.setHint(R.string.new_post_hint_title_mm);
+            postEditText.setHint(R.string.new_post_hint_title_mm);//new_post_hint_body_mm
             txt_img_upload.setText(R.string.new_post_upload_photo_mm);
             postButton.setText(R.string.new_post_mm);
             txt_camera_text.setText(R.string.new_post_take_photo_mm);
+
+            txt_audio_upload.setText(R.string.new_post_audio_mm);
+            txt_video_upload.setText(R.string.new_post_video_mm);
 
 
             new_post_et_title.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
@@ -311,6 +325,8 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
             txt_img_upload.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
             txt_camera_text.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
             postButton.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+            txt_video_upload.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+            txt_audio_upload.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
 
         }
 

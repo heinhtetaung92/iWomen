@@ -43,6 +43,7 @@ import org.undp_iwomen.iwomen.ui.fragment.ResourcesFragment;
 import org.undp_iwomen.iwomen.ui.fragment.SettingsFragment;
 import org.undp_iwomen.iwomen.ui.fragment.SisterAppFragment;
 import org.undp_iwomen.iwomen.ui.fragment.TLGUserStoriesRecentFragment;
+import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 import org.undp_iwomen.iwomen.ui.widget.ProfilePictureView;
 import org.undp_iwomen.iwomen.utils.SharePrefUtils;
 
@@ -65,9 +66,9 @@ public class DrawerMainActivity extends AppCompatActivity {
     private String[] DrawerListName;
     private int[] DrawerListIcon;
     private CharSequence mTitle;
-    public TextView textViewTitle;
+    public CustomTextView textViewTitle;
     private TextView txt_user_name;
-    private TextView txt_sing_out;
+    private CustomTextView txt_sing_out;
 
     private static final int LOGIN_REQUEST = 0;
     private ParseUser currentUser;
@@ -124,8 +125,8 @@ public class DrawerMainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         //toolbar.setLogo(R.drawable.ic_action_myanmadeals_app_icon);
-        textViewTitle = (TextView) toolbar.findViewById(R.id.title_action2);
-        textViewTitle.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
+        textViewTitle = (CustomTextView) toolbar.findViewById(R.id.title_action2);
+        //textViewTitle.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
         //textViewTitle.setText("Myanma\u0020Deals");//"MYANMARDEALS"
         textViewTitle.setText(R.string.app_name);
         //textViewTitle.setTypeface(faceBold);
@@ -136,7 +137,7 @@ public class DrawerMainActivity extends AppCompatActivity {
         userProfilePicture = (ProfilePictureView) findViewById(R.id.profilePicture);
         mDrawerList = (ListView) findViewById(R.id.left_drawer_lv);
         txt_user_name = (TextView) findViewById(R.id.txt_user_name);
-        txt_sing_out = (TextView) findViewById(R.id.menu_sing_out);
+        txt_sing_out = (CustomTextView) findViewById(R.id.menu_sing_out);
 
         drawer_profilePic_rounded = (RoundedImageView) findViewById(R.id.drawer_profilePic_rounded);
         drawer_progressBar_profile_item = (ProgressBar) findViewById(R.id.drawer_progressBar_profile_item);
@@ -326,10 +327,26 @@ public class DrawerMainActivity extends AppCompatActivity {
 
                 }
 
-               mstr_lang = sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
+                //TODO FONT DRAWERMAIN
+                mstr_lang = sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
 
-               LoadDrawerCustomData();
-               selectItem(0);
+                if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)) {
+
+                    txt_sing_out.setText("Sign Out");
+                    txt_sing_out.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.NORMAL));
+                } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG)) {
+                    txt_sing_out.setText("ထ\u103Cက္ရန္");
+                    txt_sing_out.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
+                } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG_UNI)) {
+                    txt_sing_out.setText("ထ\u103Cက္ရန္");
+                    //txt_sing_out.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
+                } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG_DEFAULT)) {
+                    txt_sing_out.setText("ထ\u103Cက္ရန္");
+                    //txt_sing_out.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
+                }
+
+                LoadDrawerCustomData();
+                selectItem(0);
                 drawerLayoutt.openDrawer(mDrawerLinearLayout);
 
             }
@@ -399,6 +416,7 @@ public class DrawerMainActivity extends AppCompatActivity {
         /*DrawerListName = new String[]
                 {"Stories",  "Resources", "Setting","AboutUs"};*/
 
+        //TODO FONT DRAWERMAIN
         if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)) {
             DrawerListName = new String[]
                     {"Be Inspired", "Be Knowledgeable", "Be Together", "Talk Together", "Setting", "AboutUs", "Sister Apps"};
@@ -416,6 +434,54 @@ public class DrawerMainActivity extends AppCompatActivity {
             mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
             setListViewHeightBasedOnChildren(mDrawerList);
         } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG)) {
+            DrawerListName = new String[]
+                    {"စိတ္ဓာတ္ခ\u103Cန္အား\u107Fဖည္ ့ရန္", "ဗဟုုသုုတရရန္", "ေပ\u102Bင္းစည္းေဆာင္ရ\u103Cက္ရန္", "ေမး\u107Fမန္းေဆ\u103Cးေ\u108F\u103Cးရန္", "\u107Fပင္ဆင္ရန္", "က\u103C\u103A\u108Fုုပ္တိုု ့အေ\u107Eကာင္း", " Sister Apps"};
+
+            DrawerListIcon = new int[]
+                    {R.drawable.ic_stories, R.drawable.ic_resources, R.drawable.be_together, R.drawable.ic_talk_together, R.drawable.ic_setting, R.drawable.about_us, R.drawable.sister_app};
+
+            // R.drawable.ic_community, R.drawable.ic_news
+
+            drawer_adapter = new DrawerListViewAdapter(getApplicationContext(), DrawerListName, DrawerListIcon, mstr_lang);//mCategoriesTitles
+                    /*mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                    R.layout.drawer_list_item, mPlanetTitles));*/
+            drawer_adapter.notifyDataSetChanged();
+            mDrawerList.setAdapter(drawer_adapter);
+            mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+            setListViewHeightBasedOnChildren(mDrawerList);
+        }else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG_UNI)) {
+            DrawerListName = new String[]
+                    {"စိတ္ဓာတ္ခ\u103Cန္အား\u107Fဖည္ ့ရန္", "ဗဟုုသုုတရရန္", "ေပ\u102Bင္းစည္းေဆာင္ရ\u103Cက္ရန္", "ေမး\u107Fမန္းေဆ\u103Cးေ\u108F\u103Cးရန္", "\u107Fပင္ဆင္ရန္", "က\u103C\u103A\u108Fုုပ္တိုု ့အေ\u107Eကာင္း", " Sister Apps"};
+
+            DrawerListIcon = new int[]
+                    {R.drawable.ic_stories, R.drawable.ic_resources, R.drawable.be_together, R.drawable.ic_talk_together, R.drawable.ic_setting, R.drawable.about_us, R.drawable.sister_app};
+
+            // R.drawable.ic_community, R.drawable.ic_news
+
+            drawer_adapter = new DrawerListViewAdapter(getApplicationContext(), DrawerListName, DrawerListIcon, mstr_lang);//mCategoriesTitles
+                    /*mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                    R.layout.drawer_list_item, mPlanetTitles));*/
+            drawer_adapter.notifyDataSetChanged();
+            mDrawerList.setAdapter(drawer_adapter);
+            mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+            setListViewHeightBasedOnChildren(mDrawerList);
+        }else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG_DEFAULT)) {
+            DrawerListName = new String[]
+                    {"စိတ္ဓာတ္ခ\u103Cန္အား\u107Fဖည္ ့ရန္", "ဗဟုုသုုတရရန္", "ေပ\u102Bင္းစည္းေဆာင္ရ\u103Cက္ရန္", "ေမး\u107Fမန္းေဆ\u103Cးေ\u108F\u103Cးရန္", "\u107Fပင္ဆင္ရန္", "က\u103C\u103A\u108Fုုပ္တိုု ့အေ\u107Eကာင္း", " Sister Apps"};
+
+            DrawerListIcon = new int[]
+                    {R.drawable.ic_stories, R.drawable.ic_resources, R.drawable.be_together, R.drawable.ic_talk_together, R.drawable.ic_setting, R.drawable.about_us, R.drawable.sister_app};
+
+            // R.drawable.ic_community, R.drawable.ic_news
+
+            drawer_adapter = new DrawerListViewAdapter(getApplicationContext(), DrawerListName, DrawerListIcon, mstr_lang);//mCategoriesTitles
+                    /*mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                    R.layout.drawer_list_item, mPlanetTitles));*/
+            drawer_adapter.notifyDataSetChanged();
+            mDrawerList.setAdapter(drawer_adapter);
+            mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+            setListViewHeightBasedOnChildren(mDrawerList);
+        }else {
             DrawerListName = new String[]
                     {"စိတ္ဓာတ္ခ\u103Cန္အား\u107Fဖည္ ့ရန္", "ဗဟုုသုုတရရန္", "ေပ\u102Bင္းစည္းေဆာင္ရ\u103Cက္ရန္", "ေမး\u107Fမန္းေဆ\u103Cးေ\u108F\u103Cးရန္", "\u107Fပင္ဆင္ရန္", "က\u103C\u103A\u108Fုုပ္တိုု ့အေ\u107Eကာင္း", " Sister Apps"};
 

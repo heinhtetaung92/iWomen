@@ -27,6 +27,9 @@ public class CommonConfig {
 
     public static final String TLGPROFILE_URL = "/classes/TlgProfile";
 
+    public static final String TLGPROFILE_DETAILBYID_URL = "/classes/TlgProfile/{id}";
+
+
 
     public static final String USER_POST_URL = "/classes/Post";
 

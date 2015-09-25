@@ -16,6 +16,7 @@ import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.data.FeedItem;
 import org.undp_iwomen.iwomen.model.ISO8601Utils;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
+import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 import org.undp_iwomen.iwomen.ui.widget.ResizableImageView;
 
 import java.text.ParseException;
@@ -50,14 +51,14 @@ public class TLGUserPostListRecyclerViewAdapter extends RecyclerView.Adapter<TLG
     */
 
     public class NamesViewHolder extends RecyclerView.ViewHolder {
-        TextView mPostTile;
+        CustomTextView mPostTile;
 
-        TextView post_content;
+        CustomTextView post_content;
         TextView post_like;
         TextView post_img_path;
         TextView post_content_type;
         TextView post_content_user_id;
-        TextView post_content_user_name;
+        CustomTextView post_content_user_name;
         TextView post_content_user_img_path;
         TextView post_timestamp;
         private ProgressBar feed_item_progressBar;
@@ -68,10 +69,10 @@ public class TLGUserPostListRecyclerViewAdapter extends RecyclerView.Adapter<TLG
 
         public NamesViewHolder(View itemView) {
             super(itemView);
-            mPostTile = (TextView) itemView.findViewById(R.id.txtPostTitle);
-            post_content = (TextView) itemView.findViewById(R.id.txtContent);
+            mPostTile = (CustomTextView) itemView.findViewById(R.id.txtPostTitle);
+            post_content = (CustomTextView) itemView.findViewById(R.id.txtContent);
 
-            post_content_user_name = (TextView) itemView.findViewById(R.id.name);
+            post_content_user_name = (CustomTextView) itemView.findViewById(R.id.name);
 
             post_timestamp = (TextView) itemView.findViewById(R.id.timestamp);
 
@@ -114,13 +115,13 @@ public class TLGUserPostListRecyclerViewAdapter extends RecyclerView.Adapter<TLG
             viewHolder.mPostTile.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
             viewHolder.post_content.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
 
-        } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG)) {
+        } else {//For All MM FONT
             viewHolder.mPostTile.setText(item.getPost_title_mm());
             viewHolder.post_content.setText(item.getPost_content_mm());
             viewHolder.post_content_user_name.setText(item.getPost_content_user_name());
 
-            viewHolder.mPostTile.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
-            viewHolder.post_content.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+            //viewHolder.mPostTile.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
+            //viewHolder.post_content.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
             //viewHolder.mPostTile.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
 
         }
@@ -143,11 +144,7 @@ public class TLGUserPostListRecyclerViewAdapter extends RecyclerView.Adapter<TLG
         }
 
 
-        viewHolder.post_content.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
 
-        //viewHolder.mCatNameTextView.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
-        //viewHolder.profilePictureView.setProfileId(item.get());
-        // Feed image
         if (item.getPost_content_user_img_path() != null && !item.getPost_content_user_img_path().isEmpty()) {
             try {
                 viewHolder.profilePictureView.setVisibility(View.GONE);

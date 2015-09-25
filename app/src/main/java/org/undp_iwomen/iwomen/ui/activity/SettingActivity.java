@@ -1,17 +1,18 @@
 package org.undp_iwomen.iwomen.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.google.android.gms.analytics.Tracker;
 
 import org.undp_iwomen.iwomen.R;
-import org.undp_iwomen.iwomen.model.MyTypeFace;
 import org.undp_iwomen.iwomen.ui.fragment.SettingsFragment;
+import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 import org.undp_iwomen.iwomen.utils.Utils;
 
 
@@ -19,14 +20,15 @@ public class SettingActivity extends AppCompatActivity {
     private Toolbar mActionBarToolbar;
     private Tracker mTracker;
     private Toolbar toolbar;
-    public TextView textViewTitle;
+    public CustomTextView textViewTitle;
+    SharedPreferences sharePrefLanguageUtil;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Utils.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_fragment);
-
-
+        sharePrefLanguageUtil = getSharedPreferences(Utils.PREF_SETTING, Context.MODE_PRIVATE);
+        String lang = sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
         //setActionBarToolbar();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
@@ -35,10 +37,20 @@ public class SettingActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        textViewTitle = (TextView) toolbar.findViewById(R.id.title_action2);
-        textViewTitle.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
+        textViewTitle = (CustomTextView) toolbar.findViewById(R.id.title_action2);
+        //textViewTitle.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
         //textViewTitle.setText("Myanma\u0020Deals");//"MYANMARDEALS"
-        textViewTitle.setText(R.string.action_settings);
+        if(lang.equals(Utils.ENG_LANG)){
+            textViewTitle.setText(R.string.action_settings);
+        }
+        else if(lang.equals(Utils.MM_LANG)){
+            textViewTitle.setText(R.string.action_settings_mm);
+        }else if(lang.equals(Utils.MM_LANG_UNI)){
+            textViewTitle.setText(R.string.action_settings_mm);
+        }else if(lang.equals(Utils.MM_LANG_DEFAULT)){
+            textViewTitle.setText(R.string.action_settings_mm);
+        }
+
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()

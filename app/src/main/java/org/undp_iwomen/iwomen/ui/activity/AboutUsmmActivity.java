@@ -6,10 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
+import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 import org.undp_iwomen.iwomen.ui.widget.ResizableImageView;
 
 
@@ -17,7 +17,7 @@ public class AboutUsmmActivity extends AppCompatActivity {
 
 
     private ResizableImageView img_about_us;
-    private TextView textViewTitle;
+    private CustomTextView textViewTitle;
     private Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class AboutUsmmActivity extends AppCompatActivity {
         mContext = getApplicationContext();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
-        textViewTitle = (TextView) toolbar.findViewById(R.id.title_action2);
+        textViewTitle = (CustomTextView) toolbar.findViewById(R.id.title_action2);
 
         textViewTitle.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
         textViewTitle.setText(R.string.about_us_mm);
