@@ -40,6 +40,19 @@
             android:selectAllOnFocus="true"
             android:textColor="@color/body_text_1"/>
     </android.support.design.widget.TextInputLayout>
+    <CheckBox
+        android:id="@+id/login_showpwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_password_input"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:text="Show Password"
+        android:textColor="@color/theme_primary"
+        android:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/parse_buttons"

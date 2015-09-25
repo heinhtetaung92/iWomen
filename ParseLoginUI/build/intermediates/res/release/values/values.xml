@@ -565,6 +565,8 @@
     <string name="com_parse_ui_progress_dialog_text">Loading...</string>
     <string name="com_parse_ui_reenter_password_toast">Please re-enter your password</string>
     <string name="com_parse_ui_reenter_password_toast_mm">ေက်းဇူးၿပဳ ၍ လွ်ိဳ ့၀ွက္ စာလံုုးေနာက္တစ္ၾကိမ္ၿပန္ရိုုက္ပါ</string>
+    <string name="com_parse_ui_show_pwd_eng">Show Password</string>
+    <string name="com_parse_ui_show_pwd_mm">လွ်ိဳ ့၀ွက္ စာလံုုးစစ္ေဆး ၾကည္ ့မည္။</string>
     <string name="com_parse_ui_signup_failed_unknown_toast">Could not sign up, please try again later</string>
     <string name="com_parse_ui_signup_failed_unknown_toast_mm">မွတ္ပံုုတင္အ ခ်က္အလက္ တစ္ခုုခုု မွားယြင္းေနသည္ေနာက္တစ္ၾကိမ္ၿပန္လည္စစ္ေဆး ၀င္ရန္ၾကိဳးစားပါ။</string>
     <string name="com_parse_ui_twitter_login_button_label">Log in with Twitter</string>

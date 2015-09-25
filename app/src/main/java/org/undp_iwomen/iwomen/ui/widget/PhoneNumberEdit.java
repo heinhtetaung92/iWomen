@@ -11,7 +11,8 @@ import android.util.AttributeSet;
  */
 public class PhoneNumberEdit extends AppCompatEditText {
 
-    private String mPrefix = "+95 9"; // can be hardcoded for demo purposes
+    //private String mPrefix = "+95 9"; // can be hardcoded for demo purposes
+    private String mPrefix = "";
     private Rect mPrefixRect = new Rect(); // actual prefix size
 
     public PhoneNumberEdit(Context context, AttributeSet attrs) {

@@ -26,11 +26,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -78,6 +80,8 @@ public class ParseLoginFragment extends ParseLoginFragmentBase implements Compou
 
     private ParseLoginConfig config;
 
+    private CheckBox chkShowPwd;
+
     /*
      * ****Font Setting*********/
     RadioButton rd_lang_en, rd_lang_mm;
@@ -108,6 +112,7 @@ public class ParseLoginFragment extends ParseLoginFragmentBase implements Compou
         parseLogin = v.findViewById(R.id.parse_login);
         usernameField = (EditText) v.findViewById(R.id.login_username_input);
         passwordField = (EditText) v.findViewById(R.id.login_password_input);
+        chkShowPwd = (CheckBox) v.findViewById(R.id.login_showpwd);
         loginMotoTextView = (TextView) v.findViewById(R.id.login_moto_textview);
         parseLoginHelpButton = (Button) v.findViewById(R.id.parse_login_help);
         parseLoginButton = (Button) v.findViewById(R.id.parse_login_button);
@@ -115,6 +120,14 @@ public class ParseLoginFragment extends ParseLoginFragmentBase implements Compou
         facebookLoginButton = (Button) v.findViewById(R.id.facebook_login);
         twitterLoginButton = (Button) v.findViewById(R.id.twitter_login);
 
+        /******Show Pwd Chk*********/
+        chkShowPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                passwordField.setInputType(!isChecked ? InputType.TYPE_TEXT_VARIATION_PASSWORD : InputType.TYPE_CLASS_TEXT);
+                passwordField.setTransformationMethod(!isChecked ? PasswordTransformationMethod.getInstance() : null);
+            }
+        });
         /******Font Setting*********/
         sharePref = getActivity().getSharedPreferences(Utils.PREF_SETTING, Context.MODE_PRIVATE);
         rd_lang_en = (RadioButton) v.findViewById(R.id.settings_english_language);
@@ -511,7 +524,10 @@ public class ParseLoginFragment extends ParseLoginFragmentBase implements Compou
 
         parseSignupButton.setText(getResources().getString(R.string.com_parse_ui_create_account_button_label));
 
+        chkShowPwd.setText(getResources().getString(R.string.com_parse_ui_show_pwd_eng));
+
         //Set Type Face
+        chkShowPwd.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
         usernameField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
         passwordField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
         parseLoginButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
@@ -529,7 +545,10 @@ public class ParseLoginFragment extends ParseLoginFragmentBase implements Compou
 
         parseSignupButton.setText(getResources().getString(R.string.com_parse_ui_parse_signup_button_label_mm));
 
+        chkShowPwd.setText(getResources().getString(R.string.com_parse_ui_show_pwd_mm));
         //Set Type Face
+        chkShowPwd.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+
         usernameField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
         passwordField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
         parseLoginButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
