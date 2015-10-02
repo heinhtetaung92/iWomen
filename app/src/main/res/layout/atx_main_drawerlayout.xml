@@ -38,6 +38,7 @@
                 android:paddingLeft="16dip">
 
                 <LinearLayout
+                    android:id="@+id/menu_profile_area_ly"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <FrameLayout
@@ -49,7 +50,7 @@
                             android:layout_width="@dimen/feed_item_profile_pic"
                             android:layout_height="@dimen/feed_item_profile_pic"
                             android:scaleType="fitXY"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             android:src="@drawable/bonsai"></org.undp_iwomen.iwomen.ui.widget.ProfilePictureView>
 
                         <com.makeramen.RoundedImageView
@@ -68,7 +69,7 @@
                             app:riv_corner_radius="30dip"
                             app:riv_mutate_background="true"
                             app:riv_oval="true"
-                            android:visibility="gone"></com.makeramen.RoundedImageView>
+                            android:visibility="visible"></com.makeramen.RoundedImageView>
                         <ProgressBar
                             android:id="@+id/drawer_progressBar_profile_item"
                             style="?android:attr/progressBarStyle"
@@ -79,7 +80,7 @@
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
                             android:layout_gravity="left"
-                            android:visibility="visible" />
+                            android:visibility="gone" />
                     </FrameLayout>
 
                     <!--<org.undp_iwomen.iwomen.ui.widget.ProfilePictureView
@@ -169,7 +170,7 @@
                             android:padding="2dip"
                             android:paddingLeft="16dip"
                             android:singleLine="true"
-                            android:text="1 Post"
+                            android:text="Post"
                             android:textColor="@color/white" />
                     </LinearLayout>
 

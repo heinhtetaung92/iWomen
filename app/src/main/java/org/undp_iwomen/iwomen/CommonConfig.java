@@ -33,9 +33,22 @@ public class CommonConfig {
 
     public static final String USER_POST_URL = "/classes/Post";
 
+    public static final String USER_POST_DETAIL_BYID_URL = "/classes/Post/{id}";
+
+    public static final String IWOMEN_POST_URL = "/classes/IwomenPost";
+
+    public static final String IWOMEN_POST_DETAIL_BYID_URL = "/classes/IwomenPost/{id}";
+
     public static final String RESOURCE_URL = "/classes/Resources";
 
+
+
     public static final String SUB_RESOURCE_URL = "/classes/SubResourceDetail";
+
+    public static final String AUTHOR_DETAIL_BYID_URL = "/classes/Author/{id}";
+
+
+    public static final String STICKERS_URL = "/classes/StickerStore";
 
 
     public static final String SHARE_URL ="https://www.facebook.com/testingmobileapp";

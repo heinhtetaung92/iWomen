@@ -156,6 +156,25 @@
                     android:selectAllOnFocus="true" />
 
             </android.support.design.widget.TextInputLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/signup_lbl_township"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Township"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    />
+
+                <Spinner
+                    android:id="@+id/signup_spn_township"
+                    style="@style/Spinner.TownshipInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:text="@string/com_parse_ui_signup_township_lbl_eng"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -180,6 +199,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
+
                 android:paddingBottom="30dp"
                 android:paddingTop="40dp">
 

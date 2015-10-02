@@ -41,6 +41,9 @@ public class TlgProfileItem implements Serializable {
     private String updated_at;
 
 
+    public TlgProfileItem(){
+
+    }
 
 
     public TlgProfileItem(String objectId, String tlg_group_name, String tlg_group_address, String tlg_group_lat_address, String tlg_group_lng_address){

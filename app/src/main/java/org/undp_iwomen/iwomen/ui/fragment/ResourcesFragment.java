@@ -112,28 +112,7 @@ public class ResourcesFragment extends Fragment {
         }
 
 
-        /*if (ResourceItems.size() > 0) {
-            //getResourceDataFromSever();
 
-
-            adapter = new ResourcesListViewAdapter(getActivity().getApplicationContext(), ResourceItems,mstr_lang);
-            lvResouces.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-
-        } else {
-            getResourceDataFromSever();
-
-            *//*mProgressDialog.dismiss();
-
-            if (mstr_lang.equals(Utils.ENG_LANG)) {
-                Utils.doToastEng(mContext, "Internet Connection need!");
-            } else {
-
-                Utils.doToastMM(mContext, getActivity().getResources().getString(R.string.open_internet_warning_mm));
-            }*//*
-
-
-        }*/
 
 
         lvResouces.setOnItemClickListener(new AdapterView.OnItemClickListener() {

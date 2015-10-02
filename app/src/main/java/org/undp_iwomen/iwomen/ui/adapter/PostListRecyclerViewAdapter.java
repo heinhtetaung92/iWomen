@@ -14,11 +14,13 @@ import com.squareup.picasso.Picasso;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.data.FeedItem;
+import org.undp_iwomen.iwomen.model.ISO8601Utils;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
 import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 import org.undp_iwomen.iwomen.ui.widget.ResizableImageView;
 
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -126,11 +128,18 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
 
 
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+        ParsePosition pp = new ParsePosition(0);
+        try {
+            Date timedate = ISO8601Utils.parse(item.getCreated_at().toString(), pp);
 
-        SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd hh:mm:ss Z yyyy", Locale.US);
+            viewHolder.post_timestamp.setText(sdf.format(timedate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
+        /*
+        //SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd hh:mm:ss Z yyyy", Locale.US);
         //2015-09-16T13:46:34.875Z
-
         //Sun Jun 22 18:32:00 GMT+06:30 2014
         //Log.e("Stories Post Adapter==","Date===>" + item.getCreated_at());
         try {
@@ -139,7 +148,7 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
 
         } catch (ParseException e) {
             e.printStackTrace();
-        }
+        }*/
 
        
         if (item.getPost_content_user_img_path() != null && !item.getPost_content_user_img_path().isEmpty()) {

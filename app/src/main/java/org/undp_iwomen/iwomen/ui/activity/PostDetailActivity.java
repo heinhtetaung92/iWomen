@@ -72,6 +72,7 @@ import org.undp_iwomen.iwomen.model.TextWatcherAdapter;
 import org.undp_iwomen.iwomen.model.TimeDiff;
 import org.undp_iwomen.iwomen.model.parse.Comment;
 import org.undp_iwomen.iwomen.model.retrofit_api.CommentAPI;
+import org.undp_iwomen.iwomen.model.retrofit_api.UserPostAPI;
 import org.undp_iwomen.iwomen.provider.IwomenProviderData;
 import org.undp_iwomen.iwomen.ui.adapter.CommentAdapter;
 import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
@@ -80,6 +81,7 @@ import org.undp_iwomen.iwomen.utils.Connection;
 import org.undp_iwomen.iwomen.utils.Utils;
 
 import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -100,6 +102,10 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     TextView post_content_type;
     TextView post_content_user_id;
     TextView post_content_user_name;
+    TextView post_content_user_role;
+    TextView post_content_user_more_id;
+    TextView post_content_posted_date;
+    LinearLayout post_content_user_role_ly;
     TextView post_content_user_img_path;
     TextView post_timestamp;
     TextView postdetail_username;
@@ -116,7 +122,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     //private Toolbar toolbar;
     private LinearLayout ly_likes_button;
     private ImageView img_like;
-    private TextView txt_like_count;
+    private TextView txt_like_count, txt_cmd_count;
     private String postId, like_status;
     //private TextView txt_simile_emoji_icon;
     private EmojiconEditText et_comment;
@@ -128,6 +134,8 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     private ImageView img_player;
     private TextView txt_player;
     private TextView txt_download;
+
+    private CustomTextView txt_lbl_like_post, txt_lbl_share_post;
 
     private LinearLayout ly_postdetail_share_button;
     private LinearLayout ly_postdetail_download;
@@ -175,6 +183,8 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     private ProgressWheel progressWheel;
     private String mstr_lang;
     private ImageView video_icon;
+    String cmd_count = "0";
+    String authorID;
     private FacebookCallback<Sharer.Result> shareCallback = new FacebookCallback<Sharer.Result>() {
         @Override
         public void onCancel() {
@@ -271,6 +281,12 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         mPostTile = (CustomTextView) findViewById(R.id.postdetail_title);
         post_content = (CustomTextView) findViewById(R.id.postdetail_content);
         post_content_user_name = (TextView) findViewById(R.id.postdetail_content_username);
+        post_content_posted_date = (TextView) findViewById(R.id.postdetail_content_posted_date);
+        post_content_user_role = (TextView) findViewById(R.id.postdetail_content_user_role);
+        post_content_user_more_id = (TextView) findViewById(R.id.postdetail_content_user_role_more);
+        post_content_user_role_ly = (LinearLayout) findViewById(R.id.postdetail_content_role_more_ly);
+
+
         postdetail_username = (TextView) findViewById(R.id.postdetail_username);
         post_suggest_text = (TextView) findViewById(R.id.postdetail_suggest_title);
 
@@ -283,6 +299,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         ly_likes_button = (LinearLayout) findViewById(R.id.postdetail_like_button);
         img_like = (ImageView) findViewById(R.id.postdetail_like_img);
         txt_like_count = (TextView) findViewById(R.id.postdetail_like_count);
+        txt_cmd_count = (TextView) findViewById(R.id.postdetail_cmd_count);
 
         //txt_simile_emoji_icon = (TextView) findViewById(R.id.postdetail_smile_img_upload);
         et_comment = (EmojiconEditText) findViewById(R.id.postdetail_et_comment_upload);
@@ -305,8 +322,12 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         progressWheel = (ProgressWheel) findViewById(R.id.postdetail_progress_wheel_comment);
         video_icon = (ImageView) findViewById(R.id.postdeail_video_icon);
 
+        txt_lbl_like_post = (CustomTextView) findViewById(R.id.postdetail_like_post_lbl);
+        txt_lbl_share_post = (CustomTextView) findViewById(R.id.postdetail_share_post_lbl);
+
 
         if (postId != null) {
+            //TODO  showing Local data , before update from server by Id
             getLocalPostDetail(postId);
 
         } else {
@@ -376,6 +397,12 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
 
         getTestCommentList();
+
+
+        //TODO after showing Local data , update from server by Id
+        updatePostDetailServerStatus();
+
+        //getCommentCount(postId);// + " comments";
 
 
     }
@@ -749,6 +776,8 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
             FeedItem item = getPostById(postId);
             Log.i("Item", item.getPost_content());
+
+            //TODO set Local data
             setItem(item);
 
             //lost_data_list, lost_data_id_list, lost_data_obj_id_list ,lost_data_img_url_list
@@ -775,10 +804,41 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         }
         post_content_user_name.setText(item.getPost_content_user_name());
 
+        post_content_user_role.setText(item.getPost_content_author_role());
+
+        authorID = item.getPost_content_author_id();
+
+        if (authorID != null) {
+
+
+            post_content_user_more_id.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+
+                    Intent intent = new Intent(mContext, AuthorDetailActivity.class);
+
+                    intent.putExtra("AuthorId", authorID);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(intent);
+                }
+            });
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+        ParsePosition pp = new ParsePosition(0);
+        try {
+            Date timedate = ISO8601Utils.parse(item.getCreated_at().toString(), pp);
+
+            post_content_posted_date.setText("Posted on " + sdf.format(timedate));
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
 
         mstrPostType = item.getPost_content_type();
         if (strLang.equals(com.parse.utils.Utils.ENG_LANG)) {
-            postdetail_username.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
+            postdetail_username.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.NORMAL));
 
 
             if (item.getPost_content_type().equalsIgnoreCase("Letter")) {
@@ -822,6 +882,8 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             mPostTile.setText(item.getPost_title());
             post_content.setText(item.getPost_content());
             et_comment.setHint(R.string.post_detail_comment_eng);
+            txt_lbl_like_post.setText(R.string.post_detail_like_post_eng);
+            txt_lbl_share_post.setText(R.string.post_detail_share_post_eng);
 
             et_comment.setTypeface(MyTypeFace.get(this, MyTypeFace.NORMAL));
             mPostTile.setTypeface(MyTypeFace.get(this, MyTypeFace.NORMAL));
@@ -872,6 +934,8 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
             et_comment.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
 
+            txt_lbl_like_post.setText(R.string.post_detail_like_post_mm);
+            txt_lbl_share_post.setText(R.string.post_detail_share_post_mm);
             /*et_comment.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
             mPostTile.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
             post_content.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
@@ -974,6 +1038,10 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             String post_content_mm = "";
             String post_content_title_mm = "";
 
+            //TODO TableColumnUpdate 8
+            String author_id;
+            String author_role;
+
             String like_status = "";
             String status = "";
             String created_at = "";
@@ -997,6 +1065,9 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                     created_at = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREATED_DATE));
                     updated_at = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.UPDATED_DATE));
 
+                    //TODO TableColumnUpdate 9
+                    author_id = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ID));
+                    author_role = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE));
                     video_id = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID));
                     post_content_suggest_text = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_SUGGEST_TEXT));
                     post_content_mm = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_MM));
@@ -1017,6 +1088,10 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                     item.setPost_content_mm(post_content_mm);
                     item.setPost_title_mm(post_content_title_mm);
 
+                    //TODO TableColumnUpdate 10
+                    item.setPost_content_author_id(author_id);
+                    item.setPost_content_author_role(author_role);
+
                     item.setPost_like_status(like_status);
 
                     item.setStatus(status);
@@ -1027,7 +1102,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             }
 
         } else {
-            Log.e("LostListFragment", "Activity Null Case");
+            Log.e("PostDetail", "Activity Null Case");
         }
 
         return item;
@@ -1079,12 +1154,12 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                             HashMap<String, String> _param = new HashMap<>();
                             _param.put("objectId", postId);
 
-                            ParseCloud.callFunctionInBackground("Likes_increment", _param, new FunctionCallback<Integer>() {
+                            ParseCloud.callFunctionInBackground("IWomen_Likes_increment", _param, new FunctionCallback<Integer>() {
                                 @Override
                                 public void done(Integer like_count, ParseException e) {
 
                                     if (e == null) {
-                                        //Log.e("Cloud Increment", "===>" + like_count);
+                                        Log.e("Cloud Increment", "===>" + like_count);
                                         txt_like_count.setText(like_count + " likes");
                                         //TODO call updatePost
                                         updatePostLikeStatus(postId, like_count);
@@ -1309,6 +1384,274 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         getContentResolver().update(IwomenProviderData.PostProvider.CONTETN_URI, cv, selections, selectionargs);
 
         //Log.e("Update Post like status", "====>" + postId);
+
+    }
+
+    //TODO this is update everytime for server reply
+    private void updatePostDetailServerStatus() {
+
+        if (Connection.isOnline(getApplicationContext())) {
+
+            UserPostAPI.getInstance().getService().getIwomenPostDetailById(postId, new Callback<String>() {
+                @Override
+                public void success(String s, Response response) {
+
+                    try {
+                        JSONObject each_object = new JSONObject(s);
+
+                                /*if (each_object.isNull("comment_contents")) {
+                                    comment = "null";
+                                } else {
+                                    comment = each_object.getString("comment_contents");
+                                }*/
+
+                        final ContentValues cv = new ContentValues();
+                        /*if (!each_object.isNull("objectId")) {
+                            cv.put(TableAndColumnsName.PostUtil.POST_OBJ_ID, each_object.getString("objectId"));
+
+
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.POST_OBJ_ID, "");
+
+
+                        }*/
+                        if (!each_object.isNull("title")) {
+
+                            cv.put(TableAndColumnsName.PostUtil.POST_TITLE, each_object.getString("title"));
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.POST_TITLE, "");
+
+                        }
+
+                        if (!each_object.isNull("content")) {
+
+                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, each_object.getString("content"));
+
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, "");
+
+                        }
+                        cv.put(TableAndColumnsName.PostUtil.POST_LIKES, each_object.getInt("likes"));
+
+                        if (!each_object.isNull("image")) {
+
+                            JSONObject imgjsonObject = each_object.getJSONObject("image");
+                            if (!imgjsonObject.isNull("url")) {
+                                cv.put(TableAndColumnsName.PostUtil.POST_IMG_PATH, imgjsonObject.getString("url"));
+                            } else {
+                                cv.put(TableAndColumnsName.PostUtil.POST_IMG_PATH, "");
+
+                            }
+
+
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.POST_IMG_PATH, "");
+
+                        }
+                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TYPES, each_object.getString("contentType"));//
+
+                        if (!each_object.isNull("userId")) {
+
+                            JSONObject userjsonObject = each_object.getJSONObject("userId");
+                            if (!userjsonObject.isNull("objectId")) {
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, userjsonObject.getString("objectId"));
+                            } else {
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, "");
+
+                            }
+
+
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, "");
+
+                        }
+
+
+                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_NAME, each_object.getString("postUploadName"));
+
+
+                        if (!each_object.isNull("postUploadPersonImg")) {
+
+                            JSONObject postimgjsonObject = each_object.getJSONObject("postUploadPersonImg");
+                            if (!postimgjsonObject.isNull("url")) {
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, postimgjsonObject.getString("url"));
+                            } else {
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                            }
+
+
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                        }
+
+                        if (!each_object.isNull("videoId")) {
+
+                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID, each_object.getString("videoId"));
+
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID, "");
+
+                        }
+
+
+                        if (!each_object.isNull("suggest_section")) {
+
+                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_SUGGEST_TEXT, each_object.getString("suggest_section"));
+
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_SUGGEST_TEXT, "");
+
+                        }
+
+                        if (!each_object.isNull("titleMm")) {
+
+                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TITLE_MM, each_object.getString("titleMm"));
+
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TITLE_MM, "");
+
+                        }
+
+                        if (!each_object.isNull("content_mm")) {
+                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_MM, each_object.getString("content_mm"));
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_MM, "");
+
+                        }
+
+                        //TODO TableColumnUpdate 9
+                        if (!each_object.isNull("post_author_role")) {
+                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE, each_object.getString("post_author_role"));
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE, "");
+
+                        }
+                        if (!each_object.isNull("authorId")) {
+
+                            JSONObject userjsonObject = each_object.getJSONObject("authorId");
+                            if (!userjsonObject.isNull("objectId")) {
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ID, userjsonObject.getString("objectId"));
+                            } else {
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ID, "");
+
+                            }
+
+
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ID, "");
+
+                        }
+
+                        //cv.put(TableAndColumnsName.PostUtil.LIKE_STATUS, "0");
+
+                        //TODO check isAllow status and can hide this post later
+                        //cv.put(TableAndColumnsName.PostUtil.STATUS, "0");
+                        if (!each_object.isNull("postUploadedDate")) {
+
+                            JSONObject postUploadedDate = each_object.getJSONObject("postUploadedDate");
+                            if (!postUploadedDate.isNull("iso")) {
+                                cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, postUploadedDate.getString("iso"));
+                            } else {
+                                cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, "");
+
+                            }
+
+
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, "");
+
+                        }
+                        //cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, each_object.get("createdAt").toString());// post.get("postUploadedDate").toString() //post.getCreatedAt().toString()
+                        cv.put(TableAndColumnsName.PostUtil.UPDATED_DATE, each_object.get("updatedAt").toString());
+
+
+                        Log.e("Update Detail : ", "= = = = = = = : " + cv.toString());
+
+                        //cv.put(TableAndColumnsName.UserPostUtil.LIKE_STATUS, "1");
+                        String selections = TableAndColumnsName.PostUtil.POST_OBJ_ID + "=?";
+                        String[] selectionargs = {postId};
+                        getContentResolver().update(IwomenProviderData.PostProvider.CONTETN_URI, cv, selections, selectionargs);
+
+
+                        getCommentCount(postId);
+
+                        //TODO  showing Local data , after update from server by Id
+                        getLocalPostDetail(postId);
+
+                    } catch (JSONException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+
+                }
+            });
+
+        } else {
+
+            if (strLang.equals(Utils.ENG_LANG)) {
+                Utils.doToastEng(getApplicationContext(), "Internet Connection need!");
+            } else {
+
+                Utils.doToastMM(getApplicationContext(), getResources().getString(R.string.open_internet_warning_mm));
+            }
+        }
+
+        /*ContentValues cv = new ContentValues();
+        cv.put(TableAndColumnsName.UserPostUtil.POST_LIKES, like_count);
+        //cv.put(TableAndColumnsName.UserPostUtil.LIKE_STATUS, "1");
+        String selections = TableAndColumnsName.UserPostUtil.POST_OBJ_ID + "=?";
+        String[] selectionargs = {postId};
+        getContentResolver().update(IwomenProviderData.UserPostProvider.CONTETN_URI, cv, selections, selectionargs);*/
+
+        //Log.e("Update Post like status", "====>" + postId);
+
+    }
+
+    //TODO Comment Count API
+    private void getCommentCount(String strpostId) {
+
+
+        if (Connection.isOnline(getApplicationContext())) {
+
+            UserPostAPI.getInstance().getService().getCommentCount(0, 1, "{\"postId\":{\"__type\":\"Pointer\",\"className\":\"Post\",\"objectId\":\"" + postId + "\"}}", new Callback<String>() {
+                @Override
+                public void success(String s, Response response) {
+                    try {
+                        JSONObject whole_body = new JSONObject(s);
+                        JSONArray result = whole_body.getJSONArray("results");
+
+                        cmd_count = whole_body.getString("count");
+
+                        txt_cmd_count.setText(cmd_count + " comments");
+
+                    } catch (JSONException ex) {
+                        ex.printStackTrace();
+                    }
+
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.e("///Count Error//", "==>" + error.toString());
+
+                }
+            });
+
+        } else {
+
+            if (strLang.equals(Utils.ENG_LANG)) {
+                Utils.doToastEng(getApplicationContext(), "Internet Connection need!");
+            } else {
+
+                Utils.doToastMM(getApplicationContext(), getResources().getString(R.string.open_internet_warning_mm));
+            }
+        }
+
 
     }
 

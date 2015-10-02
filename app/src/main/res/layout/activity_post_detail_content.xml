@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:background="@color/white"
-    android:layout_height="fill_parent"
     xmlns:wheel="http://schemas.android.com/apk/res-auto"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,14 +36,14 @@
                 android:visibility="visible" />
 
             <ImageView
+                android:id="@+id/postdeail_video_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/videoplay"
                 android:layout_gravity="center"
-                android:visibility="visible"
-                android:id="@+id/postdeail_video_icon" />
+                android:src="@drawable/videoplay"
+                android:visibility="visible" />
 
         </FrameLayout>
 
@@ -52,58 +51,59 @@
         <LinearLayout
 
             android:id="@+id/detail_ly_media_main"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="@color/video_button_bg"
-            android:layout_height="match_parent">
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/detail_ly_download"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:orientation="horizontal"
                 android:padding="16dp">
 
                 <ImageView
+                    android:id="@+id/postdetail_img_download"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_file_download_grey600_48dp"
-                    android:id="@+id/postdetail_img_download" />
+                    android:src="@drawable/ic_file_download_grey600_48dp" />
 
                 <TextView
+                    android:id="@+id/postdetail_download_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/detail_download_text_eng"
-                    android:id="@+id/postdetail_download_text"
-                    android:paddingLeft="8dp" />
+                    android:paddingLeft="8dp"
+                    android:text="@string/detail_download_text_eng" />
             </LinearLayout>
+
             <View
                 android:layout_width="1dp"
                 android:layout_height="45dp"
-                android:background="@color/border_color"
-                android:layout_margin="8dp"/>
+                android:layout_margin="8dp"
+                android:background="@color/border_color" />
 
             <LinearLayout
                 android:id="@+id/detail_ly_listen_now"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:orientation="horizontal"
                 android:padding="16dp">
 
                 <ImageView
+                    android:id="@+id/postdetail_img_player"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_headset_grey600_48dp"
-                    android:id="@+id/postdetail_img_player" />
+                    android:src="@drawable/ic_headset_grey600_48dp" />
 
                 <TextView
+                    android:id="@+id/postdetail_player_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/detail_listen_text_eng"
-                    android:id="@+id/postdetail_player_text"
-                    android:paddingLeft="8dp" />
+                    android:paddingLeft="8dp"
+                    android:text="@string/detail_listen_text_eng" />
             </LinearLayout>
         </LinearLayout>
 
@@ -111,10 +111,10 @@
             android:id="@+id/postdetail_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="25sp"
+            android:layout_margin="16dp"
             android:text="Title"
-            android:layout_margin="16dp"/>
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
 
         <TextView
@@ -122,19 +122,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="18dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <org.undp_iwomen.iwomen.ui.widget.CustomTextView
             android:id="@+id/postdetail_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"/>
+            android:layout_margin="16dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="16dp">
+            android:layout_margin="16dp"
+            android:orientation="horizontal">
 
             <FrameLayout
                 android:layout_width="@dimen/feed_item_profile_pic"
@@ -145,12 +145,11 @@
                     android:layout_width="@dimen/feed_item_profile_pic"
                     android:layout_height="@dimen/feed_item_profile_pic"
                     android:scaleType="fitXY"
-                    android:visibility="gone"
-                    android:src="@drawable/bonsai"></org.undp_iwomen.iwomen.ui.widget.ProfilePictureView>
+                    android:src="@drawable/bonsai"
+                    android:visibility="gone"></org.undp_iwomen.iwomen.ui.widget.ProfilePictureView>
 
-                <com.makeramen.RoundedImageView
+                <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/postdetail_profilePic_rounded"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:layout_width="@dimen/feed_item_profile_pic"
                     android:layout_height="@dimen/feed_item_profile_pic"
 
@@ -159,12 +158,12 @@
                     android:layout_alignParentTop="true"
                     android:scaleType="fitXY"
                     android:src="@drawable/blank_profile"
+                    android:visibility="visible"
                     app:riv_border_color="#333333"
                     app:riv_border_width="0dip"
                     app:riv_corner_radius="30dip"
                     app:riv_mutate_background="true"
-                    app:riv_oval="true"
-                    android:visibility="visible"></com.makeramen.RoundedImageView>
+                    app:riv_oval="true"></com.makeramen.RoundedImageView>
 
                 <ProgressBar
                     android:id="@+id/postdetail_progressBar_profile_item"
@@ -179,14 +178,110 @@
                     android:visibility="visible" />
             </FrameLayout>
 
-            <TextView
-                android:id="@+id/postdetail_content_username"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_marginLeft="8dp"/>
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/postdetail_content_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:gravity="center_vertical"
+                    android:text="Name"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/postdetail_content_role_more_ly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/postdetail_content_user_role"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="Role" />
+
+                    <TextView
+                        android:id="@+id/postdetail_content_user_role_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="more >> "
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/postdetail_content_posted_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="Posted on 21 Aug 2015" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="horizontal">
+
+            <org.undp_iwomen.iwomen.ui.widget.CustomTextView
+                android:id="@+id/postdetail_like_post_lbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Like This Post" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/postdetail_like_button"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_margin="16dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/drawer_list_item_press"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/postdetail_like_img"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/like_stroke" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="Like" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="horizontal">
+
+            <org.undp_iwomen.iwomen.ui.widget.CustomTextView
+                android:id="@+id/postdetail_share_post_lbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Share This Post" />
+
 
         </LinearLayout>
 
@@ -194,107 +289,86 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_margin="16dp">
+            android:layout_margin="16dp"
+            android:orientation="horizontal">
+
             <LinearLayout
                 android:id="@+id/postdetail_share_vier_button"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
 
-                android:background="@color/viber_color"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:background="@color/viber_color">
 
                 <ImageView
                     android:id="@+id/postdetail_viber_img"
                     android:layout_width="80dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/viber_share_button"/>
-
+                    android:src="@drawable/viber_share_button" />
 
 
             </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/postdetail_fb_button"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="3dp"
-                android:background="@color/fb_color"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:background="@color/fb_color">
 
-            <com.facebook.share.widget.ShareButton
-                android:id="@+id/postdetail_fb_share_button"
-                android:layout_width="80dp"
-                android:layout_height="40dp"
-                android:padding="8dp"
-                 />
-                </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/postdetail_like_button"
-                android:layout_width="80dp"
-                android:layout_height="40dp"
-                android:padding="8dp"
-                android:layout_marginLeft="3dp"
-                android:background="@color/drawer_list_item_press"
-                android:layout_marginTop="8dp">
-
-                <ImageView
-                    android:id="@+id/postdetail_like_img"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/like_stroke" />
-
-                <TextView
-                    android:text="Like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"/>
-
+                <com.facebook.share.widget.ShareButton
+                    android:id="@+id/postdetail_fb_share_button"
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp" />
             </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/postdetail_share_button"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
-                android:padding="8dp"
                 android:layout_marginLeft="3dp"
+                android:layout_marginTop="8dp"
                 android:background="@color/grey_500"
-                android:layout_marginTop="8dp">
+                android:padding="8dp">
 
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/share"/>
+                    android:src="@drawable/share" />
 
                 <TextView
-                    android:text="Share"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="6dp"/>
+                    android:layout_marginLeft="6dp"
+                    android:text="Share" />
 
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:layout_margin="8dp">
+            android:layout_margin="8dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/postdetail_like_count"
                 android:layout_width="80dp"
                 android:layout_height="50dp"
-                android:text="50 Likes"
-                android:layout_margin="8dp"/>
+                android:layout_margin="8dp"
+                android:text="50 Likes" />
 
             <TextView
+                android:id="@+id/postdetail_cmd_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="14 Comments"
-                android:layout_margin="8dp"/>
+                android:layout_margin="8dp"
+                android:text="14 Comments" />
 
         </LinearLayout>
 
@@ -302,15 +376,15 @@
             android:id="@+id/postdetail_suggest_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
             android:text="Questions for discussion"
-            android:visibility="gone"
-            android:layout_margin="16dp"/>
+            android:visibility="gone" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/border_color"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:background="@color/border_color" />
 
         <org.undp_iwomen.iwomen.ui.widget.ProgressWheel
             android:id="@+id/postdetail_progress_wheel_comment"
@@ -319,19 +393,18 @@
             android:layout_gravity="center"
             android:gravity="center"
             wheel:matProg_barColor="@color/theme_primary"
-            wheel:matProg_progressIndeterminate="true"/>
+            wheel:matProg_progressIndeterminate="true" />
+
         <ListView
             android:id="@+id/postdetail_comment_listview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="100dp"
             android:background="@color/list_background"
             android:choiceMode="singleChoice"
-            android:divider="@android:color/transparent"
             android:clipToPadding="false"
-            android:layout_marginBottom="100dp"
-            android:paddingBottom="10dp"/>
-
-
+            android:divider="@android:color/transparent"
+            android:paddingBottom="10dp" />
 
 
     </LinearLayout>

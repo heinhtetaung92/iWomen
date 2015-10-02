@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.facebook.FacebookSdk;
 import com.makeramen.RoundedImageView;
 import com.parse.ParseUser;
@@ -32,9 +33,13 @@ import com.parse.ui.ParseLoginBuilder;
 import com.parse.utils.Utils;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.undp_iwomen.iwomen.CommonConfig;
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
+import org.undp_iwomen.iwomen.model.retrofit_api.UserPostAPI;
 import org.undp_iwomen.iwomen.ui.adapter.DrawerListViewAdapter;
 import org.undp_iwomen.iwomen.ui.fragment.BeTogetherFragment;
 import org.undp_iwomen.iwomen.ui.fragment.GoogleMapFragment;
@@ -45,10 +50,15 @@ import org.undp_iwomen.iwomen.ui.fragment.SisterAppFragment;
 import org.undp_iwomen.iwomen.ui.fragment.TLGUserStoriesRecentFragment;
 import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 import org.undp_iwomen.iwomen.ui.widget.ProfilePictureView;
+import org.undp_iwomen.iwomen.utils.Connection;
 import org.undp_iwomen.iwomen.utils.SharePrefUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by khinsandar on 7/29/15.
@@ -90,6 +100,11 @@ public class DrawerMainActivity extends AppCompatActivity {
 
     String mstrUserfbId;
     SharePrefUtils sessionManager;
+
+    String post_count;
+    TextView menu_user_post_count;
+
+    LinearLayout ly_menu_profile_area;
 
     @Override
     protected void onStart() {
@@ -138,6 +153,9 @@ public class DrawerMainActivity extends AppCompatActivity {
         mDrawerList = (ListView) findViewById(R.id.left_drawer_lv);
         txt_user_name = (TextView) findViewById(R.id.txt_user_name);
         txt_sing_out = (CustomTextView) findViewById(R.id.menu_sing_out);
+        menu_user_post_count = (TextView)findViewById(R.id.menu_user_post_count);
+
+        ly_menu_profile_area = (LinearLayout)findViewById(R.id.menu_profile_area_ly);
 
         drawer_profilePic_rounded = (RoundedImageView) findViewById(R.id.drawer_profilePic_rounded);
         drawer_progressBar_profile_item = (ProgressBar) findViewById(R.id.drawer_progressBar_profile_item);
@@ -176,6 +194,8 @@ public class DrawerMainActivity extends AppCompatActivity {
         currentUser = ParseUser.getCurrentUser();
 
 
+
+
         if (currentUser != null) {
             // User clicked to log out.
             //showProfileLoggedOut();
@@ -205,11 +225,11 @@ public class DrawerMainActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = sharePrefLanguageUtil.edit();
                         editor.putString(Utils.PREF_SETTING_LANG, lang);
 
-                /*if(userNrc != null) {
-                    mEditorUserInfo.putString(CommonConfig.USER_NRC, userNrc);
-                }else if(passport != null){
-                    mEditorUserInfo.putString(CommonConfig.USER_NRC, passport); // For rare register with Passport case
-                }*/
+                        /*if(userNrc != null) {
+                            mEditorUserInfo.putString(CommonConfig.USER_NRC, userNrc);
+                        }else if(passport != null){
+                            mEditorUserInfo.putString(CommonConfig.USER_NRC, passport); // For rare register with Passport case
+                        }*/
                         mEditorUserInfo.putString(CommonConfig.USER_PH, userPH);
 
                         mEditorUserInfo.commit();
@@ -224,13 +244,11 @@ public class DrawerMainActivity extends AppCompatActivity {
 
                         userProfilePicture.setProfileId(mstrUserfbId);
                     }
-                    if (currentUser.get("user_profile_img") != null) {
+                    Log.e("1st userprofile_Image_path", "==>" + currentUser.get("user_profile_img"));
 
-
-                        Uri uri = Uri.parse(currentUser.getParseFile("user_profile_img").getUrl());
-                        userprofile_Image_path = currentUser.getParseFile("user_profile_img").getUrl();
-                        Log.e("1st userprofile_Image_path", "==>" + userprofile_Image_path);
-                        //userProfilePicture.setD
+                    //TODO 1st priority if update image case
+                    if(currentUser.get("userImgPath")!= null && currentUser.get("userImgPath") != "null"){
+                        userprofile_Image_path =  currentUser.get("userImgPath").toString();
 
                         if (userprofile_Image_path != null) {
 
@@ -263,11 +281,106 @@ public class DrawerMainActivity extends AppCompatActivity {
                             drawer_progressBar_profile_item.setVisibility(View.GONE);
                             drawer_profilePic_rounded.setVisibility(View.GONE);
                             userProfilePicture.setVisibility(View.VISIBLE);
-                        }
 
+                            //TODO IF user no upload imagess and Fb login
+                            if (mstrUserfbId != null) {
+
+
+                                userProfilePicture.setProfileId(mstrUserfbId);
+                                drawer_progressBar_profile_item.setVisibility(View.GONE);
+
+                            } else {
+                                drawer_progressBar_profile_item.setVisibility(View.GONE);
+                                drawer_profilePic_rounded.setVisibility(View.VISIBLE);
+                                userProfilePicture.setVisibility(View.GONE);
+                            }
+
+                        }
+                    }else {//TODO very first time upload image case
+                        if (currentUser.get("user_profile_img") != null && currentUser.get("user_profile_img") != "null") {
+
+
+                            Uri uri = Uri.parse(currentUser.getParseFile("user_profile_img").getUrl());
+                            userprofile_Image_path = currentUser.getParseFile("user_profile_img").getUrl();
+                            Log.e("1st userprofile_Image_path", "==>" + userprofile_Image_path);
+                            //userProfilePicture.setD
+
+
+                            if (userprofile_Image_path != null) {
+
+                                mEditorUserInfo = mSharedPreferencesUserInfo.edit();
+                                mEditorUserInfo.putString(CommonConfig.USER_IMAGE_PATH, userprofile_Image_path);
+
+                                mEditorUserInfo.commit();
+                                try {
+                                    drawer_profilePic_rounded.setVisibility(View.VISIBLE);
+                                    userProfilePicture.setVisibility(View.GONE);
+                                    Picasso.with(getApplicationContext())
+                                            .load(userprofile_Image_path) //"http://cheapandcheerfulshopper.com/wp-content/uploads/2013/08/shopping1257549438_1370386595.jpg" //deal.photo1
+                                            .placeholder(R.drawable.blank_profile)
+                                            .error(R.drawable.blank_profile)
+                                            .into(drawer_profilePic_rounded, new ImageLoadedCallback(drawer_progressBar_profile_item) {
+                                                @Override
+                                                public void onSuccess() {
+                                                    if (this.progressBar != null) {
+                                                        this.progressBar.setVisibility(View.GONE);
+                                                    } else {
+                                                        this.progressBar.setVisibility(View.VISIBLE);
+                                                    }
+                                                }
+
+                                            });
+                                } catch (OutOfMemoryError outOfMemoryError) {
+                                    outOfMemoryError.printStackTrace();
+                                }
+                            } else {
+                                drawer_progressBar_profile_item.setVisibility(View.GONE);
+                                drawer_profilePic_rounded.setVisibility(View.GONE);
+                                userProfilePicture.setVisibility(View.VISIBLE);
+
+                                //TODO IF user no upload imagess and Fb login
+                                if (mstrUserfbId != null) {
+
+
+                                    userProfilePicture.setProfileId(mstrUserfbId);
+                                    drawer_progressBar_profile_item.setVisibility(View.GONE);
+
+                                } else {
+                                    drawer_progressBar_profile_item.setVisibility(View.GONE);
+                                    drawer_profilePic_rounded.setVisibility(View.VISIBLE);
+                                    userProfilePicture.setVisibility(View.GONE);
+                                }
+
+                            }
+
+                        } else {//TODO very first time not upload image case , But Login with Fb case
+                            drawer_progressBar_profile_item.setVisibility(View.GONE);
+                            drawer_profilePic_rounded.setVisibility(View.GONE);
+                            userProfilePicture.setVisibility(View.VISIBLE);
+
+                            //TODO IF user no upload imagess and Fb login
+                            if (mstrUserfbId != null) {
+
+
+                                userProfilePicture.setProfileId(mstrUserfbId);
+                                drawer_progressBar_profile_item.setVisibility(View.GONE);
+
+                            } else {
+                                drawer_progressBar_profile_item.setVisibility(View.GONE);
+                                drawer_profilePic_rounded.setVisibility(View.VISIBLE);
+                                userProfilePicture.setVisibility(View.GONE);
+                            }
+
+                        }
                     }
 
                     Log.e("1st Login==== > user Info parse", objectId + "Parse :" + userName + ":mstrUserfbId >>" + mstrUserfbId);
+
+                    //TODO FONT DRAWERMAIN
+                    mstr_lang = sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
+                    getUserPostCount();
+
+                    showRefreshInfoDialog();
 
                 } else {
                     user_name = mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null);
@@ -278,17 +391,11 @@ public class DrawerMainActivity extends AppCompatActivity {
                     //2nd Login==== > user Info parse﹕ GuzTg3T1aWParse :Su:mstrUserfbId >>null
                     Log.e("2nd Login==== > user Info parse", user_obj_id + "Parse :" + user_name + ":mstrUserfbId >>" + mstrUserfbId);
 
-                    if (mstrUserfbId != null) {
 
+                    //TODO FONT DRAWERMAIN
+                    mstr_lang = sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
+                    getUserPostCount();
 
-                        userProfilePicture.setProfileId(mstrUserfbId);
-                        drawer_progressBar_profile_item.setVisibility(View.GONE);
-
-                    } else {
-                        drawer_progressBar_profile_item.setVisibility(View.GONE);
-                        drawer_profilePic_rounded.setVisibility(View.VISIBLE);
-                        userProfilePicture.setVisibility(View.GONE);
-                    }
 
                     userprofile_Image_path = mSharedPreferencesUserInfo.getString(CommonConfig.USER_IMAGE_PATH, null);
 
@@ -320,6 +427,18 @@ public class DrawerMainActivity extends AppCompatActivity {
                         drawer_progressBar_profile_item.setVisibility(View.GONE);
                         drawer_profilePic_rounded.setVisibility(View.GONE);
                         userProfilePicture.setVisibility(View.VISIBLE);
+                        //TODO IF user no upload imagess and Fb login
+                        if (mstrUserfbId != null) {
+
+
+                            userProfilePicture.setProfileId(mstrUserfbId);
+                            drawer_progressBar_profile_item.setVisibility(View.GONE);
+
+                        } else {
+                            drawer_progressBar_profile_item.setVisibility(View.GONE);
+                            drawer_profilePic_rounded.setVisibility(View.VISIBLE);
+                            userProfilePicture.setVisibility(View.GONE);
+                        }
                     }
 
 
@@ -327,8 +446,7 @@ public class DrawerMainActivity extends AppCompatActivity {
 
                 }
 
-                //TODO FONT DRAWERMAIN
-                mstr_lang = sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
+
 
                 if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)) {
 
@@ -350,6 +468,21 @@ public class DrawerMainActivity extends AppCompatActivity {
                 drawerLayoutt.openDrawer(mDrawerLinearLayout);
 
             }
+
+            ly_menu_profile_area.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //org.undp_iwomen.iwomen.utils.Utils.doToastEng(getApplicationContext(), "On CLick" + user_obj_id);
+
+                    Intent intent = new Intent(getApplicationContext(), ProfileEditActivity.class);
+
+                    intent.putExtra("UserId", user_obj_id);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+
+                }
+            });
 
 
         } else {
@@ -396,6 +529,50 @@ public class DrawerMainActivity extends AppCompatActivity {
 
     }
 
+    //TODO Comment Count API
+    private void getUserPostCount() {
+
+
+
+        if (Connection.isOnline(getApplicationContext())) {
+
+            UserPostAPI.getInstance().getService().getPostCount(0, 1, "{\"postUploadName\":\"" + user_name + "\"}", new Callback<String>() {
+                @Override
+                public void success(String s, Response response) {
+                    try{
+                        JSONObject whole_body = new JSONObject(s);
+                        JSONArray result = whole_body.getJSONArray("results");
+
+                        post_count = whole_body.getString("count");
+                        menu_user_post_count.setText( post_count + " Post") ;
+
+                    }catch (JSONException ex){
+                        ex.printStackTrace();
+                    }
+
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.e("///Count Error//","==>" +error.toString());
+
+                }
+            });
+
+        } else {
+
+            if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)) {
+                org.undp_iwomen.iwomen.utils.Utils.doToastEng(getApplicationContext(), "Internet Connection need!");
+            } else {
+
+                org.undp_iwomen.iwomen.utils.Utils.doToastMM(getApplicationContext(), getResources().getString(R.string.open_internet_warning_mm));
+            }
+        }
+
+
+
+    }
+
     public void setThemeToApp() {
         sharePrefLanguageUtil = getSharedPreferences(Utils.PREF_SETTING_LANG, MODE_PRIVATE);
         int theme = sharePrefLanguageUtil.getInt(org.undp_iwomen.iwomen.utils.Utils.PREF_THEME, org.undp_iwomen.iwomen.utils.Utils.THEME_PINK);
@@ -422,9 +599,13 @@ public class DrawerMainActivity extends AppCompatActivity {
                     {"Be Inspired", "Be Knowledgeable", "Be Together", "Talk Together", "Setting", "AboutUs", "Sister Apps"};
 
             DrawerListIcon = new int[]
-                    {R.drawable.ic_stories, R.drawable.ic_resources, R.drawable.be_together, R.drawable.ic_talk_together, R.drawable.ic_setting, R.drawable.about_us, R.drawable.sister_app};
-
-            // R.drawable.ic_community, R.drawable.ic_news
+                    {R.drawable.ic_stories,
+                            R.drawable.ic_resources,
+                            R.drawable.be_together,
+                            R.drawable.ic_talk_together,
+                            R.drawable.ic_setting,
+                            R.drawable.about_us,
+                            R.drawable.sister_app};
 
             drawer_adapter = new DrawerListViewAdapter(getApplicationContext(), DrawerListName, DrawerListIcon, mstr_lang);//mCategoriesTitles
                     /*mDrawerList.setAdapter(new ArrayAdapter<String>(this,
@@ -438,9 +619,13 @@ public class DrawerMainActivity extends AppCompatActivity {
                     {"စိတ္ဓာတ္ခ\u103Cန္အား\u107Fဖည္ ့ရန္", "ဗဟုုသုုတရရန္", "ေပ\u102Bင္းစည္းေဆာင္ရ\u103Cက္ရန္", "ေမး\u107Fမန္းေဆ\u103Cးေ\u108F\u103Cးရန္", "\u107Fပင္ဆင္ရန္", "က\u103C\u103A\u108Fုုပ္တိုု ့အေ\u107Eကာင္း", " Sister Apps"};
 
             DrawerListIcon = new int[]
-                    {R.drawable.ic_stories, R.drawable.ic_resources, R.drawable.be_together, R.drawable.ic_talk_together, R.drawable.ic_setting, R.drawable.about_us, R.drawable.sister_app};
-
-            // R.drawable.ic_community, R.drawable.ic_news
+                    {R.drawable.ic_stories,
+                            R.drawable.ic_resources,
+                            R.drawable.be_together,
+                            R.drawable.ic_talk_together,
+                            R.drawable.ic_setting,
+                            R.drawable.about_us,
+                            R.drawable.sister_app};
 
             drawer_adapter = new DrawerListViewAdapter(getApplicationContext(), DrawerListName, DrawerListIcon, mstr_lang);//mCategoriesTitles
                     /*mDrawerList.setAdapter(new ArrayAdapter<String>(this,
@@ -454,9 +639,13 @@ public class DrawerMainActivity extends AppCompatActivity {
                     {"စိတ္ဓာတ္ခ\u103Cန္အား\u107Fဖည္ ့ရန္", "ဗဟုုသုုတရရန္", "ေပ\u102Bင္းစည္းေဆာင္ရ\u103Cက္ရန္", "ေမး\u107Fမန္းေဆ\u103Cးေ\u108F\u103Cးရန္", "\u107Fပင္ဆင္ရန္", "က\u103C\u103A\u108Fုုပ္တိုု ့အေ\u107Eကာင္း", " Sister Apps"};
 
             DrawerListIcon = new int[]
-                    {R.drawable.ic_stories, R.drawable.ic_resources, R.drawable.be_together, R.drawable.ic_talk_together, R.drawable.ic_setting, R.drawable.about_us, R.drawable.sister_app};
-
-            // R.drawable.ic_community, R.drawable.ic_news
+                    {R.drawable.ic_stories,
+                            R.drawable.ic_resources,
+                            R.drawable.be_together,
+                            R.drawable.ic_talk_together,
+                            R.drawable.ic_setting,
+                            R.drawable.about_us,
+                            R.drawable.sister_app};
 
             drawer_adapter = new DrawerListViewAdapter(getApplicationContext(), DrawerListName, DrawerListIcon, mstr_lang);//mCategoriesTitles
                     /*mDrawerList.setAdapter(new ArrayAdapter<String>(this,
@@ -470,7 +659,13 @@ public class DrawerMainActivity extends AppCompatActivity {
                     {"စိတ္ဓာတ္ခ\u103Cန္အား\u107Fဖည္ ့ရန္", "ဗဟုုသုုတရရန္", "ေပ\u102Bင္းစည္းေဆာင္ရ\u103Cက္ရန္", "ေမး\u107Fမန္းေဆ\u103Cးေ\u108F\u103Cးရန္", "\u107Fပင္ဆင္ရန္", "က\u103C\u103A\u108Fုုပ္တိုု ့အေ\u107Eကာင္း", " Sister Apps"};
 
             DrawerListIcon = new int[]
-                    {R.drawable.ic_stories, R.drawable.ic_resources, R.drawable.be_together, R.drawable.ic_talk_together, R.drawable.ic_setting, R.drawable.about_us, R.drawable.sister_app};
+                    {R.drawable.ic_stories,
+                            R.drawable.ic_resources,
+                            R.drawable.be_together,
+                            R.drawable.ic_talk_together,
+                            R.drawable.ic_setting,
+                            R.drawable.about_us,
+                            R.drawable.sister_app};
 
             // R.drawable.ic_community, R.drawable.ic_news
 
@@ -486,9 +681,13 @@ public class DrawerMainActivity extends AppCompatActivity {
                     {"စိတ္ဓာတ္ခ\u103Cန္အား\u107Fဖည္ ့ရန္", "ဗဟုုသုုတရရန္", "ေပ\u102Bင္းစည္းေဆာင္ရ\u103Cက္ရန္", "ေမး\u107Fမန္းေဆ\u103Cးေ\u108F\u103Cးရန္", "\u107Fပင္ဆင္ရန္", "က\u103C\u103A\u108Fုုပ္တိုု ့အေ\u107Eကာင္း", " Sister Apps"};
 
             DrawerListIcon = new int[]
-                    {R.drawable.ic_stories, R.drawable.ic_resources, R.drawable.be_together, R.drawable.ic_talk_together, R.drawable.ic_setting, R.drawable.about_us, R.drawable.sister_app};
-
-            // R.drawable.ic_community, R.drawable.ic_news
+                    {R.drawable.ic_stories,
+                            R.drawable.ic_resources,
+                            R.drawable.be_together,
+                            R.drawable.ic_talk_together,
+                            R.drawable.ic_setting,
+                            R.drawable.about_us,
+                            R.drawable.sister_app};
 
             drawer_adapter = new DrawerListViewAdapter(getApplicationContext(), DrawerListName, DrawerListIcon, mstr_lang);//mCategoriesTitles
                     /*mDrawerList.setAdapter(new ArrayAdapter<String>(this,
@@ -649,6 +848,60 @@ public class DrawerMainActivity extends AppCompatActivity {
         } catch (NoSuchAlgorithmException e) {
 
         }
+    }
+
+    private void showRefreshInfoDialog(){
+        MaterialDialog dialog = new MaterialDialog.Builder(DrawerMainActivity.this)
+                .title("")//Title
+                .customView(R.layout.custom_refresh_dialog, true)
+                .backgroundColor(getResources().getColor(R.color.lime_color))
+                .positiveText("OK")
+                .positiveColor(R.color.primary)
+                .positiveColorRes(R.color.primary)
+                .negativeText("")
+                .negativeColor(R.color.primary)
+                .negativeColorRes(R.color.primary)
+                .autoDismiss(false)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        //TODO logout method
+                        //signOut();
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        dialog.dismiss();
+                    }
+                })
+                .build();
+
+        dialog.show();
+        CustomTextView txt_dialog_head = (CustomTextView)dialog.findViewById(R.id.dialog_refresh_title);
+        TextView txt_dialog_content = (TextView)dialog.findViewById(R.id.dialog_refresh_content);
+
+        //TODO FONT DRAWERMAIN
+        if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)) {
+            txt_dialog_head.setText(R.string.app_name);
+            txt_dialog_content.setText(R.string.dialog_refresh_msg_eng);
+        }else if(mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG)) { //Zawygi
+
+            txt_dialog_head.setText(R.string.app_name_mm);
+            txt_dialog_content.setText(R.string.dialog_refresh_msg_mm);
+
+            txt_dialog_head.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
+            txt_dialog_content.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
+        }else if(mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG_UNI)) {
+
+            txt_dialog_head.setText(R.string.app_name_mm);
+            txt_dialog_content.setText(R.string.dialog_refresh_msg_mm);
+        }else {//DEFAULT
+
+            txt_dialog_head.setText(R.string.app_name_mm);
+            txt_dialog_content.setText(R.string.dialog_refresh_msg_mm);
+        }
+
     }
 
     private class ImageLoadedCallback implements com.squareup.picasso.Callback {

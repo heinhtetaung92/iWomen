@@ -176,20 +176,93 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <org.undp_iwomen.iwomen.ui.widget.PhoneNumberEdit
+                <EditText
                     android:id="@+id/signup_mobile_number_for_nrc_input"
+                    style="@style/ParseLoginUI.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/abc_edit_text_material"
+                    android:fontFamily="sans-serif"
                     android:inputType="phone"
+                    android:nextFocusDown="@+id/singup_tlg_checkbox"
+                    android:nextFocusForward="@+id/singup_tlg_checkbox"
+                    android:selectAllOnFocus="true" />
+
+            </android.support.design.widget.TextInputLayout>
+            <!--<android.support.design.widget.TextInputLayout
+                android:id="@+id/til_signup_mobile_number_for_nrc_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/signup_mobile_number_for_nrc_input"
+                    style="@style/ParseLoginUI.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+
+                    android:nextFocusDown="@+id/singup_tlg_checkbox"
+                    android:nextFocusForward="@+id/singup_tlg_checkbox"
+                    android:inputType="phone"
+                    android:hint="Phone"
                     android:selectAllOnFocus="true"
                     android:text=" " />
 
-            </android.support.design.widget.TextInputLayout>
+            </android.support.design.widget.TextInputLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/singup_tlg_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/singup_tlg_checkbox_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:fontFamily="sans-serif"
+                    android:textSize="18sp"
+                    android:text="@string/signup_tlg_member_exit_mm" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/signup_lbl_township"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/com_parse_ui_horizontal_margin"
+                    android:paddingBottom="@dimen/com_parse_ui_horizontal_margin"
+                    android:paddingLeft="3dp"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif"
+                    android:text="Township"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    />
+
+                <Spinner
+                    android:id="@+id/signup_spn_township"
+                    style="@style/Spinner.TownshipInfo"
+                    android:enabled="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:text="@string/com_parse_ui_signup_township_lbl_eng"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:orientation="horizontal">
 
                 <CheckBox
@@ -202,6 +275,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif"
                     android:text="@string/i_agree_mm" />
 
             </LinearLayout>
@@ -227,6 +302,8 @@
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:paddingLeft="@dimen/keyline_1"
+        android:paddingRight="@dimen/keyline_1"
         android:paddingBottom="20dp"
         android:paddingTop="40dp">
 

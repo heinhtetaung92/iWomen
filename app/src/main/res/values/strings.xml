@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">iwomen</string>
+    <string name="app_name_mm">စြမ္းရည္ၿမင္ ့မား ေမ့အင္အား</string>
     <string name="parse_app_id">WyU802fB70eNhyF9uSoj1SgKVKGLYYAZ0kX96xhr</string>
     <string name="parse_client_key">qnaqxGzfOLEgFAWXUTUJpTkgbOgn3CVxTqtTD6pn</string>
     <string name="hello_world">Hello world!</string>
@@ -71,6 +72,13 @@
     <string name="post_detail_comment_mm">မွတ္ ခ်က္ (သိုု ့မဟုုတ္) ေကာမန္ ့ေရးရန္</string>
     <string name="post_detail_comment_eng">Enter your Comment</string>
 
+    <string name="post_detail_share_post_mm">ဤ ပိုု ့စ္ ကိုု ရွဲ မွ်ေ၀ ရန္t</string>
+    <string name="post_detail_share_post_eng">Share This Post</string>
+
+    <string name="post_detail_like_post_mm">ဤ ပိုု ့စ္ ကိုုလိုုက္ႏိွပ္ရန္</string>
+    <string name="post_detail_like_post_eng">Like This Post</string>
+
+
     <string name="com_parse_ui_username_input_hint_mm">အမည္</string>
     <string name="com_parse_ui_password_input_hint_mm">လွ်ိဳ ့၀ွက္ စာလံုုး</string>
     <string name="com_parse_ui_confirm_password_input_hint_mm">လွ်ိဳ ့၀ွက္ စာလံုုးေနာက္တစ္ၾကိမ္ၿပန္ရိုုက္ပါ</string>
@@ -82,6 +90,10 @@
     <string name="com_parse_ui_create_account_button_label_mm">၀င္မည္</string>
     <string name="com_parse_ui_edit_account_button_label_mm">ၿပင္ဆင္မည္</string>
     <string name="i_agree_mm">မွတ္ပံုုတင္အခ်က္ အလက္မ်ားကိုုသေဘာတူပါသည္ <a href="https://www.facebook.com/UndpMyanmar"></a></string>
+
+
+    <string name="signup_tlg_member_exit_mm">TLG အဖြဲ ့၀င္ၿဖစ္လ်င္အမွန္ၿခစ္ လုုပ္ပါ</string>
+    <string name="signup_tlg_member_exit_eng">I am TLG member</string>
 
     <string name="success">Success</string>
     <string name="successfully_posted_post">Post ID: %1$s</string>
@@ -157,7 +169,15 @@
     <string name="resource_coming_soon_eng">Coming soon</string>
     <string name="resource_coming_soon_mm">မၾကာမွီတင္ေပးပါမည္။</string>
 
+    <string name="author_title_mm">စာေရးသူအေၾကာင္း</string>
+    <string name="author_title_eng">Author Detail</string>
 
+    <string name="edit_profile_mm">ဓာတ္ပံုု ၿပင္ရန္</string>
+    <string name="edit_profile_eng">Edit Profile</string>
+
+
+    <string name="dialog_refresh_msg_mm">ထိုု ၿမွားပါ အဝိုုင္းပံုု ကိုု ႏွိပ္၍ အင္တာနက္ဖြင္ ့ပီးအသစ္ မ်ား ရယူပါ။</string>
+    <string name="dialog_refresh_msg_eng">Please click on that icon with open internet condition for download news.</string>
 
 
 </resources>

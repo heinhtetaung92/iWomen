@@ -22,6 +22,7 @@
 package com.parse.ui;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,6 +35,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -41,12 +43,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,17 +75,29 @@ import com.parse.ParseUser;
 import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
+import com.parse.adapter.CitySpinnerAdapter;
+import com.parse.model.CityForShow;
 import com.parse.model.MyTypeFace;
+import com.parse.retrofit_api.TlgProfileAPI;
+import com.parse.utils.Connection;
 import com.parse.utils.Utils;
 import com.parse.utils.ValidatorUtils;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Fragment for the user signup screen.
@@ -120,7 +136,10 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
     //private TextInputLayout mMobileNoForPassportTextInputLayout;
 
     private CheckBox mIAgreeCheckBox;
+    private CheckBox mIamTLGCheckBox;
     private TextView mTosTextView;
+    private TextView mTlgmemberText;
+    private TextView mTownshipLbl;
 
     private ParseLoginConfig config;
     private int minPasswordLength;
@@ -187,7 +206,10 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
     private static int REQUEST_PICTURE = 1;
     private static int REQUEST_CROP_PICTURE = 2;
 
-
+    String mFromCityName;
+    private Spinner spnFrom;
+    String FromCityID;
+    private ProgressDialog mProgressDialog;
     /**
      * *********************************
      */
@@ -204,6 +226,8 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setCancelable(false);
     }
 
     @Override
@@ -239,6 +263,8 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         confirmPasswordField = (EditText) v.findViewById(R.id.signup_confirm_password_input);
         mobileNoForNrcField = (EditText) v.findViewById(R.id.signup_mobile_number_for_nrc_input);
 
+        spnFrom = (Spinner) v.findViewById(R.id.signup_spn_township);
+
         /*emailField = (EditText) v.findViewById(R.id.signup_email_input);
         mobileNoForPassportField = (EditText) v.findViewById(R.id.signup_mobile_number_for_passport_input);
         nrcNoField = (EditText) v.findViewById(R.id.signup_nrc_input);
@@ -263,6 +289,10 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         mTosTextView = (TextView) v.findViewById(R.id.terms_and_conditions_textview);
         mTosTextView.setClickable(true);
         mTosTextView.setMovementMethod(LinkMovementMethod.getInstance());
+
+        mTlgmemberText = (TextView)v.findViewById(R.id.singup_tlg_checkbox_textview);
+        mTownshipLbl = (TextView)v.findViewById(R.id.signup_lbl_township);
+
 
         /*mEmailTextInputLayout = (TextInputLayout) v.findViewById(R.id.til_signup_email_address);
         mMobileNoForPassportTextInputLayout = (TextInputLayout) v.findViewById(R.id.til_signup_mobile_number_for_passport_input);
@@ -289,6 +319,20 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
                 }
             }
         });
+
+        spnFrom.setEnabled(false);
+        mIamTLGCheckBox = (CheckBox)v.findViewById(R.id.singup_tlg_checkbox);
+        mIamTLGCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    spnFrom.setEnabled(true);
+                } else {
+                    spnFrom.setEnabled(false);
+                }
+            }
+        });
+
 
         btnLoginWithFacebook = (LoginButton) v.findViewById(R.id.facebook_login);
 
@@ -360,6 +404,7 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         }
         /******Font Setting*********/
 
+        setFromAdapter();
 
         return v;
     }
@@ -386,6 +431,152 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
                     "Activity must implemement ParseOnLoadingListener");
         }
     }
+
+
+    private void setFromAdapter() {
+
+        final List<String> listName = new ArrayList<String>();
+        listName.add("Yangon            " + getResources().getString(R.string.ygn));//Klsa0sQrMw
+        listName.add("Mandalay          "+getResources().getString(R.string.mdy));//EGDFFZrIM7
+        listName.add("Nay Pyi Taw       "+ getResources().getString(R.string.npt));//A471gH1HNh
+
+        final List<String> listEngName = new ArrayList<String>();
+        listEngName.add("Yangon");//Klsa0sQrMw
+        listEngName.add("Mandalay");//EGDFFZrIM7
+        listEngName.add("Nay Pyi Taw");//A471gH1HNh
+
+
+        final List<String> list_id = new ArrayList<String>();
+        list_id.add("Klsa0sQrMw");//Klsa0sQrMw
+        list_id.add("A471gH1HNh");//EGDFFZrIM7
+        list_id.add("EGDFFZrIM7");//A471gH1HNh
+
+        final ArrayList<CityForShow> cities = new ArrayList<CityForShow>();
+
+
+        /*CityForShow ygnCity = new CityForShow("Klsa0sQrMw", "Yangon", getResources().getString(R.string.ygn));
+        CityForShow mdyCity = new CityForShow("A471gH1HNh", "Mandalay", getResources().getString(R.string.mdy));
+        CityForShow nptCity = new CityForShow("EGDFFZrIM7", "Nay Pyi Taw", getResources().getString(R.string.npt));
+
+        cities.add(ygnCity);
+        cities.add(mdyCity);
+        cities.add(nptCity);*/
+
+
+        if(Connection.isOnline(getActivity().getApplicationContext())) {
+
+            mProgressDialog.show();
+            TlgProfileAPI.getInstance().getService().getTlgProfileList(new Callback<String>() {
+                @Override
+                public void success(String s, Response response) {
+
+                    try{
+                        JSONObject whole_body = new JSONObject(s);
+                        JSONArray result = whole_body.getJSONArray("results");
+
+                        for (int i = 0; i < result.length(); i++) {
+                            JSONObject each_object = result.getJSONObject(i);
+
+
+                            String _objectId;
+                            String _tlg_group_name;
+                            String _tlg_group_address;
+                            String _tlg_group_address_mm;
+                            String _tlg_group_lat_address;
+                            String _tlg_group_lng_address;
+                            if (each_object.isNull("objectId")) {
+                                _objectId = "null";
+                            } else {
+                                _objectId = each_object.getString("objectId");
+                            }
+
+                            if (each_object.isNull("tlg_group_name")) {
+                                _tlg_group_name = "null";
+                            } else {
+                                _tlg_group_name = each_object.getString("tlg_group_name");
+                            }
+
+                            if (each_object.isNull("tlg_group_address")) {
+                                _tlg_group_address = "null";
+                            } else {
+                                _tlg_group_address = each_object.getString("tlg_group_address");
+                            }
+                            if (each_object.isNull("tlg_group_address_mm")) {
+                                _tlg_group_address_mm = "null";
+                            } else {
+                                _tlg_group_address_mm = each_object.getString("tlg_group_address_mm");
+                            }
+
+                            if (each_object.isNull("tlg_group_lat_address")) {
+                                _tlg_group_lat_address = "null";
+                            } else {
+                                _tlg_group_lat_address = each_object.getString("tlg_group_lat_address");
+                            }
+
+                            if (each_object.isNull("tlg_group_lng_address")) {
+                                _tlg_group_lng_address = "null";
+                            } else {
+                                _tlg_group_lng_address = each_object.getString("tlg_group_lng_address");
+                            }
+
+                            cities.add( new CityForShow(_objectId, _tlg_group_address, _tlg_group_address_mm));
+                        }
+                        mProgressDialog.dismiss();
+
+                        CitySpinnerAdapter adapter = new CitySpinnerAdapter((AppCompatActivity)getActivity(), cities);
+                        spnFrom.setAdapter(adapter);
+
+                        /*
+                        ArrayAdapter<String> adapterFrom = new ArrayAdapter<String>(getActivity(), R.layout.simple_spinner_item, listName);
+                        adapterFrom.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spnFrom.setAdapter(adapterFrom);
+                        */
+                        spnFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                FromCityID = cities.get(position).getId();
+                                mFromCityName = cities.get(position).getNameInEnglish();
+
+                                //TODO for query in local db
+                                //Log.e("Search From", "==" + list_id.get(position));
+                                //queryToCity(FromCityID);
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+
+
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    mProgressDialog.dismiss();
+                }
+            });
+        }else {
+            mProgressDialog.dismiss();
+
+            if (lang.equals(Utils.ENG_LANG)) {
+                Utils.doToastEng(mContext, getResources().getString(R.string.open_internet_warning_eng));
+            } else if (lang.equals(Utils.MM_LANG)) {
+
+                Utils.doToastMM(mContext, getResources().getString(R.string.open_internet_warning_mm));
+            } else {
+
+
+            }
+        }
+
+
+
+    }
+
 
     /*private void onDocTypeChanged(int checkId) {
         if (checkId == R.id.signup_doc_type_nrc_radio_button) {
@@ -693,7 +884,7 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
             if (user_fb_id != null) {
                 user.put("facebookId", user_fb_id);
             }
-            if (user_fb_email != null) {
+            if (user_fb_email != null && user_fb_email != "") {
                 user.put("email", user_fb_email);
             }
 
@@ -898,6 +1089,9 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         createAccountButton.setText(getResources().getString(R.string.com_parse_ui_create_account_button_label_eng));
         mobileNoForNrcField.setHint(getResources().getString(R.string.com_parse_ui_ph_input_hint));
         editAccountButton.setText(getResources().getString(R.string.com_parse_ui_edit_account_button_label_eng));
+
+        mTlgmemberText.setText(getResources().getString(R.string.signup_tlg_member_exit_eng));
+        mTownshipLbl.setText(getResources().getString(R.string.signup_tlg_township_choose_eng));
         //Set Type Face
         img_upload_textview.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
         usernameField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
@@ -906,6 +1100,9 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         mTosTextView.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
         createAccountButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
         editAccountButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+        mobileNoForNrcField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+        mTlgmemberText.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
+        mTownshipLbl.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.NORMAL));
     }
 
     public void setMyanmarFont() {
@@ -920,7 +1117,9 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         createAccountButton.setText(getResources().getString(R.string.com_parse_ui_create_account_button_label_mm));
         editAccountButton.setText(getResources().getString(R.string.com_parse_ui_edit_account_button_label_mm));
         mTosTextView.setText(getResources().getString(R.string.i_agree_mm));
+        mTlgmemberText.setText(getResources().getString(R.string.signup_tlg_member_exit_mm));
 
+        mTownshipLbl.setText(getResources().getString(R.string.signup_tlg_township_choose_mm));
         //Set Type Face
         img_upload_textview.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
         usernameField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
@@ -929,6 +1128,10 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
         mTosTextView.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
         createAccountButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
         editAccountButton.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+        mobileNoForNrcField.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+        mTlgmemberText.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+        mTownshipLbl.setTypeface(MyTypeFace.get(getActivity().getApplicationContext(), MyTypeFace.ZAWGYI));
+
 
 
     }

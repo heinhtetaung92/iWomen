@@ -58,7 +58,11 @@ public class TableAndColumnsName {
         String POST_CONTENT_USER_NAME = "post_content_user_name";
         String POST_CONTENT_USER_IMG_PATH = "post_content_user_img_path";
 
+        String POST_CONTENT_AUTHOR_ID = "post_content_author_id";
+        String POST_CONTENT_AUTHOR_ROLE = "post_content_author_role";
 
+
+        //TODO TableColumnUpdate 1
         String POST_CONTENT_VIDEO_ID = "video_id";
         String POST_CONTENT_SUGGEST_TEXT= "post_content_suggest_text";
         String POST_CONTENT_TITLE_MM = "post_title_mm";
@@ -82,6 +86,9 @@ public class TableAndColumnsName {
                 POST_CONTENT_USER_ID + " Text Not Null," +
                 POST_CONTENT_USER_NAME + " Text Not Null," +
                 POST_CONTENT_USER_IMG_PATH + " Text Not Null," +
+
+                POST_CONTENT_AUTHOR_ID + " Text Not Null," +
+                POST_CONTENT_AUTHOR_ROLE + " Text Not Null," +
 
                 POST_CONTENT_VIDEO_ID + " Text Not Null," +
                 POST_CONTENT_SUGGEST_TEXT + " Text Not Null," +

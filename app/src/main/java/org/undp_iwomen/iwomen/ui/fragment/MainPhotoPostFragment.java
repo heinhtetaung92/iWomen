@@ -558,6 +558,7 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
             //postParse.setImageFile(photoFile);
 
 
+            //postUploadImgPath
             /**Very Important */
             ParseACL groupACL = new ParseACL();
             // userList is an Iterable<ParseUser> with the users we are sending this message to.

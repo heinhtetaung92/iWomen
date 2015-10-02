@@ -261,7 +261,7 @@
                     android:id="@+id/toggleEmojiIcon"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/smiley"
+                    android:src="@drawable/ic_smiley"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="8dp"/>
 

@@ -190,7 +190,7 @@ public class MainMaterialTab extends Fragment {
         tabs.setTextColor(getResources().getColor(android.R.color.white));
         tabs.setBackgroundColor(getResources().getColor(R.color.line_color));
         tabs.setIndicatorColor(getResources().getColor(android.R.color.white));
-        tabs.setIndicatorHeight(3);
+        tabs.setIndicatorHeight(2);
 
 
 
@@ -280,9 +280,9 @@ public class MainMaterialTab extends Fragment {
         StoriesRecentFragment storiesRecentFragment = new StoriesRecentFragment();
 
 
+        fList.add(storiesRecentFragment);
 
         fList.add(storiesMostLikesFragment);
-        fList.add(storiesRecentFragment);
 
         return fList;
     }
@@ -309,9 +309,9 @@ public class MainMaterialTab extends Fragment {
 
 
 
-        private final String[] TITLES = { "most liked", "most recent"
+        private final String[] TITLES = {"most recent" ,"most liked"
                  };
-        private final String[] TITLES_MM = { "လူ\u107Eကိ\u1033က္အမ\u103Aားဆံုုး", "ေနာက္ဆံုုးရစာမ\u103Aား"
+        private final String[] TITLES_MM = {"ေနာက္ဆံုုးရစာမ\u103Aား", "လူ\u107Eကိ\u1033က္အမ\u103Aားဆံုုး"
         };
 
         public MyPagerAdapter(FragmentManager fm, List<Fragment> fragments , String typefaceName) {

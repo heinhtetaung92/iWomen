@@ -452,7 +452,7 @@
     <eat-comment/>
     <string name="all_images">All pictures</string>
     <string name="all_videos">All videos</string>
-    <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/exploded-aar/com.kbeanie/image-chooser-library/1.4.5-beta/res/values/values.xml -->
+    <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/exploded-aar/com.kbeanie/image-chooser-library/1.5.0/res/values/values.xml -->
     <eat-comment/>
     <string name="app_name">Image Chooser Library</string>
     <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/exploded-aar/com.android.support/design/22.2.0/res/values/values.xml -->
@@ -565,8 +565,12 @@
     <string name="com_parse_ui_progress_dialog_text">Loading...</string>
     <string name="com_parse_ui_reenter_password_toast">Please re-enter your password</string>
     <string name="com_parse_ui_reenter_password_toast_mm">ေက်းဇူးၿပဳ ၍ လွ်ိဳ ့၀ွက္ စာလံုုးေနာက္တစ္ၾကိမ္ၿပန္ရိုုက္ပါ</string>
+    <string name="com_parse_ui_show_pwd_eng">Show Password</string>
+    <string name="com_parse_ui_show_pwd_mm">လွ်ိဳ ့၀ွက္ စာလံုုးစစ္ေဆး ၾကည္ ့မည္။</string>
     <string name="com_parse_ui_signup_failed_unknown_toast">Could not sign up, please try again later</string>
     <string name="com_parse_ui_signup_failed_unknown_toast_mm">မွတ္ပံုုတင္အ ခ်က္အလက္ တစ္ခုုခုု မွားယြင္းေနသည္ေနာက္တစ္ၾကိမ္ၿပန္လည္စစ္ေဆး ၀င္ရန္ၾကိဳးစားပါ။</string>
+    <string name="com_parse_ui_signup_township_lbl_eng">Choose Township</string>
+    <string name="com_parse_ui_signup_township_lbl_mm">မိမိ TLG ၿမိဳ ့နယ္ေရြးပါ</string>
     <string name="com_parse_ui_twitter_login_button_label">Log in with Twitter</string>
     <string name="com_parse_ui_twitter_login_failed_toast">Twitter login failed</string>
     <string name="com_parse_ui_username_input_hint">Username</string>
@@ -664,6 +668,7 @@
     <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/bundles/debug/res/values/values.xml -->
     <eat-comment/>
     <string name="login_moto">Inspiration for Myanmar Women</string>
+    <string name="mdy">မႏ ၱေလး</string>
     <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.0.0/res/values/values.xml -->
     <eat-comment/>
     <string name="messenger_send_button_text">Send</string>
@@ -687,6 +692,7 @@
     <string name="not_enough_space" product="default">Your SD card is full.</string>
     <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/bundles/debug/res/values/values.xml -->
     <eat-comment/>
+    <string name="npt">ေနၿပည္ေတာ္</string>
     <string name="nrc_number_error">NRC number is required</string>
     <string name="nrc_number_helper">##/###(N)######</string>
     <string name="open_internet_warning_eng">Please Open Internet Connection.</string>
@@ -756,6 +762,7 @@
     <string name="wallpaper">Setting wallpaper\u2026</string>
     <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/bundles/debug/res/values/values.xml -->
     <eat-comment/>
+    <string name="ygn">ရန္ကုုန္</string>
     <string name="your_name_error">Your name is required</string>
     <string name="your_name_error_mm">အမည္ ရိုုက္ထည့္ရန္လိုုအပ္ပါသည္</string>
     <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light"/>
@@ -1964,6 +1971,19 @@
     <style name="RtlOverlay.Widget.AppCompat.Toolbar.Button.Navigation" parent="Base.Widget.AppCompat.Toolbar.Button.Navigation">
         <item name="android:paddingLeft">@dimen/abc_action_bar_navigation_padding_start_material</item>
     </style>
+    <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/bundles/debug/res/values/values.xml -->
+    <eat-comment/>
+    <style name="Spinner.TownshipInfo" parent="Widget.AppCompat.Spinner.Underlined">
+        <item name="android:textColor">#444444</item>
+    </style>
+    <style name="SpinnerItem.TownshipInfo" parent="">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:textColor">#444444</item>
+    </style>
+    <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
+    <eat-comment/>
     <style name="TextAppearance.AppCompat" parent="Base.TextAppearance.AppCompat"/>
     <style name="TextAppearance.AppCompat.Body1" parent="Base.TextAppearance.AppCompat.Body1"/>
     <style name="TextAppearance.AppCompat.Body2" parent="Base.TextAppearance.AppCompat.Body2"/>

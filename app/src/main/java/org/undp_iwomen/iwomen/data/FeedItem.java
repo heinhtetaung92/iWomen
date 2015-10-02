@@ -13,6 +13,10 @@ public class FeedItem {
     String post_content_user_name;
     String post_content_user_img_path;
 
+    //TODO TableColumnUpdate 4
+    String post_content_author_id;
+    String post_content_author_role;
+
     String post_content_video_id;
     String post_content_suggest_text;
     String post_content_mm;
@@ -150,6 +154,22 @@ public class FeedItem {
 
     public void setPost_content_suggest_text(String post_content_suggest_text) {
         this.post_content_suggest_text = post_content_suggest_text;
+    }
+
+    public String getPost_content_author_id() {
+        return post_content_author_id;
+    }
+
+    public void setPost_content_author_id(String post_content_author_id) {
+        this.post_content_author_id = post_content_author_id;
+    }
+
+    public String getPost_content_author_role() {
+        return post_content_author_role;
+    }
+
+    public void setPost_content_author_role(String post_content_author_role) {
+        this.post_content_author_role = post_content_author_role;
     }
 
     public String getPost_title_mm() {

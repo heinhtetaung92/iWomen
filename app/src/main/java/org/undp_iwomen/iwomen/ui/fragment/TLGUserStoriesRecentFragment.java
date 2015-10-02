@@ -583,6 +583,11 @@ public class TLGUserStoriesRecentFragment extends Fragment implements View.OnCli
                                 cv.put(TableAndColumnsName.UserPostUtil.LIKE_STATUS, "0");
 
                                 cv.put(TableAndColumnsName.UserPostUtil.STATUS, "0");
+
+                                /*"postUploadedDate": {
+                "__type": "Date",
+                "iso": "2014-03-14T12:01:00.000Z"
+            },*/
                                 cv.put(TableAndColumnsName.UserPostUtil.CREATED_DATE, each_object.get("createdAt").toString());// post.get("postUploadedDate").toString() //post.getCreatedAt().toString()
                                 cv.put(TableAndColumnsName.UserPostUtil.UPDATED_DATE, each_object.get("updatedAt").toString());
 

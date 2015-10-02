@@ -34,10 +34,14 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.data.FeedItem;
 import org.undp_iwomen.iwomen.database.TableAndColumnsName;
 import org.undp_iwomen.iwomen.model.parse.Post;
+import org.undp_iwomen.iwomen.model.retrofit_api.UserPostAPI;
 import org.undp_iwomen.iwomen.provider.IwomenProviderData;
 import org.undp_iwomen.iwomen.ui.activity.MainPhotoPostActivity;
 import org.undp_iwomen.iwomen.ui.activity.PostDetailActivity;
@@ -49,6 +53,10 @@ import org.undp_iwomen.iwomen.utils.Utils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by khinsandar on 7/29/15.
@@ -68,6 +76,9 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
     FloatingActionButton fab;
     SharedPreferences sharePrefLanguageUtil;
     String mstr_lang;
+
+    private int offsetlimit = 3;
+    private int skipLimit = 0;
 
     public StoriesMostLikesFragment() {
         // Empty constructor required for fragment subclasses
@@ -129,7 +140,8 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
         } else {
 
             if (Connection.isOnline(getActivity())) {
-                getPostDataOrderByLikesDate();
+                //getPostDataOrderByLikesDate();
+                getIWomenPostByLimit();
             } else {
                 //scrollview.setVisibility(View.INVISIBLE);
                 //connectionerrorview.setVisibility(View.VISIBLE);
@@ -226,6 +238,10 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
             String post_content_mm = "";
             String post_content_title_mm = "";
 
+            //TODO TableColumnUpdate 5
+            String author_id;
+            String author_role;
+
             String like_status = "";
             String status = "";
             String created_at = "";
@@ -252,6 +268,9 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
                         post_content_mm = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_MM));
                         post_content_title_mm = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_TITLE_MM));
 
+                        //TODO TableColumnUpdate 6
+                        author_id =cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ID));
+                        author_role = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE));
 
                         like_status   = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.LIKE_STATUS));
                         status = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.STATUS));
@@ -275,6 +294,9 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
                         item.setPost_content_video_id(video_id);
                         item.setPost_content_suggest_text(post_content_suggest_text);
                         item.setPost_title_mm(post_content_title_mm);
+                        //TODO TableColumnUpdate 7
+                        item.setPost_content_author_id(author_id);
+                        item.setPost_content_author_role(author_role);
 
                         item.setPost_like_status(like_status);
                         item.setStatus(status);
@@ -319,7 +341,7 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
 
             //Utils.doToast(getActivity(), String.valueOf(feedItems.size()));
         } else {
-            Log.e("LostListFragment", "Activity Null Case");
+            Log.e("PostListFragment", "Activity Null Case");
         }
 
     }
@@ -413,7 +435,8 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
                 //mProgressDialog.show();
 
                 //SetPostData();
-                getPostDataOrderByLikesDate();
+                //getPostDataOrderByLikesDate();
+                getIWomenPostByLimit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -465,6 +488,455 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
         getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);
 
     }
+
+    private void getIWomenPostByLimit() {
+        if (Connection.isOnline(mContext)) {
+
+            Cursor cursorMain = getActivity().getContentResolver().query(IwomenProviderData.PostProvider.CONTETN_URI, null, null, null, BaseColumns._ID + " DESC");
+
+
+            if (cursorMain.getCount() > 0) {
+
+
+                Log.e("Row Count", "==>" + cursorMain.getCount());
+
+                //skipLimit = skipLimit + 10;
+                skipLimit = cursorMain.getCount();
+                Log.e("Offset Range Count", "==>" + offsetlimit + "/" + skipLimit);
+                mProgressDialog.show();//{"isAllow": true}
+                String sCondition = "{\"isAllow\": true}";
+                UserPostAPI.getInstance().getService().getIWomenPost(offsetlimit, skipLimit, sCondition, new Callback<String>() {
+                    @Override
+                    public void success(String s, Response response) {
+                        Log.e("success", "==" + s);
+                        try {
+
+                            JSONObject whole_body = new JSONObject(s);
+                            JSONArray result = whole_body.getJSONArray("results");
+                            for (int i = 0; i < result.length(); i++) {
+                                JSONObject each_object = result.getJSONObject(i);
+
+                                /*if (each_object.isNull("comment_contents")) {
+                                    comment = "null";
+                                } else {
+                                    comment = each_object.getString("comment_contents");
+                                }*/
+
+                                final ContentValues cv = new ContentValues();
+                                if (!each_object.isNull("objectId")) {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_OBJ_ID, each_object.getString("objectId"));
+
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_OBJ_ID, "");
+
+
+                                }
+                                if (!each_object.isNull("title")) {
+
+                                    cv.put(TableAndColumnsName.PostUtil.POST_TITLE, each_object.getString("title"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_TITLE, "");
+
+                                }
+
+                                if (!each_object.isNull("content")) {
+
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, each_object.getString("content"));
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, "");
+
+                                }
+                                cv.put(TableAndColumnsName.PostUtil.POST_LIKES, each_object.getInt("likes"));
+
+                                if (!each_object.isNull("image")) {
+
+                                    JSONObject imgjsonObject = each_object.getJSONObject("image");
+                                    if (!imgjsonObject.isNull("url")) {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_IMG_PATH, imgjsonObject.getString("url"));
+                                    } else {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_IMG_PATH, "");
+
+                                    }
+
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_IMG_PATH, "");
+
+                                }
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TYPES, each_object.getString("contentType"));//
+
+                                if (!each_object.isNull("userId")) {
+
+                                    JSONObject userjsonObject = each_object.getJSONObject("userId");
+                                    if (!userjsonObject.isNull("objectId")) {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, userjsonObject.getString("objectId"));
+                                    } else {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, "");
+
+                                    }
+
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, "");
+
+                                }
+
+
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_NAME, each_object.getString("postUploadName"));
+
+
+                                if (!each_object.isNull("postUploadPersonImg")) {
+
+                                    JSONObject postimgjsonObject = each_object.getJSONObject("postUploadPersonImg");
+                                    if (!postimgjsonObject.isNull("url")) {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, postimgjsonObject.getString("url"));
+                                    } else {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                    }
+
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                }
+
+                                if (!each_object.isNull("videoId")) {
+
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID, each_object.getString("videoId"));
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID, "");
+
+                                }
+
+
+                                if (!each_object.isNull("suggest_section")) {
+
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_SUGGEST_TEXT, each_object.getString("suggest_section"));
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_SUGGEST_TEXT, "");
+
+                                }
+
+                                if (!each_object.isNull("titleMm")) {
+
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TITLE_MM, each_object.getString("titleMm"));
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TITLE_MM, "");
+
+                                }
+
+                                if (!each_object.isNull("content_mm")) {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_MM, each_object.getString("content_mm"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_MM, "");
+
+                                }
+
+                                cv.put(TableAndColumnsName.PostUtil.LIKE_STATUS, "0");
+
+                                cv.put(TableAndColumnsName.PostUtil.STATUS, "0");
+
+                                //TODO TableColumnUpdate 2
+                                if (!each_object.isNull("post_author_role")) {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE, each_object.getString("post_author_role"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE, "");
+
+                                }
+                                if (!each_object.isNull("authorId")) {
+
+                                    JSONObject userjsonObject = each_object.getJSONObject("authorId");
+                                    if (!userjsonObject.isNull("objectId")) {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ID, userjsonObject.getString("objectId"));
+                                    } else {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ID, "");
+
+                                    }
+
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ID, "");
+
+                                }
+
+
+
+                                if (!each_object.isNull("postUploadedDate")) {
+
+                                    JSONObject postUploadedDate = each_object.getJSONObject("postUploadedDate");
+                                    if (!postUploadedDate.isNull("iso")) {
+                                        cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, postUploadedDate.getString("iso"));
+                                    } else {
+                                        cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, "");
+
+                                    }
+
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, "");
+
+                                }
+                                //cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, each_object.get("createdAt").toString());// post.get("postUploadedDate").toString() //post.getCreatedAt().toString()
+
+
+                                cv.put(TableAndColumnsName.PostUtil.UPDATED_DATE, each_object.get("updatedAt").toString());
+
+
+                                Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
+
+
+                                getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);
+
+
+                            }
+                            setupAdapter();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("JSON err", "==>" + e.toString());
+                        }
+                        mProgressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.e("error", "==" + error);
+                        mProgressDialog.dismiss();
+                    }
+                });
+
+
+            } else {
+                mProgressDialog.show();
+                Log.e("First Time Offset Range Count", "==>" + offsetlimit + "/" + skipLimit);//where={"isAllow": true}
+
+                String sCondition = "{\"isAllow\": true}";
+
+                UserPostAPI.getInstance().getService().getIWomenPost(offsetlimit, skipLimit, sCondition, new Callback<String>() {
+                    @Override
+                    public void success(String s, Response response) {
+                        Log.e("success", "==" + s);
+
+
+                        try {
+
+                            JSONObject whole_body = new JSONObject(s);
+                            JSONArray result = whole_body.getJSONArray("results");
+                            for (int i = 0; i < result.length(); i++) {
+                                JSONObject each_object = result.getJSONObject(i);
+
+                                /*if (each_object.isNull("comment_contents")) {
+                                    comment = "null";
+                                } else {
+                                    comment = each_object.getString("comment_contents");
+                                }*/
+
+                                final ContentValues cv = new ContentValues();
+                                if (!each_object.isNull("objectId")) {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_OBJ_ID, each_object.getString("objectId"));
+
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_OBJ_ID, "");
+
+
+                                }
+                                if (!each_object.isNull("title")) {
+
+                                    cv.put(TableAndColumnsName.PostUtil.POST_TITLE, each_object.getString("title"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_TITLE, "");
+
+                                }
+
+                                if (!each_object.isNull("content")) {
+
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, each_object.getString("content"));
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, "");
+
+                                }
+                                cv.put(TableAndColumnsName.PostUtil.POST_LIKES, each_object.getInt("likes"));
+
+                                if (!each_object.isNull("image")) {
+
+                                    JSONObject imgjsonObject = each_object.getJSONObject("image");
+                                    if (!imgjsonObject.isNull("url")) {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_IMG_PATH, imgjsonObject.getString("url"));
+                                    } else {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_IMG_PATH, "");
+
+                                    }
+
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_IMG_PATH, "");
+
+                                }
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TYPES, each_object.getString("contentType"));//
+
+                                if (!each_object.isNull("userId")) {
+
+                                    JSONObject userjsonObject = each_object.getJSONObject("userId");
+                                    if (!userjsonObject.isNull("objectId")) {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, userjsonObject.getString("objectId"));
+                                    } else {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, "");
+
+                                    }
+
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, "");
+
+                                }
+
+
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_NAME, each_object.getString("postUploadName"));
+
+
+                                if (!each_object.isNull("postUploadPersonImg")) {
+
+                                    JSONObject postimgjsonObject = each_object.getJSONObject("postUploadPersonImg");
+                                    if (!postimgjsonObject.isNull("url")) {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, postimgjsonObject.getString("url"));
+                                    } else {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                    }
+
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                }
+
+                                if (!each_object.isNull("videoId")) {
+
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID, each_object.getString("videoId"));
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID, "");
+
+                                }
+
+
+                                if (!each_object.isNull("suggest_section")) {
+
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_SUGGEST_TEXT, each_object.getString("suggest_section"));
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_SUGGEST_TEXT, "");
+
+                                }
+
+                                if (!each_object.isNull("titleMm")) {
+
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TITLE_MM, each_object.getString("titleMm"));
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_TITLE_MM, "");
+
+                                }
+
+                                if (!each_object.isNull("content_mm")) {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_MM, each_object.getString("content_mm"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_MM, "");
+
+                                }
+
+                                cv.put(TableAndColumnsName.PostUtil.LIKE_STATUS, "0");
+
+                                cv.put(TableAndColumnsName.PostUtil.STATUS, "0");
+
+                                //TODO TableColumnUpdate 3
+                                if (!each_object.isNull("post_author_role")) {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE, each_object.getString("post_author_role"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE, "");
+
+                                }
+                                if (!each_object.isNull("authorId")) {
+
+                                    JSONObject userjsonObject = each_object.getJSONObject("authorId");
+                                    if (!userjsonObject.isNull("objectId")) {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ID, userjsonObject.getString("objectId"));
+                                    } else {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ID, "");
+
+                                    }
+
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ID, "");
+
+                                }
+                                if (!each_object.isNull("postUploadedDate")) {
+
+                                    JSONObject postUploadedDate = each_object.getJSONObject("postUploadedDate");
+                                    if (!postUploadedDate.isNull("iso")) {
+                                        cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, postUploadedDate.getString("iso"));
+                                    } else {
+                                        cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, "");
+
+                                    }
+
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, "");
+
+                                }
+                                //cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, each_object.get("createdAt").toString());// post.get("postUploadedDate").toString() //post.getCreatedAt().toString()
+                                cv.put(TableAndColumnsName.PostUtil.UPDATED_DATE, each_object.get("updatedAt").toString());
+
+
+                                Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
+
+
+                                getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);
+
+
+                            }
+                            setupAdapter();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("JSON err", "==>" + e.toString());
+                        }
+
+                        mProgressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.e("error", "==" + error);
+                        mProgressDialog.dismiss();
+                    }
+                });
+
+
+            }
+
+        } else {
+            //Utils.doToast(mContext, "Internet Connection need!");
+
+            if (mstr_lang.equals(Utils.ENG_LANG)) {
+                Utils.doToastEng(mContext, "Internet Connection need!");
+            } else {
+
+                Utils.doToastMM(mContext, getActivity().getResources().getString(R.string.open_internet_warning_mm));
+            }
+        }
+    }
+
 
     private void getPostDataOrderByLikesDate() {
         if (Connection.isOnline(mContext)) {
@@ -758,7 +1230,6 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
             case R.id.post_news:
 
                 startActivity(new Intent(getActivity(), MainPhotoPostActivity.class));
-                //Utils.doToastEng(mContext, "Coming Soon!");
 
 
                 break;

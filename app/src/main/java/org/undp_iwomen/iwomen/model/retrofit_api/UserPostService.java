@@ -4,6 +4,7 @@ import org.undp_iwomen.iwomen.CommonConfig;
 
 import retrofit.Callback;
 import retrofit.http.GET;
+import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**
@@ -14,6 +15,27 @@ public interface UserPostService {
     @GET(CommonConfig.USER_POST_URL)
     public void getUserPost(@Query("limit") int limit,@Query("skip") int skiplimit,@Query("where") String sWhere, Callback<String> callback);
 
+    @GET(CommonConfig.IWOMEN_POST_URL)
+    public void getIWomenPost(@Query("limit") int limit,@Query("skip") int skiplimit,@Query("where") String sWhere, Callback<String> callback);
 
 
+    @GET(CommonConfig.USER_POST_URL)
+    public void getPostCount(@Query("limit") int limit,@Query("count") int skiplimit,@Query("where") String sWhere, Callback<String> callback);
+
+    @GET(CommonConfig.COMMENT_URL)
+    public void getCommentCount(@Query("limit") int limit,@Query("count") int skiplimit,@Query("where") String sWhere, Callback<String> callback);
+
+
+    @GET(CommonConfig.USER_POST_DETAIL_BYID_URL)
+    public void getUserPostDetailById(@Path("id") String id, Callback<String> callback);
+
+    @GET(CommonConfig.IWOMEN_POST_DETAIL_BYID_URL)
+    public void getIwomenPostDetailById(@Path("id") String id, Callback<String> callback);
+
+    @GET(CommonConfig.AUTHOR_DETAIL_BYID_URL)
+    public void getAuhtorDetailById(@Path("id") String id, Callback<String> callback);
+
+
+    @GET(CommonConfig.STICKERS_URL)
+    public void getAllStickers( Callback<String> callback);
 }
