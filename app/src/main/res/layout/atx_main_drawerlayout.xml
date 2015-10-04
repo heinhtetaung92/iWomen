@@ -41,6 +41,7 @@
                     android:id="@+id/menu_profile_area_ly"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
+
                     <FrameLayout
                         android:layout_width="@dimen/feed_item_profile_pic"
                         android:layout_height="@dimen/feed_item_profile_pic">
@@ -50,12 +51,12 @@
                             android:layout_width="@dimen/feed_item_profile_pic"
                             android:layout_height="@dimen/feed_item_profile_pic"
                             android:scaleType="fitXY"
-                            android:visibility="gone"
-                            android:src="@drawable/bonsai"></org.undp_iwomen.iwomen.ui.widget.ProfilePictureView>
+                            android:src="@drawable/bonsai"
+                            android:visibility="gone"></org.undp_iwomen.iwomen.ui.widget.ProfilePictureView>
 
                         <com.makeramen.RoundedImageView
-                            android:id="@+id/drawer_profilePic_rounded"
                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/drawer_profilePic_rounded"
                             android:layout_width="@dimen/feed_item_profile_pic"
                             android:layout_height="@dimen/feed_item_profile_pic"
 
@@ -64,12 +65,13 @@
                             android:layout_alignParentTop="true"
                             android:scaleType="fitXY"
                             android:src="@drawable/blank_profile"
+                            android:visibility="visible"
                             app:riv_border_color="#333333"
                             app:riv_border_width="0dip"
                             app:riv_corner_radius="30dip"
                             app:riv_mutate_background="true"
-                            app:riv_oval="true"
-                            android:visibility="visible"></com.makeramen.RoundedImageView>
+                            app:riv_oval="true"></com.makeramen.RoundedImageView>
+
                         <ProgressBar
                             android:id="@+id/drawer_progressBar_profile_item"
                             style="?android:attr/progressBarStyle"
@@ -145,6 +147,7 @@
 
                         android:singleLine="true"
                         android:text="Name"
+                        android:textSize="14sp"
                         android:textColor="@color/white" />
 
                 </LinearLayout>
@@ -171,6 +174,7 @@
                             android:paddingLeft="16dip"
                             android:singleLine="true"
                             android:text="Post"
+                            android:textSize="14sp"
                             android:textColor="@color/white" />
                     </LinearLayout>
 
@@ -211,6 +215,7 @@
 
                             android:singleLine="true"
                             android:text="Sign Out"
+                            android:textSize="14sp"
                             android:textColor="@color/white" />
                     </LinearLayout>
 

@@ -245,6 +245,15 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
             String author_id;
             String author_role;
 
+            String author_role_mm;
+            String credit_name;
+            String credit_logo_link;
+            String credit_link_mm;
+            String credit_link_eng;
+            int post_comment_count = 0;
+            int post_share_count = 0;
+
+
             String like_status = "";
             String status = "";
             String created_at = "";
@@ -275,6 +284,13 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
                         author_id =cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ID));
                         author_role = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE));
 
+                        author_role_mm =cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE_MM));
+                        credit_name = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREDIT_NAME));
+                        credit_logo_link =cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREDIT_LOGO_URL));
+                        credit_link_mm = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREDIT_LINK_MM));
+                        credit_link_eng =cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREDIT_LINK_ENG));
+                        post_comment_count = cursor.getInt(cursor.getColumnIndex(TableAndColumnsName.PostUtil.COMMENT_COUNT));
+                        post_share_count =cursor.getInt(cursor.getColumnIndex(TableAndColumnsName.PostUtil.SHARE_COUNT));
 
                         like_status = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.LIKE_STATUS));
                         status = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.STATUS));
@@ -303,10 +319,21 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
                         item.setPost_content_author_id(author_id);
                         item.setPost_content_author_role(author_role);
 
+
+                        item.setAuthor_role_mm(author_role_mm);//author_role_mm
+                        item.setCredit_name(credit_name); //credit_name
+                        item.setCredit_logo_link(credit_logo_link); //credit_logo_link
+                        item.setCredit_link_mm(credit_link_mm); //credit_link_mm
+                        item.setCredit_link_eng(credit_link_eng); //credit_link_eng
+                        item.setPost_comment_count(post_comment_count);
+                        item.setPost_share_count(post_share_count);
+
                         item.setPost_like_status(like_status);
                         item.setStatus(status);
                         item.setCreated_at(created_at);
                         item.setUpdated_at(updated_at);
+
+
 
 
 
@@ -510,7 +537,7 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
                 Log.e("Offset Range Count", "==>" + offsetlimit + "/" + skipLimit);
                 mProgressDialog.show();//{"isAllow": true}
                 String sCondition = "{\"isAllow\": true}";
-                UserPostAPI.getInstance().getService().getIWomenPost(offsetlimit, skipLimit, sCondition, new Callback<String>() {
+                UserPostAPI.getInstance().getService().getIWomenPost("createdAt",offsetlimit, skipLimit, sCondition, new Callback<String>() {
                     @Override
                     public void success(String s, Response response) {
                         Log.e("success", "==" + s);
@@ -553,7 +580,15 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
                                     cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, "");
 
                                 }
-                                cv.put(TableAndColumnsName.PostUtil.POST_LIKES, each_object.getInt("likes"));
+
+                                //TODO
+                                if (!each_object.isNull("likes")) {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_LIKES, each_object.getInt("likes"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_LIKES, 0);
+
+                                }
+
 
                                 if (!each_object.isNull("image")) {
 
@@ -643,10 +678,10 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
 
                                 }
 
+
                                 cv.put(TableAndColumnsName.PostUtil.LIKE_STATUS, "0");
 
                                 cv.put(TableAndColumnsName.PostUtil.STATUS, "0");
-                                //TODO TableColumnUpdate 2
                                 if (!each_object.isNull("post_author_role")) {
                                     cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE, each_object.getString("post_author_role"));
                                 } else {
@@ -668,6 +703,55 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
                                     cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ID, "");
 
                                 }
+                                //TODO TableColumnUpdate 2
+
+                                if (!each_object.isNull("post_author_role_mm")) {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE_MM, each_object.getString("post_author_role_mm"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE_MM, "");
+
+                                }
+                                if (!each_object.isNull("credit_link")) {
+                                    cv.put(TableAndColumnsName.PostUtil.CREDIT_LINK_ENG, each_object.getString("credit_link"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.CREDIT_LINK_ENG, "");
+
+                                }
+                                if (!each_object.isNull("credit_link_mm")) {
+                                    cv.put(TableAndColumnsName.PostUtil.CREDIT_LINK_MM, each_object.getString("credit_link_mm"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.CREDIT_LINK_MM, "");
+
+                                }
+                                if (!each_object.isNull("credit_logo_url")) {
+                                    cv.put(TableAndColumnsName.PostUtil.CREDIT_LOGO_URL, each_object.getString("credit_logo_url"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.CREDIT_LOGO_URL, "");
+
+                                }
+                                if (!each_object.isNull("credit_name")) {
+                                    cv.put(TableAndColumnsName.PostUtil.CREDIT_NAME, each_object.getString("credit_name"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.CREDIT_NAME, "");
+
+                                }
+
+
+
+                                if (!each_object.isNull("comment_count")) {
+                                    cv.put(TableAndColumnsName.PostUtil.COMMENT_COUNT, each_object.getInt("comment_count"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.COMMENT_COUNT, 0);
+
+                                }
+                                if (!each_object.isNull("share_count")) {
+                                    cv.put(TableAndColumnsName.PostUtil.SHARE_COUNT, each_object.getInt("share_count"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.SHARE_COUNT, 0);
+
+                                }
+
+
 
                                 if (!each_object.isNull("postUploadedDate")) {
 
@@ -718,7 +802,7 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
 
                 String sCondition = "{\"isAllow\": true}";
 
-                UserPostAPI.getInstance().getService().getIWomenPost(offsetlimit, skipLimit, sCondition, new Callback<String>() {
+                UserPostAPI.getInstance().getService().getIWomenPost("createdAt",offsetlimit, skipLimit, sCondition, new Callback<String>() {
                     @Override
                     public void success(String s, Response response) {
                         Log.e("success", "==" + s);
@@ -763,7 +847,13 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
                                     cv.put(TableAndColumnsName.PostUtil.POST_CONTENT, "");
 
                                 }
-                                cv.put(TableAndColumnsName.PostUtil.POST_LIKES, each_object.getInt("likes"));
+                                //TODO
+                                if (!each_object.isNull("likes")) {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_LIKES, each_object.getInt("likes"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_LIKES, 0);
+
+                                }
 
                                 if (!each_object.isNull("image")) {
 
@@ -879,6 +969,53 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
                                     cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ID, "");
 
                                 }
+
+                                if (!each_object.isNull("post_author_role_mm")) {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE_MM, each_object.getString("post_author_role_mm"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE_MM, "");
+
+                                }
+                                if (!each_object.isNull("credit_link")) {
+                                    cv.put(TableAndColumnsName.PostUtil.CREDIT_LINK_ENG, each_object.getString("credit_link"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.CREDIT_LINK_ENG, "");
+
+                                }
+                                if (!each_object.isNull("credit_link_mm")) {
+                                    cv.put(TableAndColumnsName.PostUtil.CREDIT_LINK_MM, each_object.getString("credit_link_mm"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.CREDIT_LINK_MM, "");
+
+                                }
+                                if (!each_object.isNull("credit_logo_url")) {
+                                    cv.put(TableAndColumnsName.PostUtil.CREDIT_LOGO_URL, each_object.getString("credit_logo_url"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.CREDIT_LOGO_URL, "");
+
+                                }
+                                if (!each_object.isNull("credit_name")) {
+                                    cv.put(TableAndColumnsName.PostUtil.CREDIT_NAME, each_object.getString("credit_name"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.CREDIT_NAME, "");
+
+                                }
+
+
+
+                                if (!each_object.isNull("comment_count")) {
+                                    cv.put(TableAndColumnsName.PostUtil.COMMENT_COUNT, each_object.getInt("comment_count"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.COMMENT_COUNT, 0);
+
+                                }
+                                if (!each_object.isNull("share_count")) {
+                                    cv.put(TableAndColumnsName.PostUtil.SHARE_COUNT, each_object.getInt("share_count"));
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.SHARE_COUNT, 0);
+
+                                }
+
 
                                 if (!each_object.isNull("postUploadedDate")) {
 
@@ -1231,7 +1368,10 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
         switch (v.getId()) {
             case R.id.post_news:
 
-                startActivity(new Intent(getActivity(), MainPhotoPostActivity.class));
+                Intent intent = new Intent(mContext, MainPhotoPostActivity.class);
+
+                intent.putExtra("PostType", "BeInspiredIwomenPost");
+                startActivity(intent);
                 //Utils.doToastEng(mContext, "Coming Soon!");
 
                 break;

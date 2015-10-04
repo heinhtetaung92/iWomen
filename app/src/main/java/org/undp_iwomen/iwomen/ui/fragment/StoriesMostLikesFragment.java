@@ -505,7 +505,7 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
                 Log.e("Offset Range Count", "==>" + offsetlimit + "/" + skipLimit);
                 mProgressDialog.show();//{"isAllow": true}
                 String sCondition = "{\"isAllow\": true}";
-                UserPostAPI.getInstance().getService().getIWomenPost(offsetlimit, skipLimit, sCondition, new Callback<String>() {
+                UserPostAPI.getInstance().getService().getIWomenPost("createdAt",offsetlimit, skipLimit, sCondition, new Callback<String>() {
                     @Override
                     public void success(String s, Response response) {
                         Log.e("success", "==" + s);
@@ -718,7 +718,7 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
 
                 String sCondition = "{\"isAllow\": true}";
 
-                UserPostAPI.getInstance().getService().getIWomenPost(offsetlimit, skipLimit, sCondition, new Callback<String>() {
+                UserPostAPI.getInstance().getService().getIWomenPost("createdAt",offsetlimit, skipLimit, sCondition, new Callback<String>() {
                     @Override
                     public void success(String s, Response response) {
                         Log.e("success", "==" + s);
@@ -1229,7 +1229,11 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
         switch (v.getId()) {
             case R.id.post_news:
 
-                startActivity(new Intent(getActivity(), MainPhotoPostActivity.class));
+                Intent intent = new Intent(mContext, MainPhotoPostActivity.class);
+
+                intent.putExtra("PostType", "BeInspiredIwomenPost");
+                startActivity(intent);
+                //startActivity(new Intent(getActivity(), MainPhotoPostActivity.class));
 
 
                 break;

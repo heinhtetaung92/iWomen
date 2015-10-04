@@ -13,10 +13,10 @@ import retrofit.http.Query;
 public interface UserPostService {
 
     @GET(CommonConfig.USER_POST_URL)
-    public void getUserPost(@Query("limit") int limit,@Query("skip") int skiplimit,@Query("where") String sWhere, Callback<String> callback);
+    public void getUserPost(@Query("order") String s,@Query("limit") int limit,@Query("skip") int skiplimit,@Query("where") String sWhere, Callback<String> callback);
 
     @GET(CommonConfig.IWOMEN_POST_URL)
-    public void getIWomenPost(@Query("limit") int limit,@Query("skip") int skiplimit,@Query("where") String sWhere, Callback<String> callback);
+    public void getIWomenPost(@Query("order") String s,@Query("limit") int limit,@Query("skip") int skiplimit,@Query("where") String sWhere, Callback<String> callback);
 
 
     @GET(CommonConfig.USER_POST_URL)

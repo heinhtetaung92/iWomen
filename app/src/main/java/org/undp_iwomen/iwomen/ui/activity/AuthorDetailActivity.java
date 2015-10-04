@@ -259,7 +259,7 @@ public class AuthorDetailActivity extends AppCompatActivity {
 
         } else {
             txtAuthorTitle.setText(item.getAuthorTitleMM());
-            txtBody.setText(item.getAuthorTitleMM());
+            txtBody.setText(item.getAuthorInfoMM());
         }
 
         //Common

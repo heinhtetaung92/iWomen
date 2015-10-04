@@ -1,6 +1,7 @@
 package org.undp_iwomen.iwomen.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -8,9 +9,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
+import org.undp_iwomen.iwomen.ui.fragment.MainPhotoIWomenPostFragment;
 import org.undp_iwomen.iwomen.ui.fragment.MainPhotoPostFragment;
 import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 import org.undp_iwomen.iwomen.utils.Utils;
@@ -18,7 +19,7 @@ import org.undp_iwomen.iwomen.utils.Utils;
 
 public class MainPhotoPostActivity extends ActionBarActivity {
 
-    String mstrReportType;
+    String mstrPostType;
     SharedPreferences sharePrefLanguageUtil;
     String strLang;
     private CustomTextView textViewTitle;
@@ -30,8 +31,8 @@ public class MainPhotoPostActivity extends ActionBarActivity {
         setContentView(R.layout.activity_fragment);
         sharePrefLanguageUtil = getSharedPreferences(Utils.PREF_SETTING, Context.MODE_PRIVATE);
 
-        /*Intent i = getIntent();
-        mstrReportType = i.getStringExtra("ReportType");*/
+        Intent i = getIntent();
+        mstrPostType = i.getStringExtra("PostType");
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -45,7 +46,14 @@ public class MainPhotoPostActivity extends ActionBarActivity {
         strLang = sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
 
         if(strLang.equals(Utils.ENG_LANG)) {
-            textViewTitle.setText(R.string.title_activity_new_post_eng);
+
+
+            if(mstrPostType.equalsIgnoreCase("BeInspiredIwomenPost")){
+                textViewTitle.setText(R.string.title_activity_beinspired_new_post_eng);
+            }else{
+                textViewTitle.setText(R.string.title_activity_new_post_eng);
+            }
+
             textViewTitle.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.NORMAL));
             //setTitle(R.string.loading_eng);
 
@@ -69,24 +77,30 @@ public class MainPhotoPostActivity extends ActionBarActivity {
 
         }
 
-        /*ActionBar actionbar = getSupportActionBar();
 
-        if (actionbar != null) {
-            actionbar.setHomeButtonEnabled(true);
-            actionbar.setDisplayHomeAsUpEnabled(true);
-        }*/
 
         if (savedInstanceState == null) {
+
+
             MainPhotoPostFragment mainReportFragment = new MainPhotoPostFragment();
+
+            MainPhotoIWomenPostFragment  mainPhotoIWomenPostFragment = new MainPhotoIWomenPostFragment();
             /*Bundle b = new Bundle();
 
             b.putString("ReportType",mstrReportType);
 
 
             mainReportFragment.setArguments(b);*/
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, mainReportFragment)
-                    .commit();
+            if(mstrPostType.equalsIgnoreCase("BeInspiredIwomenPost")){
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.container, mainPhotoIWomenPostFragment)
+                        .commit();
+            }else{
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.container, mainReportFragment)
+                        .commit();
+            }
+
         }
 
 

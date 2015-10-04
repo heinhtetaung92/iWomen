@@ -15,6 +15,7 @@ import android.provider.BaseColumns;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -77,6 +78,7 @@ import org.undp_iwomen.iwomen.provider.IwomenProviderData;
 import org.undp_iwomen.iwomen.ui.adapter.CommentAdapter;
 import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 import org.undp_iwomen.iwomen.ui.widget.ProgressWheel;
+import org.undp_iwomen.iwomen.ui.widget.ResizableImageView;
 import org.undp_iwomen.iwomen.utils.Connection;
 import org.undp_iwomen.iwomen.utils.Utils;
 
@@ -87,6 +89,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -112,7 +115,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     TextView post_suggest_text;
     private ProgressBar feed_item_progressBar;
     private ProgressBar profile_item_progressBar;
-    private org.undp_iwomen.iwomen.ui.widget.ProfilePictureView profilePictureView;
+    //private org.undp_iwomen.iwomen.ui.widget.ProfilePictureView profilePictureView;
     private RoundedImageView profile;
     private org.undp_iwomen.iwomen.ui.widget.ResizableImageView postIMg;
     private SharedPreferences mSharedPreferencesUserInfo;
@@ -134,6 +137,12 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     private ImageView img_player;
     private TextView txt_player;
     private TextView txt_download;
+
+    private ResizableImageView img_credit_logo;
+    private TextView txt_credit_link;
+    private ProgressBar progressBar_credit;
+    private LinearLayout ly_credit;
+
 
     private CustomTextView txt_lbl_like_post, txt_lbl_share_post;
 
@@ -290,7 +299,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         postdetail_username = (TextView) findViewById(R.id.postdetail_username);
         post_suggest_text = (TextView) findViewById(R.id.postdetail_suggest_title);
 
-        profilePictureView = (org.undp_iwomen.iwomen.ui.widget.ProfilePictureView) findViewById(R.id.postdetail_profilePic);
+        //profilePictureView = (org.undp_iwomen.iwomen.ui.widget.ProfilePictureView) findViewById(R.id.postdetail_profilePic);
         postIMg = (org.undp_iwomen.iwomen.ui.widget.ResizableImageView) findViewById(R.id.postdetail_content_img);
         feed_item_progressBar = (ProgressBar) findViewById(R.id.postdetail_feed_item_progressBar);
         profile_item_progressBar = (ProgressBar) findViewById(R.id.postdetail_progressBar_profile_item);
@@ -324,6 +333,11 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
         txt_lbl_like_post = (CustomTextView) findViewById(R.id.postdetail_like_post_lbl);
         txt_lbl_share_post = (CustomTextView) findViewById(R.id.postdetail_share_post_lbl);
+
+        img_credit_logo = (ResizableImageView)findViewById(R.id.postdetail_credit_img);
+        txt_credit_link = (TextView)findViewById(R.id.postdetail_credit_link);
+        progressBar_credit = (ProgressBar)findViewById(R.id.postdetail_credit_progress);
+        ly_credit = (LinearLayout)findViewById(R.id.postdetail_ly_credit);
 
 
         if (postId != null) {
@@ -836,7 +850,10 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             e.printStackTrace();
         }
 
+
+
         mstrPostType = item.getPost_content_type();
+        //TODO TableColumnUpdate 10 data set show in UI
         if (strLang.equals(com.parse.utils.Utils.ENG_LANG)) {
             postdetail_username.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.NORMAL));
 
@@ -890,6 +907,13 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             post_content.setTypeface(MyTypeFace.get(this, MyTypeFace.NORMAL));
             post_suggest_text.setTypeface(MyTypeFace.get(this, MyTypeFace.NORMAL));
 
+            txt_credit_link.setText("Credit to " + item.getCredit_name());
+            if(item.getCredit_link_eng()!= null){
+
+                Pattern pattern = Pattern.compile("[a-zA-Z]+");
+                Linkify.addLinks(txt_credit_link,pattern, item.getCredit_link_eng());
+            }
+
         } else {
             postdetail_username.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
 
@@ -936,11 +960,22 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
             txt_lbl_like_post.setText(R.string.post_detail_like_post_mm);
             txt_lbl_share_post.setText(R.string.post_detail_share_post_mm);
+
+            txt_credit_link.setText("Credit to " + item.getCredit_name());
+            if(item.getCredit_link_mm()!= null){
+
+                Pattern pattern = Pattern.compile("[a-zA-Z]+");
+                Linkify.addLinks(txt_credit_link,pattern, item.getCredit_link_mm());
+            }
+
             /*et_comment.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
             mPostTile.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
             post_content.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
             post_suggest_text.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));*/
         }
+
+
+
 
         if (like_status.equalsIgnoreCase("0")) {
             img_like.setImageResource(R.drawable.like_stroke);
@@ -948,13 +983,43 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
             img_like.setImageResource(R.drawable.like_fill);
         }
-        txt_like_count.setText(item.getPost_like() + " likes");
+        txt_like_count.setText(item.getPost_like()+" " );
+
+
+        if (item.getCredit_logo_link() != null && !item.getCredit_logo_link().isEmpty()) {
+            try {
+                //profilePictureView.setVisibility(View.GONE);
+                profile.setVisibility(View.VISIBLE);
+                Picasso.with(this)
+                        .load(item.getCredit_logo_link()) //"http://cheapandcheerfulshopper.com/wp-content/uploads/2013/08/shopping1257549438_1370386595.jpg" //deal.photo1
+                        .placeholder(R.drawable.place_holder)
+                        .error(R.drawable.place_holder)
+                        .into(img_credit_logo, new ImageLoadedCallback(progressBar_credit) {
+                            @Override
+                            public void onSuccess() {
+                                if (this.progressBar != null) {
+                                    this.progressBar.setVisibility(View.GONE);
+                                } else {
+                                    this.progressBar.setVisibility(View.VISIBLE);
+                                }
+                            }
+
+                        });
+            } catch (OutOfMemoryError outOfMemoryError) {
+                outOfMemoryError.printStackTrace();
+            }
+        } else {
+
+            profile.setImageResource(R.drawable.blank_profile);
+
+            profile_item_progressBar.setVisibility(View.GONE);
+        }
 
         //viewHolder.mCatNameTextView.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
         //viewHolder.profilePictureView.setProfileId(item.get());
         if (item.getPost_content_user_img_path() != null && !item.getPost_content_user_img_path().isEmpty()) {
             try {
-                profilePictureView.setVisibility(View.GONE);
+                //profilePictureView.setVisibility(View.GONE);
                 profile.setVisibility(View.VISIBLE);
                 Picasso.with(this)
                         .load(item.getPost_content_user_img_path()) //"http://cheapandcheerfulshopper.com/wp-content/uploads/2013/08/shopping1257549438_1370386595.jpg" //deal.photo1
@@ -977,8 +1042,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         } else {
 
             profile.setImageResource(R.drawable.blank_profile);
-            profilePictureView.setVisibility(View.GONE);
-            //profilePictureView.setBackgroundResource(R.drawable.blank_profile);
+
             profile_item_progressBar.setVisibility(View.GONE);
         }
 
@@ -1042,6 +1106,15 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             String author_id;
             String author_role;
 
+            String author_role_mm;
+            String credit_name;
+            String credit_logo_link;
+            String credit_link_mm;
+            String credit_link_eng;
+            int post_comment_count = 0;
+            int post_share_count = 0;
+
+
             String like_status = "";
             String status = "";
             String created_at = "";
@@ -1068,6 +1141,17 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                     //TODO TableColumnUpdate 9
                     author_id = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ID));
                     author_role = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE));
+
+
+                     author_role_mm = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE_MM));
+                     credit_name = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREDIT_NAME));
+                     credit_logo_link = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREDIT_LOGO_URL));
+                     credit_link_mm = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREDIT_LINK_MM));
+                     credit_link_eng = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREDIT_LINK_ENG));
+                    post_comment_count = cursor.getInt(cursor.getColumnIndex(TableAndColumnsName.PostUtil.COMMENT_COUNT));
+                    post_share_count = cursor.getInt(cursor.getColumnIndex(TableAndColumnsName.PostUtil.SHARE_COUNT));
+
+
                     video_id = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_VIDEO_ID));
                     post_content_suggest_text = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_SUGGEST_TEXT));
                     post_content_mm = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_MM));
@@ -1092,11 +1176,22 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                     item.setPost_content_author_id(author_id);
                     item.setPost_content_author_role(author_role);
 
+                    item.setAuthor_role_mm(author_role_mm);//author_role_mm
+                    item.setCredit_name(credit_name); //credit_name
+                    item.setCredit_logo_link(credit_logo_link); //credit_logo_link
+                    item.setCredit_link_mm(credit_link_mm); //credit_link_mm
+                    item.setCredit_link_eng(credit_link_eng); //credit_link_eng
+                    item.setPost_comment_count(post_comment_count);
+                    item.setPost_share_count(post_share_count);
+
                     item.setPost_like_status(like_status);
 
                     item.setStatus(status);
                     item.setCreated_at(created_at);
                     item.setUpdated_at(updated_at);
+
+
+
 
                 } while (cursor.moveToNext());
             }
@@ -1160,7 +1255,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
                                     if (e == null) {
                                         Log.e("Cloud Increment", "===>" + like_count);
-                                        txt_like_count.setText(like_count + " likes");
+                                        txt_like_count.setText(like_count+" " );//+ " likes"
                                         //TODO call updatePost
                                         updatePostLikeStatus(postId, like_count);
                                         like_status = "1";
@@ -1521,7 +1616,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
                         }
 
-                        //TODO TableColumnUpdate 9
+                        //TODO TableColumnUpdate 11
                         if (!each_object.isNull("post_author_role")) {
                             cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE, each_object.getString("post_author_role"));
                         } else {
@@ -1541,6 +1636,52 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
                         } else {
                             cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ID, "");
+
+                        }
+
+                        if (!each_object.isNull("post_author_role_mm")) {
+                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE_MM, each_object.getString("post_author_role_mm"));
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE_MM, "");
+
+                        }
+                        if (!each_object.isNull("credit_link")) {
+                            cv.put(TableAndColumnsName.PostUtil.CREDIT_LINK_ENG, each_object.getString("credit_link"));
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.CREDIT_LINK_ENG, "");
+
+                        }
+                        if (!each_object.isNull("credit_link_mm")) {
+                            cv.put(TableAndColumnsName.PostUtil.CREDIT_LINK_MM, each_object.getString("credit_link_mm"));
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.CREDIT_LINK_MM, "");
+
+                        }
+                        if (!each_object.isNull("credit_logo_url")) {
+                            cv.put(TableAndColumnsName.PostUtil.CREDIT_LOGO_URL, each_object.getString("credit_logo_url"));
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.CREDIT_LOGO_URL, "");
+
+                        }
+                        if (!each_object.isNull("credit_name")) {
+                            cv.put(TableAndColumnsName.PostUtil.CREDIT_NAME, each_object.getString("credit_name"));
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.CREDIT_NAME, "");
+
+                        }
+
+
+
+                        if (!each_object.isNull("comment_count")) {
+                            cv.put(TableAndColumnsName.PostUtil.COMMENT_COUNT, each_object.getInt("comment_count"));
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.COMMENT_COUNT, 0);
+
+                        }
+                        if (!each_object.isNull("share_count")) {
+                            cv.put(TableAndColumnsName.PostUtil.SHARE_COUNT, each_object.getInt("share_count"));
+                        } else {
+                            cv.put(TableAndColumnsName.PostUtil.SHARE_COUNT, 0);
 
                         }
 
@@ -1627,7 +1768,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
                         cmd_count = whole_body.getString("count");
 
-                        txt_cmd_count.setText(cmd_count + " comments");
+                        txt_cmd_count.setText(cmd_count + " People Comments On this");
 
                     } catch (JSONException ex) {
                         ex.printStackTrace();

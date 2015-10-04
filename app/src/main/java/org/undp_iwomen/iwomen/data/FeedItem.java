@@ -27,6 +27,14 @@ public class FeedItem {
     String created_at;
     String updated_at;
 
+    String author_role_mm;
+    String credit_name;
+    String credit_logo_link;
+    String credit_link_mm;
+    String credit_link_eng;
+    int post_comment_count = 0;
+    int post_share_count = 0;
+
     public FeedItem() {
     }
 
@@ -186,6 +194,63 @@ public class FeedItem {
 
     public void setPost_like_status(String post_like_status) {
         this.post_like_status = post_like_status;
+    }
+
+
+    public String getAuthor_role_mm() {
+        return author_role_mm;
+    }
+
+    public void setAuthor_role_mm(String author_role_mm) {
+        this.author_role_mm = author_role_mm;
+    }
+
+    public String getCredit_name() {
+        return credit_name;
+    }
+
+    public void setCredit_name(String credit_name) {
+        this.credit_name = credit_name;
+    }
+
+    public String getCredit_logo_link() {
+        return credit_logo_link;
+    }
+
+    public void setCredit_logo_link(String credit_logo_link) {
+        this.credit_logo_link = credit_logo_link;
+    }
+
+    public String getCredit_link_mm() {
+        return credit_link_mm;
+    }
+
+    public void setCredit_link_mm(String credit_link_mm) {
+        this.credit_link_mm = credit_link_mm;
+    }
+
+    public String getCredit_link_eng() {
+        return credit_link_eng;
+    }
+
+    public void setCredit_link_eng(String credit_link_eng) {
+        this.credit_link_eng = credit_link_eng;
+    }
+
+    public int getPost_comment_count() {
+        return post_comment_count;
+    }
+
+    public void setPost_comment_count(int post_comment_count) {
+        this.post_comment_count = post_comment_count;
+    }
+
+    public int getPost_share_count() {
+        return post_share_count;
+    }
+
+    public void setPost_share_count(int post_share_count) {
+        this.post_share_count = post_share_count;
     }
 
     public String getStatus() {

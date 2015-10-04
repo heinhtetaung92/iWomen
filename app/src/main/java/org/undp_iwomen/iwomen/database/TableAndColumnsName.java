@@ -62,11 +62,23 @@ public class TableAndColumnsName {
         String POST_CONTENT_AUTHOR_ROLE = "post_content_author_role";
 
 
+
         //TODO TableColumnUpdate 1
         String POST_CONTENT_VIDEO_ID = "video_id";
         String POST_CONTENT_SUGGEST_TEXT= "post_content_suggest_text";
         String POST_CONTENT_TITLE_MM = "post_title_mm";
         String LIKE_STATUS = "like_status";
+
+        String POST_CONTENT_AUTHOR_ROLE_MM = "post_content_author_role_mm";
+
+        String CREDIT_LINK_ENG = "credit_link";
+        String CREDIT_LINK_MM = "credit_link_mm";
+        String CREDIT_LOGO_URL = "credit_logo_url";
+        String CREDIT_NAME = "credit_name";
+
+        String COMMENT_COUNT = "comment_count";
+        String SHARE_COUNT = "share_count";
+
 
         String STATUS = "status";
         String CREATED_DATE ="created_at";
@@ -95,6 +107,17 @@ public class TableAndColumnsName {
                 POST_CONTENT_TITLE_MM + " Text Not Null," +
 
                 LIKE_STATUS + " Text Not Null," +
+
+                POST_CONTENT_AUTHOR_ROLE_MM + " Text Not Null," +
+                CREDIT_LINK_ENG + " Text Not Null," +
+                CREDIT_LINK_MM + " Text Not Null," +
+                CREDIT_LOGO_URL + " Text Not Null," +
+                CREDIT_NAME + " Text Not Null," +
+                COMMENT_COUNT + " INTEGER Not Null," +
+                SHARE_COUNT + " INTEGER Not Null," +
+
+
+
                 STATUS + " Text Not Null," +
                 CREATED_DATE + " DateTime Not Null," +
                 UPDATED_DATE + " DateTime Not Null,"+

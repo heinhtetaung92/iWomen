@@ -452,7 +452,7 @@
     <eat-comment/>
     <string name="all_images">All pictures</string>
     <string name="all_videos">All videos</string>
-    <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/exploded-aar/com.kbeanie/image-chooser-library/1.5.0/res/values/values.xml -->
+    <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/exploded-aar/com.kbeanie/image-chooser-library/1.5.2/res/values/values.xml -->
     <eat-comment/>
     <string name="app_name">Image Chooser Library</string>
     <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/exploded-aar/com.android.support/design/22.2.0/res/values/values.xml -->
@@ -746,6 +746,14 @@
     <string name="send_media_files">Share media files via</string>
     <string name="setImage">Set picture as</string>
     <string name="show_on_map">Show on Maps</string>
+    <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/bundles/debug/res/values/values.xml -->
+    <eat-comment/>
+    <string name="signup_tlg_member_exit_eng">I am TLG member</string>
+    <string name="signup_tlg_member_exit_mm">TLG အဖြဲ ့၀င္ၿဖစ္လ်င္အမွန္ၿခစ္ လုုပ္ပါ</string>
+    <string name="signup_tlg_township_choose_eng">Choose TLG Township</string>
+    <string name="signup_tlg_township_choose_mm">TLG ၿမိဳ့နယ္တည္ေနရာေရြးခ်ယ္ပါ</string>
+    <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/exploded-aar/me.villani.lorenzo.android/android-cropimage/1.0.2/res/values/values.xml -->
+    <eat-comment/>
     <string name="slide_show">Slideshow</string>
     <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>

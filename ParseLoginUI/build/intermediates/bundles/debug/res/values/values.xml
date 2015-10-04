@@ -158,6 +158,10 @@
     <string name="password_error">Password is required</string>
     <string name="password_error_mm">လွ်ိဳ ့၀ွက္ စာလံုုးရိုုက္ထည့္ရန္လိုုအပ္ပါသည္</string>
     <string name="select_picture">Select Picture</string>
+    <string name="signup_tlg_member_exit_eng">I am TLG member</string>
+    <string name="signup_tlg_member_exit_mm">TLG အဖြဲ ့၀င္ၿဖစ္လ်င္အမွန္ၿခစ္ လုုပ္ပါ</string>
+    <string name="signup_tlg_township_choose_eng">Choose TLG Township</string>
+    <string name="signup_tlg_township_choose_mm">TLG ၿမိဳ့နယ္တည္ေနရာေရြးခ်ယ္ပါ</string>
     <string name="ygn">ရန္ကုုန္</string>
     <string name="your_name_error">Your name is required</string>
     <string name="your_name_error_mm">အမည္ ရိုုက္ထည့္ရန္လိုုအပ္ပါသည္</string>

@@ -77,6 +77,7 @@ import org.undp_iwomen.iwomen.provider.IwomenProviderData;
 import org.undp_iwomen.iwomen.ui.adapter.CommentAdapter;
 import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 import org.undp_iwomen.iwomen.ui.widget.ProgressWheel;
+import org.undp_iwomen.iwomen.ui.widget.ResizableImageView;
 import org.undp_iwomen.iwomen.utils.Connection;
 import org.undp_iwomen.iwomen.utils.Utils;
 
@@ -112,7 +113,7 @@ public class TLGUserPostDetailActivity extends AppCompatActivity implements View
     TextView post_suggest_text;
     private ProgressBar feed_item_progressBar;
     private ProgressBar profile_item_progressBar;
-    private org.undp_iwomen.iwomen.ui.widget.ProfilePictureView profilePictureView;
+    //private org.undp_iwomen.iwomen.ui.widget.ProfilePictureView profilePictureView;
     private RoundedImageView profile;
     private org.undp_iwomen.iwomen.ui.widget.ResizableImageView postIMg;
     private SharedPreferences mSharedPreferencesUserInfo;
@@ -134,6 +135,11 @@ public class TLGUserPostDetailActivity extends AppCompatActivity implements View
     private ImageView img_player;
     private TextView txt_player;
     private TextView txt_download;
+
+    private ResizableImageView img_credit_logo;
+    private TextView txt_credit_link;
+    private ProgressBar progressBar_credit;
+    private LinearLayout ly_credit;
 
     private LinearLayout ly_postdetail_share_button;
     private LinearLayout ly_postdetail_download;
@@ -288,7 +294,7 @@ public class TLGUserPostDetailActivity extends AppCompatActivity implements View
 
         post_suggest_text = (TextView) findViewById(R.id.postdetail_suggest_title);
 
-        profilePictureView = (org.undp_iwomen.iwomen.ui.widget.ProfilePictureView) findViewById(R.id.postdetail_profilePic);
+        //profilePictureView = (org.undp_iwomen.iwomen.ui.widget.ProfilePictureView) findViewById(R.id.postdetail_profilePic);
         postIMg = (org.undp_iwomen.iwomen.ui.widget.ResizableImageView) findViewById(R.id.postdetail_content_img);
         feed_item_progressBar = (ProgressBar) findViewById(R.id.postdetail_feed_item_progressBar);
         profile_item_progressBar = (ProgressBar) findViewById(R.id.postdetail_progressBar_profile_item);
@@ -324,6 +330,13 @@ public class TLGUserPostDetailActivity extends AppCompatActivity implements View
 
         txt_lbl_like_post = (CustomTextView)findViewById(R.id.postdetail_like_post_lbl);
         txt_lbl_share_post =(CustomTextView)findViewById(R.id.postdetail_share_post_lbl);
+
+        img_credit_logo = (ResizableImageView)findViewById(R.id.postdetail_credit_img);
+        txt_credit_link = (TextView)findViewById(R.id.postdetail_credit_link);
+        progressBar_credit = (ProgressBar)findViewById(R.id.postdetail_credit_progress);
+        ly_credit = (LinearLayout)findViewById(R.id.postdetail_ly_credit);
+
+        ly_credit.setVisibility(View.GONE);
 
         if (postId != null) {
             getLocalPostDetail(postId);
@@ -918,13 +931,13 @@ public class TLGUserPostDetailActivity extends AppCompatActivity implements View
 
             img_like.setImageResource(R.drawable.like_fill);
         }
-        txt_like_count.setText(item.getPost_like() + " likes");
+        txt_like_count.setText(item.getPost_like() +" " );
 
         //viewHolder.mCatNameTextView.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
         //viewHolder.profilePictureView.setProfileId(item.get());
         if (item.getPost_content_user_img_path() != null && !item.getPost_content_user_img_path().isEmpty()) {
             try {
-                profilePictureView.setVisibility(View.GONE);
+                //profilePictureView.setVisibility(View.GONE);
                 profile.setVisibility(View.VISIBLE);
                 Picasso.with(this)
                         .load(item.getPost_content_user_img_path()) //"http://cheapandcheerfulshopper.com/wp-content/uploads/2013/08/shopping1257549438_1370386595.jpg" //deal.photo1
@@ -947,8 +960,7 @@ public class TLGUserPostDetailActivity extends AppCompatActivity implements View
         } else {
 
             profile.setImageResource(R.drawable.blank_profile);
-            profilePictureView.setVisibility(View.GONE);
-            //profilePictureView.setBackgroundResource(R.drawable.blank_profile);
+
             profile_item_progressBar.setVisibility(View.GONE);
         }
 
@@ -1119,7 +1131,7 @@ public class TLGUserPostDetailActivity extends AppCompatActivity implements View
 
                                     if (e == null) {
                                         //Log.e("Cloud Increment", "===>" + like_count);
-                                        txt_like_count.setText(like_count + " likes");
+                                        txt_like_count.setText(like_count + " "  );
                                         //TODO call updatePost
                                         updatePostLikeStatus(postId, like_count);
                                         like_status = "1";
@@ -1547,7 +1559,7 @@ public class TLGUserPostDetailActivity extends AppCompatActivity implements View
                         JSONArray result = whole_body.getJSONArray("results");
 
                         cmd_count = whole_body.getString("count");
-                        txt_cmd_count.setText( cmd_count + " comments") ;
+                        txt_cmd_count.setText( cmd_count + " People Comments On this") ;
 
                     }catch (JSONException ex){
                         ex.printStackTrace();

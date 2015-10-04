@@ -113,6 +113,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="Title"
+
             android:textSize="25sp"
             android:textStyle="bold" />
 
@@ -121,14 +122,120 @@
             android:id="@+id/postdetail_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="18dp"
-            android:textStyle="bold" />
+            android:layout_marginLeft="16dp"
+            android:paddingBottom="5dp"
+            android:text="Dear" />
 
         <org.undp_iwomen.iwomen.ui.widget.CustomTextView
             android:id="@+id/postdetail_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp" />
+            android:layout_marginLeft="16dp"
+            android:text="Content" />
+
+
+        <LinearLayout
+            android:id="@+id/postdetail_ly_credit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="@dimen/feed_item_profile_pic"
+                android:layout_height="@dimen/feed_item_profile_pic">
+
+
+                <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/postdetail_credit_pic_rounded"
+                    android:layout_width="@dimen/feed_item_profile_pic"
+                    android:layout_height="@dimen/feed_item_profile_pic"
+
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_credit"
+                    android:visibility="visible"
+                    app:riv_border_color="#333333"
+                    app:riv_border_width="0dip"
+                    app:riv_corner_radius="30dip"
+                    app:riv_mutate_background="true"
+                    app:riv_oval="true"></com.makeramen.RoundedImageView>
+
+                <!--<ProgressBar
+                    android:id="@+id/postdetail_credit_progress"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="@dimen/feed_item_profile_pic"
+                    android:layout_height="@dimen/feed_item_profile_pic"
+
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_gravity="left"
+                    android:visibility="visible" />-->
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:orientation="horizontal">
+
+                <!-- <TextView
+                     android:id="@+id/postdetail_credit_name"
+                     android:layout_width="wrap_content"
+                     android:layout_height="match_parent"
+                     android:layout_marginLeft="8dp"
+                     android:gravity="center_vertical"
+                     android:text="TED"
+
+                     android:textSize="18sp"
+                     android:textStyle="bold" />-->
+                <FrameLayout
+                    android:layout_width="@dimen/feed_item_profile_pic"
+                    android:layout_height="@dimen/feed_item_profile_pic">
+
+
+                    <org.undp_iwomen.iwomen.ui.widget.ResizableImageView
+
+                        android:id="@+id/postdetail_credit_img"
+                        android:layout_width="@dimen/feed_item_profile_pic"
+                        android:layout_height="@dimen/feed_item_profile_pic"
+
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/place_holder"
+                        android:visibility="visible"></org.undp_iwomen.iwomen.ui.widget.ResizableImageView>
+
+                    <ProgressBar
+                        android:id="@+id/postdetail_credit_progress"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="@dimen/feed_item_profile_pic"
+                        android:layout_height="@dimen/feed_item_profile_pic"
+
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_gravity="left"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/postdetail_credit_link"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:gravity="center_vertical"
+                    android:text="Credit To "
+                    android:textColor="@color/blue_500"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+        <!-- Credit -->
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -140,13 +247,6 @@
                 android:layout_width="@dimen/feed_item_profile_pic"
                 android:layout_height="@dimen/feed_item_profile_pic">
 
-                <org.undp_iwomen.iwomen.ui.widget.ProfilePictureView
-                    android:id="@+id/postdetail_profilePic"
-                    android:layout_width="@dimen/feed_item_profile_pic"
-                    android:layout_height="@dimen/feed_item_profile_pic"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/bonsai"
-                    android:visibility="gone"></org.undp_iwomen.iwomen.ui.widget.ProfilePictureView>
 
                 <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/postdetail_profilePic_rounded"
@@ -198,7 +298,7 @@
                     android:id="@+id/postdetail_content_role_more_ly"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/postdetail_content_user_role"
@@ -211,8 +311,12 @@
                         android:id="@+id/postdetail_content_user_role_more"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@color/grey_500"
+                        android:padding="10dp"
                         android:text="more >> "
+                        android:textColor="@color/white"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -221,7 +325,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="Posted on 21 Aug 2015" />
+                    android:text="Posted on 21 Aug 2015"
+                    android:textStyle="bold" />
 
 
             </LinearLayout>
@@ -235,11 +340,17 @@
             android:layout_margin="8dp"
             android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/postdetail_like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text=" " />
             <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                 android:id="@+id/postdetail_like_post_lbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+
                 android:text="Like This Post" />
 
 
@@ -356,19 +467,14 @@
             android:layout_margin="8dp"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/postdetail_like_count"
-                android:layout_width="80dp"
-                android:layout_height="50dp"
-                android:layout_margin="8dp"
-                android:text="50 Likes" />
+
 
             <TextView
                 android:id="@+id/postdetail_cmd_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="14 Comments" />
+                android:text="0 Comments" />
 
         </LinearLayout>
 

@@ -442,12 +442,14 @@ public class TLGUserStoriesRecentFragment extends Fragment implements View.OnCli
 
                 Log.e("Row Count", "==>" + cursorMain.getCount());
 
-                //skipLimit = skipLimit + 10;
-                skipLimit = cursorMain.getCount();
+                //skipLimit = skipLimit + 10; // OLd way
+                skipLimit = cursorMain.getCount();// my way
+
+
                 Log.e("Offset Range Count", "==>" + offsetlimit + "/" + skipLimit);
                 mProgressDialog.show();//{"isAllow": true}
                 String sCondition = "{\"isAllow\": true}";
-                UserPostAPI.getInstance().getService().getUserPost(offsetlimit, skipLimit, sCondition, new Callback<String>() {
+                UserPostAPI.getInstance().getService().getUserPost("createdAt",offsetlimit, skipLimit, sCondition, new Callback<String>() {
                     @Override
                     public void success(String s, Response response) {
                         Log.e("success", "==" + s);
@@ -622,7 +624,7 @@ public class TLGUserStoriesRecentFragment extends Fragment implements View.OnCli
 
                 String sCondition = "{\"isAllow\": true}";
 
-                UserPostAPI.getInstance().getService().getUserPost(offsetlimit, skipLimit, sCondition, new Callback<String>() {
+                UserPostAPI.getInstance().getService().getUserPost("createdAt",offsetlimit, skipLimit, sCondition, new Callback<String>() {
                     @Override
                     public void success(String s, Response response) {
                         Log.e("success", "==" + s);
@@ -1108,7 +1110,11 @@ public class TLGUserStoriesRecentFragment extends Fragment implements View.OnCli
         switch (v.getId()) {
             case R.id.post_news:
 
-                startActivity(new Intent(getActivity(), MainPhotoPostActivity.class));
+                Intent intent = new Intent(mContext, MainPhotoPostActivity.class);
+
+                intent.putExtra("PostType", "TalkTogetherPost");
+                startActivity(intent);
+                //startActivity(new Intent(getActivity(), MainPhotoPostActivity.class));
                 //Utils.doToastEng(mContext, "Coming Soon!");
 
                 break;

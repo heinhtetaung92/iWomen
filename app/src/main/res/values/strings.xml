@@ -43,6 +43,11 @@
     <string name="title_activity_new_post_eng">New Post</string>
     <string name="title_activity_new_post_mm">ပိုု ့စ္အသစ္တင္မည္</string>
 
+
+    <string name="title_activity_beinspired_new_post_eng">New Be Inspired Post</string>
+    <string name="title_activity_beinspired_new_post_mm">New Post</string>
+
+
     <string name="new_post_mm">ပိုု ့စ္အသစ္တင္မည္</string>
     <string name="new_post_eng">Post New Story</string>
 
@@ -52,6 +57,10 @@
 ေအာင္ၿမင္ေသာ လုုပ္ငန္းေဆာင္တာမ်ား အဖြဲ ့လွုုပ္ရွားေဆာင္ရြက္ ခ်က္မ်ား ကိုုလည္းတင္ၿပႏိုုင္ပါသည္။
  </string>
     <string name="new_post_hint_title_eng">Here you can ask a question to other TLGs, ask for advice to other TLGs and share your livelihood skills with other TLGs.And of course you can aslo post your successful TLG activities.</string>
+
+    <string name="new_iwomen_post_hint_title_eng">Here you can post an insiprational story of your life.</string>
+    <string name="new_iwomen_post_hint_title_mm">ယခုု ေနရာတြင္ မိမိဘ၀တစ္ေလ်ာက္လံုုးအမွတ္ရေနသည္ ့လြမ္းမိုုးသည္ ့စိတ္ဓာတ္ခြန္အားေပးသည့္
+အေၾကာင္းအရာကိုုေရးသားတင္ပိုု ့ေပးႏိုုင္ပါသည္။</string>
 
     <string name="new_post_hint_body_mm">ပိုု ့စ္အသစ္</string>
     <string name="new_post_hint_body_eng">Story</string>
