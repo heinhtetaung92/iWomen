@@ -598,33 +598,33 @@ public class TLGUserPostDetailActivity extends AppCompatActivity implements View
                                 str_comment_time_long = "";
                                 if (diff[0] != 0) {
                                     if (diff[0] == 1) {
-                                        str_comment_time_long = diff[0] + " day";
+                                        str_comment_time_long = diff[0] + " d";
 
                                     } else {
                                         if (diff[0] > 365) {
-                                            str_comment_time_long = diff[0] / 365 + " year";
+                                            str_comment_time_long = diff[0] / 365 + " y";
                                         } else {
 
 
-                                            str_comment_time_long = diff[0] + " days";
+                                            str_comment_time_long = diff[0] + " d";
                                         }
 
                                     }
                                 }
                                 if (diff[1] != 0) {
                                     if (diff[1] < 24) {
-                                        str_comment_time_long += " " + diff[1] + " hr";
+                                        str_comment_time_long += " " + diff[1] + " h";
                                     }
 
                                 }
                                 if (diff[2] != 0) {
                                     if (diff[2] < 60) {
-                                        str_comment_time_long += " " + diff[2] + " min";
+                                        str_comment_time_long += " " + diff[2] + " m";
                                     }
                                 }
 
                                 if (diff[2] == 0) {
-                                    str_comment_time_long += " " + diff[3] + " seconds ago";
+                                    str_comment_time_long += " " + diff[3] + " sec ago";
                                 } else {
                                     str_comment_time_long += " ago";
                                 }
@@ -676,7 +676,7 @@ public class TLGUserPostDetailActivity extends AppCompatActivity implements View
         } else {
 
             if (mstr_lang.equals(Utils.ENG_LANG)) {
-                Utils.doToastEng(mContext, "Internet Connection need!");
+                Utils.doToastEng(mContext, getResources().getString(R.string.open_internet_warning_eng));
             } else {
 
                 Utils.doToastMM(mContext, getResources().getString(R.string.open_internet_warning_mm));
@@ -1150,7 +1150,7 @@ public class TLGUserPostDetailActivity extends AppCompatActivity implements View
                     }
                 } else {
                     if (strLang.equals(Utils.ENG_LANG)) {
-                        Utils.doToastEng(getApplicationContext(), "Internet Connection need!");
+                        Utils.doToastEng(getApplicationContext(), getResources().getString(R.string.open_internet_warning_eng));
                     } else {
 
                         Utils.doToastMM(getApplicationContext(), getResources().getString(R.string.open_internet_warning_mm));
@@ -1265,7 +1265,7 @@ public class TLGUserPostDetailActivity extends AppCompatActivity implements View
                 } else {
 
                     if (strLang.equals(Utils.ENG_LANG)) {
-                        Utils.doToastEng(getApplicationContext(), "Internet Connection need!");
+                        Utils.doToastEng(getApplicationContext(), getResources().getString(R.string.open_internet_warning_eng));
                     } else {
 
                         Utils.doToastMM(getApplicationContext(), getResources().getString(R.string.open_internet_warning_mm));
@@ -1434,13 +1434,32 @@ public class TLGUserPostDetailActivity extends AppCompatActivity implements View
                             if (!postimgjsonObject.isNull("url")) {
                                 cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, postimgjsonObject.getString("url"));
                             } else {
-                                cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+                                //cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                if (!each_object.isNull("postUploadUserImgPath")) {
+
+                                    cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, each_object.getString("postUploadUserImgPath"));
+
+                                } else {
+                                    cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                }
 
                             }
 
 
                         } else {
-                            cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+                            //cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+
+                            if (!each_object.isNull("postUploadUserImgPath")) {
+
+                                cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, each_object.getString("postUploadUserImgPath"));
+
+                            } else {
+                                cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                            }
 
                         }
 
@@ -1526,7 +1545,7 @@ public class TLGUserPostDetailActivity extends AppCompatActivity implements View
         } else {
 
             if (strLang.equals(Utils.ENG_LANG)) {
-                Utils.doToastEng(getApplicationContext(), "Internet Connection need!");
+                Utils.doToastEng(getApplicationContext(),getResources().getString(R.string.open_internet_warning_eng));
             } else {
 
                 Utils.doToastMM(getApplicationContext(), getResources().getString(R.string.open_internet_warning_mm));
@@ -1559,7 +1578,7 @@ public class TLGUserPostDetailActivity extends AppCompatActivity implements View
                         JSONArray result = whole_body.getJSONArray("results");
 
                         cmd_count = whole_body.getString("count");
-                        txt_cmd_count.setText( cmd_count + " People Comments On this") ;
+                        txt_cmd_count.setText( cmd_count + "Comments") ;
 
                     }catch (JSONException ex){
                         ex.printStackTrace();
@@ -1577,7 +1596,7 @@ public class TLGUserPostDetailActivity extends AppCompatActivity implements View
         } else {
 
             if (strLang.equals(Utils.ENG_LANG)) {
-                Utils.doToastEng(getApplicationContext(), "Internet Connection need!");
+                Utils.doToastEng(getApplicationContext(), getResources().getString(R.string.open_internet_warning_eng));
             } else {
 
                 Utils.doToastMM(getApplicationContext(), getResources().getString(R.string.open_internet_warning_mm));

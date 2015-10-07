@@ -51,7 +51,7 @@
                             android:layout_width="@dimen/feed_item_profile_pic"
                             android:layout_height="@dimen/feed_item_profile_pic"
                             android:scaleType="fitXY"
-                            android:src="@drawable/bonsai"
+                            android:src="@drawable/place_holder"
                             android:visibility="gone"></org.undp_iwomen.iwomen.ui.widget.ProfilePictureView>
 
                         <com.makeramen.RoundedImageView
@@ -233,15 +233,26 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/ly1"
+            android:background="@drawable/lucky_draw_menu_bg"
             android:orientation="vertical">
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/txtline"
                 android:layout_width="match_parent"
                 android:layout_height="1dip"
                 android:background="@color/drawer_list_div"
                 android:text="TextView"
-                android:textColor="@color/black" />
+                android:textColor="@color/black" />-->
+
+            <org.undp_iwomen.iwomen.ui.widget.CustomButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New Button"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:background="@android:color/transparent"
+                android:id="@+id/drawer_btn_take_challenge" />
+
         </LinearLayout>
 
         <ScrollView

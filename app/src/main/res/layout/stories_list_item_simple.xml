@@ -82,14 +82,14 @@
                         android:layout_width="@dimen/feed_item_profile_pic"
                         android:layout_height="@dimen/feed_item_profile_pic"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/bonsai"></org.undp_iwomen.iwomen.ui.widget.ProfilePictureView>
+                        android:src="@drawable/place_holder"></org.undp_iwomen.iwomen.ui.widget.ProfilePictureView>
 
                     <org.undp_iwomen.iwomen.ui.widget.ResizableImageView
                         android:id="@+id/profilePic_resizable"
                         android:layout_width="@dimen/feed_item_profile_pic"
                         android:layout_height="@dimen/feed_item_profile_pic"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/bonsai"
+                        android:src="@drawable/place_holder"
                         android:visibility="gone"></org.undp_iwomen.iwomen.ui.widget.ResizableImageView>
                 </FrameLayout>
 

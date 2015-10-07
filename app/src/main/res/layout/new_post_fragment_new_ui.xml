@@ -8,7 +8,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:scrollbars="none"
-    tools:context="org.undp_iwomen.iwomen.ui.fragment.StoriesFragment">
+    tools:context="org.undp_iwomen.iwomen.ui.fragment.MainPhotoPostFragment">
     <FrameLayout
         android:id="@+id/content_frame2"
         android:layout_width="match_parent"

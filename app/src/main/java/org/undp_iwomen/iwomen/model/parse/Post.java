@@ -66,6 +66,22 @@ public class Post extends ParseObject {
         put("likes", likes);
     }
 
+    public int getCommentCount() {
+        return getInt("comment_count");
+    }
+
+    public void setCommentCount(int likes) {
+        put("comment_count", likes);
+    }
+
+    public int getShareCount() {
+        return getInt("share_count");
+    }
+
+    public void setShareCount(int likes) {
+        put("share_count", likes);
+    }
+
     public ParseFile getImageFile() {
         return getParseFile("image");
     }
@@ -80,6 +96,14 @@ public class Post extends ParseObject {
 
     public void setContentTypes(String contentTypes) {
         put("contentType", contentTypes);
+    }
+
+    public String getPostUploadUserImgPath() {
+        return getString("postUploadUserImgPath");
+    }
+
+    public void setPostUploadUserImgPath(String contentTypes) {
+        put("postUploadUserImgPath", contentTypes);
     }
 
     public Date getPostUploadedDate() {

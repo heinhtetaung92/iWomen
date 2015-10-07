@@ -120,7 +120,9 @@ public class GoogleMapFragment extends Fragment {//
                     // Pass all data country
                     intent.putExtra("TLGAddress", marker.getSnippet());//(shopInfolist.get(position).getsShopID())
                     // Pass all data population
+                    Log.e("ID","==>"+ marker.getId()+"///"+marker.getId().substring(1, marker.getId().length()));
                     intent.putExtra("TLGID", tlgArraylist.get(Integer.parseInt(marker.getId().substring(1, marker.getId().length()))).get_objectId());
+
 
 
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -269,7 +271,7 @@ public class GoogleMapFragment extends Fragment {//
         } else {
 
             if (mstr_lang.equals(Utils.ENG_LANG)) {
-                Utils.doToastEng(mContext, "Internet Connection need!");
+                Utils.doToastEng(mContext, getResources().getString(R.string.open_internet_warning_eng));
             } else {
 
                 Utils.doToastMM(mContext, getResources().getString(R.string.open_internet_warning_mm));
@@ -292,6 +294,7 @@ public class GoogleMapFragment extends Fragment {//
                 mMap.addMarker(new MarkerOptions()
 
                         .title(tlgArraylist.get(i).get_tlg_group_name())
+
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher))
                         .snippet(tlgArraylist.get(i).get_tlg_group_address())
                         .position(pick_up));

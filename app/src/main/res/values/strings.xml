@@ -28,7 +28,7 @@
     <string name="title_activity_about_us_mm">ကြ်ႏုုပ္တိုု ့အေၾကာင္း</string>
     <string name="title_activity_post_news">News</string>
 
-    <string name="open_internet_warning">Please Open Internet Connection.</string>
+    <string name="open_internet_warning">Internet Connection needed.</string>
     <string name="open_internet_warning_mm">အင္တာနက္ ခ်ိတ္ဆက္မွုုဖြင္ ့ရန္လိုုအပ္ပါသည္။</string>
 
     <string name="loading_mm">ခဏေစာင့္ပါ ….</string>
@@ -71,6 +71,8 @@
     <string name="new_post_upload_photo_mm">ဓာတ္ပံုုတင္မည္</string>
     <string name="new_post_upload_photo_eng">Upload Image</string>
 
+    <string name="choose_photo_mm">ေရြး ခ်ယ္ပါ</string>
+    <string name="choose_photo_eng">Choose</string>
 
     <string name="new_post_audio_mm">အသံဖိုုင္တင္ရန္ ႏွိပ္ေရြးပါ</string>
     <string name="new_post_audio_eng">Click Here to Upload Audio</string>
@@ -81,10 +83,10 @@
     <string name="post_detail_comment_mm">မွတ္ ခ်က္ (သိုု ့မဟုုတ္) ေကာမန္ ့ေရးရန္</string>
     <string name="post_detail_comment_eng">Enter your Comment</string>
 
-    <string name="post_detail_share_post_mm">ဤ ပိုု ့စ္ ကိုု ရွဲ မွ်ေ၀ ရန္t</string>
+    <string name="post_detail_share_post_mm">ရွဲမွ်ေ၀ပါသည္။</string>
     <string name="post_detail_share_post_eng">Share This Post</string>
 
-    <string name="post_detail_like_post_mm">ဤ ပိုု ့စ္ ကိုုလိုုက္ႏိွပ္ရန္</string>
+    <string name="post_detail_like_post_mm">ကိဳက္ႏွစ္သက္ပါသည္။ </string>
     <string name="post_detail_like_post_eng">Like This Post</string>
 
 
@@ -173,6 +175,9 @@
     <string name="upload_success_toast_mm">ပိုု ့စ္တင္ၿခင္းေရာက္ရွိပါသည္။</string>
     <string name="upload_success_toast_eng">Success Upload post</string>
 
+    <string name="iwomen_postupload_success_toast_mm">သင္၏ စိတ္ဓာတ္ခြန္အားေပးၿဖစ္ရပ္အေၾကာင္းအရာေပးပိုု ့မွုုလက္ခံရရွိပါသည္။ တာ၀န္ရွိသူမွ စစ္ေဆး
+ၾကည့္ရွုု ၿပီးမွ ပိုု ့စ္ေပါ ္လာပါမည္။</string>
+    <string name="iwomen_postupload_success_toast_eng">Thank you for submitting your inspiring story. The administrator will review it and will publish it. You will be motified when your story is being published.</string>
     <string name="google_maps_key">AIzaSyC0x9igzav3skQvcf2RDdD2xZPNXr0GUlY</string>
 
     <string name="resource_coming_soon_eng">Coming soon</string>
@@ -186,7 +191,39 @@
 
 
     <string name="dialog_refresh_msg_mm">ထိုု ၿမွားပါ အဝိုုင္းပံုု ကိုု ႏွိပ္၍ အင္တာနက္ဖြင္ ့ပီးအသစ္ မ်ား ရယူပါ။</string>
-    <string name="dialog_refresh_msg_eng">Please click on that icon with open internet condition for download news.</string>
+    <string name="dialog_refresh_msg_eng">Please click on this icon to download new content from the app.</string>
 
+
+    <string name="competition_take_challenge">Take The Challenge</string>
+    <string name="competition_congratulation">CONGRATULATIONS!!!</string>
+    <string name="competition_winner">WINNER</string>
+    <string name="competition_winning_answer">Winning Answers</string>
+    <string name="competition_answer_1">Answer 1</string>
+    <string name="competition_answer_2">Answer 2</string>
+    <string name="competition_answer_3">Answer 3</string>
+    <string name="competition_save">Save</string>
+    <string name="competition_save_desc">Click here to save your answer and come back later.</string>
+    <string name="competition_submit">Submit</string>
+    <string name="competition_submit_desc">Click here to submit your answers to your group.</string>
+    <string name="competition_group_answer">Group Answer</string>
+    <string name="competition_group_answer_desc">Click here to see your group members answers.</string>
+    <string name="competition_answer_hit_1">Type your answer 1 here</string>
+    <string name="competition_answer_hit_2">Type your answer 2 here</string>
+    <string name="competition_answer_hit_3">Type your answer 3 here</string>
+    <string name="competition_go_to_answer">Go to My Answers</string>
+    <string name="competition_compelete">Congratulation, Have a good luck!</string>
+    <string name="competition_day">Days</string>
+    <string name="competition_hour">Hours</string>
+    <string name="competition_minute">Minutes</string>
+    <string name="competition_second">Seconds</string>
+    <string name="competition_not_answer">This group member is not answer yet.</string>
+    <string name="competition_finished">Finished</string>
+    <string name="competition_play_game">Ready To Play ?</string>
+    <string name="competition_discover_winner">Discover Who is the WINNER</string>
+    <string name="title_activity_competition_new_game">CompetitionNewGameActivity</string>
+    <string name="title_activity_competition_winner_group">Competition Winner Group</string>
+    <string name="title_activity_competition_submit_answer">Competition Submit Answer</string>
+    <string name="title_activity_competition_group_user">CompetitionGroupUserActivity</string>
+    <string name="title_activity_game_over">GameOverActivity</string>
 
 </resources>

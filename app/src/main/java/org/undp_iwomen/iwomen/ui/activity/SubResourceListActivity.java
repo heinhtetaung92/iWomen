@@ -337,7 +337,7 @@ public class SubResourceListActivity extends AppCompatActivity {
             //Utils.doToast(mContext, "Internet Connection need!");
 
             if (mstr_lang.equals(Utils.ENG_LANG)) {
-                Utils.doToastEng(mContext, "Internet Connection need!");
+                Utils.doToastEng(mContext, getResources().getString(R.string.open_internet_warning_eng));
             } else {
 
                 Utils.doToastMM(mContext, getResources().getString(R.string.open_internet_warning_mm));

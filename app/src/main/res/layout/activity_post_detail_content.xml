@@ -230,7 +230,7 @@
                     android:layout_marginLeft="8dp"
                     android:gravity="center_vertical"
                     android:text="Credit To "
-                    android:textColor="@color/blue_500"
+                    android:textColor="@color/grey_500"
                     android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -325,6 +325,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
+                    android:visibility="gone"
                     android:text="Posted on 21 Aug 2015"
                     android:textStyle="bold" />
 
@@ -350,7 +351,7 @@
                 android:id="@+id/postdetail_like_post_lbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:textStyle="bold"
                 android:text="Like This Post" />
 
 
@@ -391,6 +392,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:textStyle="bold"
                 android:text="Share This Post" />
 
 
@@ -474,6 +476,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:textStyle="bold"
                 android:text="0 Comments" />
 
         </LinearLayout>

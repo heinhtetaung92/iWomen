@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -39,7 +41,7 @@ import retrofit.client.Response;
 /**
  * Created by khinsandar on 7/29/15.
  */
-public class ResourcesFragment extends Fragment {
+public class ResourcesFragment extends Fragment implements AbsListView.OnScrollListener {
     public static final String ARG_MENU_INDEX = "index";
 
     private Context mContext;
@@ -57,6 +59,15 @@ public class ResourcesFragment extends Fragment {
     private ProgressDialog mProgressDialog;
 
     private StorageUtil storageUtil;
+
+
+    public int index = 1;
+    public int skipcount = 5;//10 , 20
+    public int skipLimit = 0;
+    public int countlimit = -1;
+    private boolean isloading = false;
+    private int TOTAL_ITEMS = 0;//100
+    View footer;
 
 
     public ResourcesFragment() {
@@ -84,6 +95,9 @@ public class ResourcesFragment extends Fragment {
         mContext = getActivity().getApplicationContext();
         storageUtil = StorageUtil.getInstance(mContext);
 
+        LayoutInflater footerinflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        footer = (View) inflater.inflate(R.layout.loading_layout, null);
+
         init(rootView);
 
 
@@ -103,6 +117,8 @@ public class ResourcesFragment extends Fragment {
 
         Log.e("ResourceItems size", "===>" + ResourceItems.size());
 
+        lvResouces.addFooterView(footer);
+        lvResouces.setOnScrollListener(this);
         if (ResourceItems.size() > 0) {
             adapter = new ResourcesListViewAdapter(getActivity().getApplicationContext(), ResourceItems, mstr_lang);
             lvResouces.setAdapter(adapter);
@@ -110,9 +126,6 @@ public class ResourcesFragment extends Fragment {
         } else {
             getResourceDataFromSever();
         }
-
-
-
 
 
         lvResouces.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -142,8 +155,13 @@ public class ResourcesFragment extends Fragment {
     private void getResourceDataFromSever() {
         if (Connection.isOnline(mContext)) {
 
+            skipLimit = skipcount * (index - 1); // 5
+
+            Log.e("getServerData","===>" + skipLimit + "/count/" + skipcount);
+
+            String sCondition = "{\"isAllow\": true}";
             mProgressDialog.show();
-            ResourceAPI.getInstance().getService().getResourceList("created", new Callback<String>() {
+            ResourceAPI.getInstance().getService().getResourceList("createdAt", skipLimit, skipcount, sCondition,  new Callback<String>() {
                 @Override
                 public void success(String s, Response response) {
 
@@ -204,9 +222,34 @@ public class ResourcesFragment extends Fragment {
                         }
 
 
-                        storageUtil.SaveArrayListToSD("ResourceArrayList", ResourceItems);
-                        adapter = new ResourcesListViewAdapter(getActivity().getApplicationContext(), ResourceItems, mstr_lang);
-                        lvResouces.setAdapter(adapter);
+
+
+                        if (ResourceItems.size() > 0) {
+                            try {
+                                storageUtil.SaveArrayListToSD("ResourceArrayList", ResourceItems);
+                                adapter = new ResourcesListViewAdapter(getActivity().getApplicationContext(), ResourceItems, mstr_lang);
+                                lvResouces.setAdapter(adapter);
+
+                                if (adapter.getCount() == TOTAL_ITEMS || ResourceItems.size() == TOTAL_ITEMS) {
+                                    //header.setText("All " + adapter.getCount() + " Items are loaded.");
+                                    lvResouces.setOnScrollListener(null);
+                                    lvResouces.removeFooterView(footer);
+                                    isloading = true;
+
+                                    //For calling Menu item click
+                                    ((AppCompatActivity) getActivity()).supportInvalidateOptionsMenu();
+                                }else{
+                                    isloading = false;
+                                }
+                                index++;
+
+                            } catch (NullPointerException ex) {
+                                ex.printStackTrace();
+                            }
+                        } else {
+
+                            mProgressDialog.dismiss();
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Log.e("JSON err", "==>" + e.toString());
@@ -226,7 +269,7 @@ public class ResourcesFragment extends Fragment {
             //Utils.doToast(mContext, "Internet Connection need!");
 
             if (mstr_lang.equals(Utils.ENG_LANG)) {
-                Utils.doToastEng(mContext, "Internet Connection need!");
+                Utils.doToastEng(mContext, getResources().getString(R.string.open_internet_warning_eng));
             } else {
 
                 Utils.doToastMM(mContext, getActivity().getResources().getString(R.string.open_internet_warning_mm));
@@ -256,6 +299,29 @@ public class ResourcesFragment extends Fragment {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView absListView, int i) {
+
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        int loadedItems = firstVisibleItem + visibleItemCount;
+        Log.e("///ON Scroll//", "==>" + loadedItems + "/" + totalItemCount + isloading + index + "/" + countlimit);
+        if (!isloading) {
+            if ((loadedItems >= totalItemCount) && index <= countlimit && index != 1) {
+
+                Log.e("///ON Scroll Load Query//", "==>" + loadedItems + "/" + totalItemCount + isloading + index + "/" + countlimit);
+
+                isloading = true;
+                getResourceDataFromSever();
+                //Toast.makeText(getActivity().getApplicationContext(),"On Scroll" + index + "limit" + countlimit,Toast.LENGTH_SHORT).show();
+                //setQueryTripArrayList(strDate, FromLocationList, ToLocationList);
+
+            }
         }
     }
 

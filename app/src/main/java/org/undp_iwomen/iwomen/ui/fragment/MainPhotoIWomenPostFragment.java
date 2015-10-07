@@ -46,7 +46,7 @@ import org.json.JSONObject;
 import org.undp_iwomen.iwomen.CommonConfig;
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
-import org.undp_iwomen.iwomen.model.parse.Post;
+import org.undp_iwomen.iwomen.model.parse.IwomenPost;
 import org.undp_iwomen.iwomen.ui.activity.DrawerMainActivity;
 import org.undp_iwomen.iwomen.ui.widget.ResizableImageView;
 import org.undp_iwomen.iwomen.utils.Connection;
@@ -67,7 +67,7 @@ public class MainPhotoIWomenPostFragment extends Fragment implements ImageChoose
     /*LostReport lostReport;
     FoundReport foundReport;*/
 
-    Post postParse;
+    IwomenPost postParse;
     View progressbackground;
 
     ProgressWheel progress_wheel;
@@ -116,6 +116,7 @@ public class MainPhotoIWomenPostFragment extends Fragment implements ImageChoose
     //private final Context Dcontext;
     private SharedPreferences mSharedPreferences;
     private String user_name, user_obj_id, user_nrc;
+    private String userprofile_Image_path;
 
     //For Image Chooser
     private ImageChooserManager imageChooserManager;
@@ -189,7 +190,7 @@ public class MainPhotoIWomenPostFragment extends Fragment implements ImageChoose
             user_obj_id = mSharedPreferences.getString(CommonConfig.USER_OBJ_ID, null);
 
         }
-
+        userprofile_Image_path = mSharedPreferences.getString(CommonConfig.USER_IMAGE_PATH, null);
 
         init(rootView);
         return rootView;
@@ -232,11 +233,10 @@ public class MainPhotoIWomenPostFragment extends Fragment implements ImageChoose
 
 
         txt_camera = (TextView) rootView.findViewById(R.id.new_post_camera_img_camera);
-        txt_camera_text= (TextView) rootView.findViewById(R.id.new_post_txt_camera_upload);
+        txt_camera_text = (TextView) rootView.findViewById(R.id.new_post_txt_camera_upload);
 
-        txt_audio_upload = (TextView)rootView.findViewById(R.id.new_post_txt_audio_upload);
-        txt_video_upload = (TextView)rootView.findViewById(R.id.new_post_txt_video_upload);
-
+        txt_audio_upload = (TextView) rootView.findViewById(R.id.new_post_txt_audio_upload);
+        txt_video_upload = (TextView) rootView.findViewById(R.id.new_post_txt_video_upload);
 
 
         txt_camera.setOnClickListener(new View.OnClickListener() {
@@ -273,8 +273,8 @@ public class MainPhotoIWomenPostFragment extends Fragment implements ImageChoose
 
         progress_wheel = (ProgressWheel) rootView.findViewById(R.id.new_post_photo_progress_wheel);
         progressbackground = rootView.findViewById(R.id.new_post_progresswheel_background);
-        ly_title = (LinearLayout)rootView.findViewById(R.id.new_post_ly_title);
-        ly_body = (LinearLayout)rootView.findViewById(R.id.new_post_ly_body);
+        ly_title = (LinearLayout) rootView.findViewById(R.id.new_post_ly_title);
+        ly_body = (LinearLayout) rootView.findViewById(R.id.new_post_ly_body);
 
 
         ly_title.setOnClickListener(new ShowKeyboardListener(getActivity()));
@@ -330,6 +330,30 @@ public class MainPhotoIWomenPostFragment extends Fragment implements ImageChoose
 
         }
 
+        txt_audio_upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mstr_lang.equals(Utils.ENG_LANG)) {
+                    Utils.doToastEng(mContext, getResources().getString(R.string.resource_coming_soon_eng));
+                } else {
+
+                    Utils.doToastMM(mContext, getResources().getString(R.string.resource_coming_soon_mm));
+                }
+            }
+        });
+
+        txt_video_upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mstr_lang.equals(Utils.ENG_LANG)) {
+                    Utils.doToastEng(mContext, getResources().getString(R.string.resource_coming_soon_eng));
+                } else {
+
+                    Utils.doToastMM(mContext, getResources().getString(R.string.resource_coming_soon_mm));
+                }
+            }
+        });
+
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -379,9 +403,15 @@ public class MainPhotoIWomenPostFragment extends Fragment implements ImageChoose
 
 
                 } else {
-                    Toast.makeText(getActivity().getApplicationContext(),
+                    /*Toast.makeText(getActivity().getApplicationContext(),
                             "Please Open Internet Connection!",
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_LONG).show();*/
+                    if (mstr_lang.equals(Utils.ENG_LANG)) {
+                        Utils.doToastEng(mContext, getResources().getString(R.string.open_internet_warning_eng));
+                    } else {
+
+                        Utils.doToastMM(mContext, getActivity().getResources().getString(R.string.open_internet_warning_mm));
+                    }
                 }
             }
         });
@@ -427,11 +457,12 @@ public class MainPhotoIWomenPostFragment extends Fragment implements ImageChoose
             ParseFile photoFile = new ParseFile("photo.jpg", bFile);
 
 
-            postParse = new Post();
+            postParse = new IwomenPost();
 
 
             //postParse.setContentTypes("Story");
 
+            //TODO FROM SERVER SIDE FOR REVIEW 2
             postParse.setUserId(user_obj_id);
             if (mstr_lang.equals(com.parse.utils.Utils.ENG_LANG)) {
 
@@ -454,9 +485,13 @@ public class MainPhotoIWomenPostFragment extends Fragment implements ImageChoose
 
             }
 
-            postParse.setIsAllow(true);
+            //TODO FROM SERVER SIDE FOR REVIEW 1
+            postParse.setIsAllow(false);
 
             postParse.setLikes(0);
+            postParse.setCommentCount(0);
+            postParse.setShareCount(0);
+            postParse.setPostUploadUserImgPath(userprofile_Image_path);
             postParse.setContentTypes("Story");
             postParse.setPostUploadedDate(new Date());
 
@@ -495,9 +530,9 @@ public class MainPhotoIWomenPostFragment extends Fragment implements ImageChoose
 
 
                         if (mstr_lang.equals(com.parse.utils.Utils.ENG_LANG)) {
-                            Utils.doToastEng(mContext, getResources().getString(R.string.upload_success_toast_eng));
+                            Utils.doToastEng(mContext, getResources().getString(R.string.iwomen_postupload_success_toast_eng));
                         } else {
-                            Utils.doToastMM(mContext, getResources().getString(R.string.upload_success_toast_mm));
+                            Utils.doToastMM(mContext, getResources().getString(R.string.iwomen_postupload_success_toast_mm));
 
                         }
                         Intent intent = new Intent(getActivity(), DrawerMainActivity.class);
@@ -519,8 +554,8 @@ public class MainPhotoIWomenPostFragment extends Fragment implements ImageChoose
         } else { //If didn't chose Photo
 
 
-            postParse = new Post();
-
+            postParse = new IwomenPost();
+            //TODO FROM SERVER SIDE FOR REVIEW 1
 
             postParse.setUserId(user_obj_id);
             if (mstr_lang.equals(com.parse.utils.Utils.ENG_LANG)) {
@@ -544,11 +579,15 @@ public class MainPhotoIWomenPostFragment extends Fragment implements ImageChoose
             }
 
 
+            //TODO FROM SERVER SIDE FOR REVIEW 2
 
-            postParse.setIsAllow(true);
+            postParse.setIsAllow(false);
 
             postParse.setLikes(0);
+            postParse.setCommentCount(0);
+            postParse.setShareCount(0);
             postParse.setContentTypes("Story");
+            postParse.setPostUploadUserImgPath(userprofile_Image_path);
             postParse.setPostUploadedDate(new Date());
 
             postParse.setPostUploadAuthorName(user_name);
@@ -586,9 +625,9 @@ public class MainPhotoIWomenPostFragment extends Fragment implements ImageChoose
 
 
                         if (mstr_lang.equals(com.parse.utils.Utils.ENG_LANG)) {
-                            Utils.doToastEng(mContext, getResources().getString(R.string.upload_success_toast_eng));
+                            Utils.doToastEng(mContext, getResources().getString(R.string.iwomen_postupload_success_toast_eng));
                         } else {
-                            Utils.doToastMM(mContext, getResources().getString(R.string.upload_success_toast_mm));
+                            Utils.doToastMM(mContext, getResources().getString(R.string.iwomen_postupload_success_toast_mm));
 
                         }
                         Intent intent = new Intent(getActivity(), DrawerMainActivity.class);

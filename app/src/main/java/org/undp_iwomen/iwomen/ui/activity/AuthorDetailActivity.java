@@ -241,7 +241,7 @@ public class AuthorDetailActivity extends AppCompatActivity {
         } else {
 
             if (strLang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)) {
-                org.undp_iwomen.iwomen.utils.Utils.doToastEng(mContext, "Internet Connection need!");
+                org.undp_iwomen.iwomen.utils.Utils.doToastEng(mContext, getResources().getString(R.string.open_internet_warning_eng));
             } else {
 
                 org.undp_iwomen.iwomen.utils.Utils.doToastMM(mContext, getResources().getString(R.string.open_internet_warning_mm));

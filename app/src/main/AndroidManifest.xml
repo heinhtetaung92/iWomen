@@ -17,6 +17,8 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+
     <permission
         android:name="org.undp_iwomen.iwomen.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
@@ -308,6 +310,26 @@
         <activity
             android:name=".ui.activity.PostNewsActivity"
             android:label="@string/title_activity_post_news" >
+        </activity>
+        <activity
+            android:name="com.smk.iwomen.CompetitionNewGameActivity"
+            android:label="@string/title_activity_competition_new_game" >
+        </activity>
+        <activity
+            android:name="com.smk.iwomen.CompetitionWinnerGroupActivity"
+            android:label="@string/title_activity_competition_winner_group" >
+        </activity>
+        <activity
+            android:name="com.smk.iwomen.CompetitionSubmitAnswerActivity"
+            android:label="@string/title_activity_competition_submit_answer" >
+        </activity>
+        <activity
+            android:name="com.smk.iwomen.CompetitionGroupUserActivity"
+            android:label="@string/title_activity_competition_group_user" >
+        </activity>
+        <activity
+            android:name="com.smk.iwomen.GameOverActivity"
+            android:label="@string/title_activity_game_over" >
         </activity>
         <!-- Declare the bundled CropImage Activity -->
         <activity android:name="com.android.camera.CropImage"/>

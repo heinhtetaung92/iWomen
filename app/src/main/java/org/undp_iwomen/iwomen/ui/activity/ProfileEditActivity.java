@@ -13,8 +13,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.makeramen.RoundedImageView;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -68,6 +68,8 @@ public class ProfileEditActivity extends AppCompatActivity {
 
     private String userprofile_Image_path;
 
+    String[] cameraList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,9 +112,14 @@ public class ProfileEditActivity extends AppCompatActivity {
 
             textViewTitle.setText(R.string.edit_profile_eng);
 
+            cameraList = new String[]{getResources().getString(R.string.new_post_take_photo_eng),getResources().getString(R.string.new_post_upload_photo_eng)};
+
         } else //FOR ALl MM FONT
         {
             textViewTitle.setText(R.string.edit_profile_mm);
+
+            cameraList = new String[]{getResources().getString(R.string.new_post_take_photo_mm),getResources().getString(R.string.new_post_upload_photo_mm)};
+
 
         }
 
@@ -149,11 +156,63 @@ public class ProfileEditActivity extends AppCompatActivity {
         /**********Ajust Layout Image size depend on screen at Explore ************/
         prepareList();
 
+
+
+        profileImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+
+                if (strLang.equals(Utils.ENG_LANG)) {
+                    new MaterialDialog.Builder(ProfileEditActivity.this)
+                            .title(R.string.choose_photo_eng)
+                            .items(cameraList)
+                            .typeface("roboto-medium.ttf", "roboto-medium.ttf")
+                                    .itemsCallback(new MaterialDialog.ListCallback() {
+                                        @Override
+                                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                            Utils.doToastEng(mContext, "Choose Comming Soon" + which + text.toString());
+                                /*String phno = "tel:" + text.toString();
+                                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(phno));
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                startActivity(intent);*/
+
+                                        }
+                                    })
+                            .show();
+                }else{
+                    new MaterialDialog.Builder(ProfileEditActivity.this)
+                            .title(R.string.choose_photo_mm)
+                            .items(cameraList)
+                            .typeface("zawgyi.ttf", "zawgyi.ttf")
+
+                            .itemsCallback(new MaterialDialog.ListCallback() {
+                                @Override
+                                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                    Utils.doToastEng(mContext, "Choose Comming Soon" + which + text.toString());
+                                /*String phno = "tel:" + text.toString();
+                                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(phno));
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                startActivity(intent);*/
+
+                                }
+                            })
+                            .show();
+                }
+
+            }
+        });
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> arg0, View arg1, int position,
                                     long arg3) {
-                Toast.makeText(mContext, mAdapter.getItem(position), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, mAdapter.getItem(position), Toast.LENGTH_SHORT).show();
 
                 //profileImg.setImageResource(listShopImg.get(position));
                 profileProgressbar.setVisibility(View.GONE);
@@ -216,6 +275,7 @@ public class ProfileEditActivity extends AppCompatActivity {
 
             //finish();
 
+            mProgressDialog.show();
             ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
             userQuery.getInBackground(mstrUserId, new GetCallback<ParseUser>() {
                 @Override
@@ -226,6 +286,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                             @Override
                             public void done(ParseException e) {
                                 if(e == null) {
+                                    mProgressDialog.dismiss();
                                     startDrawerMainActivity();
                                 }
                             }
@@ -255,6 +316,8 @@ public class ProfileEditActivity extends AppCompatActivity {
         if (Connection.isOnline(mContext)) {
             listShopName = new ArrayList<String>();
             listShopImg = new ArrayList<String>();
+
+            mProgressDialog.show();
 
             UserPostAPI.getInstance().getService().getAllStickers(new Callback<String>() {
                 @Override
@@ -298,6 +361,7 @@ public class ProfileEditActivity extends AppCompatActivity {
 
                         }
 
+                        mProgressDialog.dismiss();
                         mAdapter = new EditProfileGridviewAdapter(mContext, listShopName, listShopImg);
                         // Set custom adapter to gridview
 
@@ -311,14 +375,14 @@ public class ProfileEditActivity extends AppCompatActivity {
 
                 @Override
                 public void failure(RetrofitError error) {
-
+                    mProgressDialog.dismiss();
                 }
             });
         } else {
             //Utils.doToast(mContext, "Internet Connection need!");
 
             if (strLang.equals(Utils.ENG_LANG)) {
-                Utils.doToastEng(mContext, "Internet Connection need!");
+                Utils.doToastEng(mContext, getResources().getString(R.string.open_internet_warning_eng));
             } else {
 
                 Utils.doToastMM(mContext, getResources().getString(R.string.open_internet_warning_mm));

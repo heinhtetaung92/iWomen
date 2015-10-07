@@ -15,7 +15,8 @@ import android.provider.BaseColumns;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.util.Linkify;
+import android.text.Spannable;
+import android.text.style.URLSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -71,6 +72,7 @@ import org.undp_iwomen.iwomen.model.ISO8601Utils;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
 import org.undp_iwomen.iwomen.model.TextWatcherAdapter;
 import org.undp_iwomen.iwomen.model.TimeDiff;
+import org.undp_iwomen.iwomen.model.URLSpanNoUnderline;
 import org.undp_iwomen.iwomen.model.parse.Comment;
 import org.undp_iwomen.iwomen.model.retrofit_api.CommentAPI;
 import org.undp_iwomen.iwomen.model.retrofit_api.UserPostAPI;
@@ -89,7 +91,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -605,33 +606,33 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                                 str_comment_time_long = "";
                                 if (diff[0] != 0) {
                                     if (diff[0] == 1) {
-                                        str_comment_time_long = diff[0] + " day";
+                                        str_comment_time_long = diff[0] + " d";
 
                                     } else {
                                         if (diff[0] > 365) {
-                                            str_comment_time_long = diff[0] / 365 + " year";
+                                            str_comment_time_long = diff[0] / 365 + " y";
                                         } else {
 
 
-                                            str_comment_time_long = diff[0] + " days";
+                                            str_comment_time_long = diff[0] + " d";
                                         }
 
                                     }
                                 }
                                 if (diff[1] != 0) {
                                     if (diff[1] < 24) {
-                                        str_comment_time_long += " " + diff[1] + " hr";
+                                        str_comment_time_long += " " + diff[1] + " h";
                                     }
 
                                 }
                                 if (diff[2] != 0) {
                                     if (diff[2] < 60) {
-                                        str_comment_time_long += " " + diff[2] + " min";
+                                        str_comment_time_long += " " + diff[2] + " m";
                                     }
                                 }
 
                                 if (diff[2] == 0) {
-                                    str_comment_time_long += " " + diff[3] + " seconds ago";
+                                    str_comment_time_long += " " + diff[3] + " sec ago";
                                 } else {
                                     str_comment_time_long += " ago";
                                 }
@@ -683,7 +684,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         } else {
 
             if (mstr_lang.equals(Utils.ENG_LANG)) {
-                Utils.doToastEng(mContext, "Internet Connection need!");
+                Utils.doToastEng(mContext, getResources().getString(R.string.open_internet_warning_eng));
             } else {
 
                 Utils.doToastMM(mContext, getResources().getString(R.string.open_internet_warning_mm));
@@ -804,7 +805,39 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    private void setItem(FeedItem item) {
+    private void stripUnderlines(TextView tv) {
+
+        Spannable s = (Spannable)tv.getText();
+        URLSpan[] spans = s.getSpans(0, s.length(), URLSpan.class);
+
+        for (URLSpan span: spans) {
+            int start = s.getSpanStart(span);
+            int end = s.getSpanEnd(span);
+            s.removeSpan(span);
+            span = new URLSpanNoUnderline(span.getURL());
+            s.setSpan(span, start, end, 0);
+
+        }
+
+        tv.setText(s);
+
+    }
+
+    public static Spannable removeUnderlines(Spannable p_Text) {
+        URLSpan[] spans = p_Text.getSpans(0, p_Text.length(), URLSpan.class);
+        for (URLSpan span : spans) {
+            int start = p_Text.getSpanStart(span);
+            int end = p_Text.getSpanEnd(span);
+            p_Text.removeSpan(span);
+            span = new URLSpanNoUnderline(span.getURL());
+            p_Text.setSpan(span, start, end, 0);
+
+        }
+        return p_Text;
+    }
+
+
+    private void setItem(final FeedItem item) {
         profile.setAdjustViewBounds(true);
         profile.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
@@ -908,10 +941,46 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             post_suggest_text.setTypeface(MyTypeFace.get(this, MyTypeFace.NORMAL));
 
             txt_credit_link.setText("Credit to " + item.getCredit_name());
-            if(item.getCredit_link_eng()!= null){
+            Log.e("Link===","==>" +item.getCredit_link_eng());
+            if(item.getCredit_name()!= null && !item.getCredit_name().isEmpty()){
+                txt_credit_link.setVisibility(View.VISIBLE);
+                /*Pattern pattern = Pattern.compile("[a-zA-Z]+");
+                Linkify.addLinks(txt_credit_link,pattern, item.getCredit_link_eng());*/
 
-                Pattern pattern = Pattern.compile("[a-zA-Z]+");
-                Linkify.addLinks(txt_credit_link,pattern, item.getCredit_link_eng());
+
+                /*txt_credit_link.setText(
+                        Html.fromHtml(
+                                "<a href=" + item.getCredit_link_eng() + ">" + "Credit to " + item.getCredit_name() + " < / a > "));
+                txt_credit_link.setMovementMethod(LinkMovementMethod.getInstance());
+                stripUnderlines(txt_credit_link);*/
+
+
+                /*String value = "<html> Credit to <font color=#9e9e9e><b><a href=\""+ item.getCredit_link_eng() +"\">"+ item.getCredit_name() +" </a></b></font> </html>";
+                Spannable spannedText = (Spannable)
+                        Html.fromHtml(value);
+                txt_credit_link.setMovementMethod(LinkMovementMethod.getInstance());
+
+                Spannable processedText = removeUnderlines(spannedText);*/
+
+                txt_credit_link.setText("Credit to " + item.getCredit_name());
+                if(item.getCredit_link_eng()!= null && !item.getCredit_link_eng().isEmpty()){
+                    txt_credit_link.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent2 = new Intent(getApplicationContext(), AboutUsWebActivity.class);
+                            intent2.putExtra("ActivityName","PostDetailActivity");
+                            intent2.putExtra("URL",item.getCredit_link_eng());
+                            startActivity(intent2);
+                        }
+                    });
+                }else{
+                    Utils.doToastEng(getApplicationContext(),"there is no link");
+                }
+
+
+
+            }else{
+                txt_credit_link.setVisibility(View.GONE);
             }
 
         } else {
@@ -962,12 +1031,43 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             txt_lbl_share_post.setText(R.string.post_detail_share_post_mm);
 
             txt_credit_link.setText("Credit to " + item.getCredit_name());
-            if(item.getCredit_link_mm()!= null){
+            if(item.getCredit_name()!= null && !item.getCredit_name().isEmpty()){
+                txt_credit_link.setVisibility(View.VISIBLE);
+                /*Pattern pattern = Pattern.compile("[a-zA-Z]+");
+                Linkify.addLinks(txt_credit_link,pattern, item.getCredit_link_eng());*/
 
-                Pattern pattern = Pattern.compile("[a-zA-Z]+");
-                Linkify.addLinks(txt_credit_link,pattern, item.getCredit_link_mm());
+
+                /*txt_credit_link.setText(
+                        Html.fromHtml(
+                                "<a href=" + item.getCredit_link_mm() + ">" + "Credit to " + item.getCredit_name()+" < / a > "));
+                txt_credit_link.setMovementMethod(LinkMovementMethod.getInstance());
+                stripUnderlines(txt_credit_link);*/
+                /*String value = "<html> Credit to " + item.getCredit_name() + "<font color=#9e9e9e><b><a href=\""+ item.getCredit_link_mm() +"\"></a></b></font> </html>";
+                Spannable spannedText = (Spannable)
+                        Html.fromHtml(value);
+                txt_credit_link.setMovementMethod(LinkMovementMethod.getInstance());
+
+                Spannable processedText = removeUnderlines(spannedText);
+                txt_credit_link.setText(processedText);*/
+
+                txt_credit_link.setText("Credit to " + item.getCredit_name());
+                if(item.getCredit_link_mm()!= null && !item.getCredit_link_mm().isEmpty()){
+                    txt_credit_link.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent2 = new Intent(getApplicationContext(), AboutUsWebActivity.class);
+                            intent2.putExtra("ActivityName","PostDetailActivity");
+                            intent2.putExtra("URL",item.getCredit_link_mm());
+                            startActivity(intent2);
+
+                        }
+                    });
+                }else{
+                    Utils.doToastEng(getApplicationContext(), "there is no link");
+                }
+            }else{
+                txt_credit_link.setVisibility(View.GONE);
             }
-
             /*et_comment.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
             mPostTile.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
             post_content.setTypeface(MyTypeFace.get(this, MyTypeFace.ZAWGYI));
@@ -988,8 +1088,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
         if (item.getCredit_logo_link() != null && !item.getCredit_logo_link().isEmpty()) {
             try {
-                //profilePictureView.setVisibility(View.GONE);
-                profile.setVisibility(View.VISIBLE);
+                img_credit_logo.setVisibility(View.VISIBLE);
                 Picasso.with(this)
                         .load(item.getCredit_logo_link()) //"http://cheapandcheerfulshopper.com/wp-content/uploads/2013/08/shopping1257549438_1370386595.jpg" //deal.photo1
                         .placeholder(R.drawable.place_holder)
@@ -1009,7 +1108,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 outOfMemoryError.printStackTrace();
             }
         } else {
-
+            img_credit_logo.setVisibility(View.GONE);
             profile.setImageResource(R.drawable.blank_profile);
 
             profile_item_progressBar.setVisibility(View.GONE);
@@ -1274,7 +1373,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                     }
                 } else {
                     if (strLang.equals(Utils.ENG_LANG)) {
-                        Utils.doToastEng(getApplicationContext(), "Internet Connection need!");
+                        Utils.doToastEng(getApplicationContext(), getResources().getString(R.string.open_internet_warning_eng));
                     } else {
 
                         Utils.doToastMM(getApplicationContext(), getResources().getString(R.string.open_internet_warning_mm));
@@ -1388,7 +1487,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 } else {
 
                     if (strLang.equals(Utils.ENG_LANG)) {
-                        Utils.doToastEng(getApplicationContext(), "Internet Connection need!");
+                        Utils.doToastEng(getApplicationContext(), getResources().getString(R.string.open_internet_warning_eng));
                     } else {
 
                         Utils.doToastMM(getApplicationContext(), getResources().getString(R.string.open_internet_warning_mm));
@@ -1565,7 +1664,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                         cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_NAME, each_object.getString("postUploadName"));
 
 
-                        if (!each_object.isNull("postUploadPersonImg")) {
+                        /*if (!each_object.isNull("postUploadPersonImg")) {
 
                             JSONObject postimgjsonObject = each_object.getJSONObject("postUploadPersonImg");
                             if (!postimgjsonObject.isNull("url")) {
@@ -1578,6 +1677,40 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
                         } else {
                             cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                        }*/
+                        if (!each_object.isNull("postUploadPersonImg")) {
+
+                            JSONObject postimgjsonObject = each_object.getJSONObject("postUploadPersonImg");
+                            if (!postimgjsonObject.isNull("url")) {
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, postimgjsonObject.getString("url"));
+                            } else {
+                                //cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                if (!each_object.isNull("postUploadUserImgPath")) {
+
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, each_object.getString("postUploadUserImgPath"));
+
+                                } else {
+                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                }
+
+                            }
+
+
+                        } else {
+                            //cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+
+                            if (!each_object.isNull("postUploadUserImgPath")) {
+
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, each_object.getString("postUploadUserImgPath"));
+
+                            } else {
+                                cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                            }
 
                         }
 
@@ -1735,7 +1868,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         } else {
 
             if (strLang.equals(Utils.ENG_LANG)) {
-                Utils.doToastEng(getApplicationContext(), "Internet Connection need!");
+                Utils.doToastEng(getApplicationContext(),getResources().getString(R.string.open_internet_warning_eng));
             } else {
 
                 Utils.doToastMM(getApplicationContext(), getResources().getString(R.string.open_internet_warning_mm));
@@ -1768,7 +1901,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
                         cmd_count = whole_body.getString("count");
 
-                        txt_cmd_count.setText(cmd_count + " People Comments On this");
+                        txt_cmd_count.setText(cmd_count + "Comments");
 
                     } catch (JSONException ex) {
                         ex.printStackTrace();
@@ -1786,7 +1919,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         } else {
 
             if (strLang.equals(Utils.ENG_LANG)) {
-                Utils.doToastEng(getApplicationContext(), "Internet Connection need!");
+                Utils.doToastEng(getApplicationContext(), getResources().getString(R.string.open_internet_warning_eng));
             } else {
 
                 Utils.doToastMM(getApplicationContext(), getResources().getString(R.string.open_internet_warning_mm));

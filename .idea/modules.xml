@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/iwomen.iml" filepath="$PROJECT_DIR$/iwomen.iml" />
       <module fileurl="file://$PROJECT_DIR$/iwomen.iml" filepath="$PROJECT_DIR$/iwomen.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sKAlertMessage/sKAlertMessage.iml" filepath="$PROJECT_DIR$/sKAlertMessage/sKAlertMessage.iml" />
     </modules>
   </component>
 </project>

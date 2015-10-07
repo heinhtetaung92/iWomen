@@ -116,7 +116,7 @@
                             android:layout_height="@dimen/feed_item_profile_pic"
                             android:scaleType="fitXY"
                             android:visibility="gone"
-                            android:src="@drawable/bonsai"></org.undp_iwomen.iwomen.ui.widget.ProfilePictureView>
+                            android:src="@drawable/place_holder"></org.undp_iwomen.iwomen.ui.widget.ProfilePictureView>
 
                         <com.makeramen.RoundedImageView
                             android:id="@+id/profilePic_rounded"

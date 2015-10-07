@@ -537,13 +537,32 @@ public class TLGUserStoriesRecentFragment extends Fragment implements View.OnCli
                                     if (!postimgjsonObject.isNull("url")) {
                                         cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, postimgjsonObject.getString("url"));
                                     } else {
-                                        cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+                                        //cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                        if (!each_object.isNull("postUploadUserImgPath")) {
+
+                                            cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, each_object.getString("postUploadUserImgPath"));
+
+                                        } else {
+                                            cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                        }
 
                                     }
 
 
                                 } else {
-                                    cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+                                    //cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+
+                                    if (!each_object.isNull("postUploadUserImgPath")) {
+
+                                        cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, each_object.getString("postUploadUserImgPath"));
+
+                                    } else {
+                                        cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                    }
 
                                 }
 
@@ -714,13 +733,32 @@ public class TLGUserStoriesRecentFragment extends Fragment implements View.OnCli
                                     if (!postimgjsonObject.isNull("url")) {
                                         cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, postimgjsonObject.getString("url"));
                                     } else {
-                                        cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+                                        //cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                        if (!each_object.isNull("postUploadUserImgPath")) {
+
+                                            cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, each_object.getString("postUploadUserImgPath"));
+
+                                        } else {
+                                            cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                        }
 
                                     }
 
 
                                 } else {
-                                    cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+                                    //cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+
+                                    if (!each_object.isNull("postUploadUserImgPath")) {
+
+                                        cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, each_object.getString("postUploadUserImgPath"));
+
+                                    } else {
+                                        cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                    }
 
                                 }
 
@@ -797,7 +835,7 @@ public class TLGUserStoriesRecentFragment extends Fragment implements View.OnCli
             //Utils.doToast(mContext, "Internet Connection need!");
 
             if (mstr_lang.equals(Utils.ENG_LANG)) {
-                Utils.doToastEng(mContext, "Internet Connection need!");
+                Utils.doToastEng(mContext,getResources().getString(R.string.open_internet_warning_eng));
             } else {
 
                 Utils.doToastMM(mContext, getActivity().getResources().getString(R.string.open_internet_warning_mm));
@@ -886,11 +924,28 @@ public class TLGUserStoriesRecentFragment extends Fragment implements View.OnCli
                                         }
                                         cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_TYPES, post.getString("contentType"));//
 
-                                        if (post.get("image") != null) {
+
+                                        /*if (!post.isN("userId")) {
+
+                                            JSONObject userjsonObject = post.getJSONObject("userId");
+                                            if (!userjsonObject.isNull("objectId")) {
+                                                cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_ID, post.getString("objectId"));
+                                            } else {
+                                                cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_ID, "");
+
+                                            }
+
+
+                                        } else {
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID, "");
+
+                                        }*/
+
+                                        /*if (post.get("image") != null) {
                                             cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_ID, post.getParseObject("userId").getObjectId());
                                         } else {
                                             cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_ID, "");
-                                        }
+                                        }*/
 
                                         cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_NAME, post.getString("postUploadName"));
 
@@ -1096,7 +1151,7 @@ public class TLGUserStoriesRecentFragment extends Fragment implements View.OnCli
             //Utils.doToast(mContext, "Internet Connection need!");
 
             if (mstr_lang.equals(Utils.ENG_LANG)) {
-                Utils.doToastEng(mContext, "Internet Connection need!");
+                Utils.doToastEng(mContext,getResources().getString(R.string.open_internet_warning_eng));
             } else {
 
                 Utils.doToastMM(mContext, getActivity().getResources().getString(R.string.open_internet_warning_mm));

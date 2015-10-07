@@ -17,6 +17,7 @@ import com.path.android.jobqueue.log.CustomLogger;
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.parse.AppVersion;
 import org.undp_iwomen.iwomen.model.parse.Comment;
+import org.undp_iwomen.iwomen.model.parse.IwomenPost;
 import org.undp_iwomen.iwomen.model.parse.Post;
 import org.undp_iwomen.iwomen.ui.activity.DrawerMainActivity;
 
@@ -46,6 +47,7 @@ public class MainApplication extends Application {
         ParseObject.registerSubclass(AppVersion.class);
         ParseObject.registerSubclass(Post.class);
         ParseObject.registerSubclass(Comment.class);
+        ParseObject.registerSubclass(IwomenPost.class);
 
         
         ParseACL defaultACL = new ParseACL();

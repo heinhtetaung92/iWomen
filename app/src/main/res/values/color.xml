@@ -75,4 +75,19 @@
     <color name="blue_grey_500">#607d8b</color>
     <color name="notification_light">#88ff0000</color>
 
+    <color name="error">#FF1D25</color>
+    <color name="black_overlay">#66000000</color>
+
+    <color name="competition_black_overlay">#66000000</color>
+    <color name="competition_primary">#F5A623</color>
+    <color name="competition_accent">#ED670A</color>
+    <color name="competition_text">#FFFFFF</color>
+    <color name="competition_progress">#7ED321</color>
+    <color name="competition_progress_bar">#D8D8D8</color>
+    <color name="competition_phone">#01AC46</color>
+    <color name="competition_viber">#8F66AE</color>
+    <color name="competition_user_status_1">#C20000</color>
+    <color name="competition_user_status_2">#C27800</color>
+    <color name="competition_user_status_3">#00C200</color>
+
 </resources>

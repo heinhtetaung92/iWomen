@@ -27,5 +27,21 @@
 
     <dimen name="theme_color_icon_size_small">25dp</dimen>
 
+    <dimen name="competition_horizontal_margin">16dp</dimen>
+    <dimen name="competition_vertical_margin">20dp</dimen>
+
+    <dimen name="txt_size_header_1">48sp</dimen>
+    <dimen name="txt_size_header_2">32sp</dimen>
+
+    <dimen name="txt_size_hit">18sp</dimen>
+    <dimen name="txt_size_title">16sp</dimen>
+    <dimen name="edt_size_hit">18sp</dimen>
+    <dimen name="sp_size_hit">18sp</dimen>
+    <dimen name="btn_size_hit">14sp</dimen>
+    <dimen name="ab_size_title">22sp</dimen>
+
+    <dimen name="vertical_margin_1">50dp</dimen>
+    <dimen name="vertical_margin_2">30dp</dimen>
+
 
 </resources>

@@ -116,6 +116,7 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
     //private final Context Dcontext;
     private SharedPreferences mSharedPreferences;
     private String user_name, user_obj_id, user_nrc;
+    private String userprofile_Image_path;
 
     //For Image Chooser
     private ImageChooserManager imageChooserManager;
@@ -189,6 +190,9 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
             user_obj_id = mSharedPreferences.getString(CommonConfig.USER_OBJ_ID, null);
 
         }
+
+        userprofile_Image_path = mSharedPreferences.getString(CommonConfig.USER_IMAGE_PATH, null);
+
 
 
         init(rootView);
@@ -329,7 +333,29 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
             txt_audio_upload.setTypeface(MyTypeFace.get(mContext, MyTypeFace.ZAWGYI));
 
         }
+        txt_audio_upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mstr_lang.equals(Utils.ENG_LANG)) {
+                    Utils.doToastEng(mContext, getResources().getString(R.string.resource_coming_soon_eng));
+                } else {
 
+                    Utils.doToastMM(mContext, getResources().getString(R.string.resource_coming_soon_mm));
+                }
+            }
+        });
+
+        txt_video_upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mstr_lang.equals(Utils.ENG_LANG)) {
+                    Utils.doToastEng(mContext, getResources().getString(R.string.resource_coming_soon_eng));
+                } else {
+
+                    Utils.doToastMM(mContext, getResources().getString(R.string.resource_coming_soon_mm));
+                }
+            }
+        });
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -379,9 +405,12 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
 
 
                 } else {
-                    Toast.makeText(getActivity().getApplicationContext(),
-                            "Please Open Internet Connection!",
-                            Toast.LENGTH_LONG).show();
+                    if (mstr_lang.equals(Utils.ENG_LANG)) {
+                        Utils.doToastEng(mContext,getResources().getString(R.string.open_internet_warning_eng));
+                    } else {
+
+                        Utils.doToastMM(mContext, getActivity().getResources().getString(R.string.open_internet_warning_mm));
+                    }
                 }
             }
         });
@@ -457,6 +486,9 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
             postParse.setIsAllow(true);
 
             postParse.setLikes(0);
+            postParse.setCommentCount(0);
+            postParse.setShareCount(0);
+            postParse.setPostUploadUserImgPath(userprofile_Image_path);
             postParse.setContentTypes("Story");
             postParse.setPostUploadedDate(new Date());
 
@@ -544,10 +576,12 @@ public class MainPhotoPostFragment extends Fragment implements ImageChooserListe
             }
 
 
-
             postParse.setIsAllow(true);
 
             postParse.setLikes(0);
+            postParse.setCommentCount(0);
+            postParse.setShareCount(0);
+            postParse.setPostUploadUserImgPath(userprofile_Image_path);
             postParse.setContentTypes("Story");
             postParse.setPostUploadedDate(new Date());
 

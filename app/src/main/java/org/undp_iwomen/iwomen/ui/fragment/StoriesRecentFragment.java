@@ -221,9 +221,9 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
 
 
             //TODO ADMIN ACCOUNT POST FILTER
-            String selections = TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID + "=?";
-            String[] selectionargs = {"P8Q6mhIfOG"};
-            Cursor cursor = getActivity().getContentResolver().query(IwomenProviderData.PostProvider.CONTETN_URI, null, selections, selectionargs, BaseColumns._ID + " DESC");
+            /*String selections = TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID + "=?";
+            String[] selectionargs = {"P8Q6mhIfOG"};*/
+            Cursor cursor = getActivity().getContentResolver().query(IwomenProviderData.PostProvider.CONTETN_URI, null, null, null, BaseColumns._ID + " DESC");
 
 
             ArrayList<FeedItem> feedItemArrayList = new ArrayList<>();
@@ -633,13 +633,32 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
                                     if (!postimgjsonObject.isNull("url")) {
                                         cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, postimgjsonObject.getString("url"));
                                     } else {
-                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+                                        //cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                        if (!each_object.isNull("postUploadUserImgPath")) {
+
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, each_object.getString("postUploadUserImgPath"));
+
+                                        } else {
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                        }
 
                                     }
 
 
                                 } else {
-                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+                                    //cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+
+                                    if (!each_object.isNull("postUploadUserImgPath")) {
+
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, each_object.getString("postUploadUserImgPath"));
+
+                                    } else {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                    }
 
                                 }
 
@@ -898,13 +917,32 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
                                     if (!postimgjsonObject.isNull("url")) {
                                         cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, postimgjsonObject.getString("url"));
                                     } else {
-                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+                                        //cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                        if (!each_object.isNull("postUploadUserImgPath")) {
+
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, each_object.getString("postUploadUserImgPath"));
+
+                                        } else {
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                        }
 
                                     }
 
 
                                 } else {
-                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+                                    //cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+
+                                    if (!each_object.isNull("postUploadUserImgPath")) {
+
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, each_object.getString("postUploadUserImgPath"));
+
+                                    } else {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                    }
 
                                 }
 

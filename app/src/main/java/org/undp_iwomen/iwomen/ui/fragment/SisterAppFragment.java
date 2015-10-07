@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -70,11 +70,20 @@ public class SisterAppFragment extends Fragment {
         txt_gen_link = (TextView)rootView.findViewById(R.id.sister_app_gen_txt);
         txt_undp_link = (TextView)rootView.findViewById(R.id.sister_app_undp_link_txt);
 
-        txt_gen_link.setClickable(true);
+
+        txt_gen_link.setText("www.gen.org");
+        Linkify.addLinks(txt_gen_link, Linkify.WEB_URLS);
+
+        txt_undp_link.setText("www.undpmyanmar.org");
+        Linkify.addLinks(txt_undp_link, Linkify.WEB_URLS);
+
+        /*txt_gen_link.setClickable(true);
         txt_gen_link.setMovementMethod(LinkMovementMethod.getInstance());
+        //Have to write <a href > in string for use
+
 
         txt_undp_link.setClickable(true);
-        txt_undp_link.setMovementMethod(LinkMovementMethod.getInstance());
+        txt_undp_link.setMovementMethod(LinkMovementMethod.getInstance());*/
 
         lv_sister.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

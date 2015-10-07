@@ -1,7 +1,9 @@
 package org.undp_iwomen.iwomen.ui.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,6 +25,8 @@ import org.undp_iwomen.iwomen.ui.activity.SettingActivity;
 import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 import org.undp_iwomen.iwomen.utils.StoreUtil;
 import org.undp_iwomen.iwomen.utils.Utils;
+
+import java.util.Locale;
 
 /**
  * Created by khinsandar on 8/7/15.
@@ -170,16 +174,28 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
                 if (buttonView.getId() == R.id.settings_english_language) {
 
 
-                    StoreUtil.getInstance().saveTo("fonts","english");
+                    StoreUtil.getInstance().saveTo("fonts", "english");
 
                     editor.putString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
 
                     setEnglishFont();
 
 
+                    SharedPreferences.Editor fontEditor = getActivity().getSharedPreferences("mLanguage", Activity.MODE_PRIVATE).edit();
+                    fontEditor.putString("lang", "eng");
+                    fontEditor.commit();
+
+
                 } else if (buttonView.getId() == R.id.settings_mm_zawgyi_language) {
                     StoreUtil.getInstance().saveTo("fonts", "zawgyione");
                     editor.putString(Utils.PREF_SETTING_LANG, Utils.MM_LANG);
+
+                    String languageToLoad  = "mm"; // your language
+                    Locale locale = new Locale(languageToLoad);
+                    Locale.setDefault(locale);
+                    Configuration config = new Configuration();
+                    config.locale = locale;
+                    getActivity().getBaseContext().getResources().updateConfiguration(config, getActivity().getBaseContext().getResources().getDisplayMetrics());
 
                     setMyanmarFont();
 
@@ -188,11 +204,27 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
                     StoreUtil.getInstance().saveTo("fonts", "myanmar3");
                     editor.putString(Utils.PREF_SETTING_LANG, Utils.MM_LANG_UNI);
 
+                    String languageToLoad  = "mm"; // your language
+                    Locale locale = new Locale(languageToLoad);
+                    Locale.setDefault(locale);
+                    Configuration config = new Configuration();
+                    config.locale = locale;
+                    getActivity().getBaseContext().getResources().updateConfiguration(config, getActivity().getBaseContext().getResources().getDisplayMetrics());
+
+
                     setMyanmarFontUni();
 
                 } else if (buttonView.getId() == R.id.settings_mm_default_language) {
                     StoreUtil.getInstance().saveTo("fonts", "default");
                     editor.putString(Utils.PREF_SETTING_LANG, Utils.MM_LANG_DEFAULT);
+
+                    String languageToLoad  = "mm"; // your language
+                    Locale locale = new Locale(languageToLoad);
+                    Locale.setDefault(locale);
+                    Configuration config = new Configuration();
+                    config.locale = locale;
+                    getActivity().getBaseContext().getResources().updateConfiguration(config, getActivity().getBaseContext().getResources().getDisplayMetrics());
+
 
                     setMyanmarFontDefault();
 

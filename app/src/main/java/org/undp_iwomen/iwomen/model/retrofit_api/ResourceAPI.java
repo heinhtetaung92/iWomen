@@ -3,6 +3,8 @@ package org.undp_iwomen.iwomen.model.retrofit_api;
 //import com.google.android.gms.internal.ne;
 
 
+import android.util.Log;
+
 import com.squareup.okhttp.OkHttpClient;
 
 import org.undp_iwomen.iwomen.CommonConfig;
@@ -66,7 +68,7 @@ public class ResourceAPI {
                 .setLog(new RestAdapter.Log() {
                     @Override
                     public void log(String msg) {
-                        //Log.e("//////////////Lost Report API////////////////////////", msg);
+                        Log.e("//////////////Resource API////////////////////////", msg);
                     }
                 })
                 .setConverter(new StringConverter()) //Reply String result

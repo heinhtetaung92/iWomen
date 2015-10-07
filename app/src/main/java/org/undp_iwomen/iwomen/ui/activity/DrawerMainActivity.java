@@ -1,5 +1,6 @@
 package org.undp_iwomen.iwomen.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -27,10 +29,16 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.facebook.FacebookSdk;
+import com.google.gson.Gson;
 import com.makeramen.RoundedImageView;
 import com.parse.ParseUser;
 import com.parse.ui.ParseLoginBuilder;
 import com.parse.utils.Utils;
+import com.smk.clientapi.NetworkEngine;
+import com.smk.iwomen.CompetitionNewGameActivity;
+import com.smk.iwomen.CompetitionWinnerGroupActivity;
+import com.smk.iwomen.GameOverActivity;
+import com.smk.model.CompetitionQuestion;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -55,6 +63,7 @@ import org.undp_iwomen.iwomen.utils.SharePrefUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -105,6 +114,7 @@ public class DrawerMainActivity extends AppCompatActivity {
     TextView menu_user_post_count;
 
     LinearLayout ly_menu_profile_area;
+    private Button btn_play_game;
 
     @Override
     protected void onStart() {
@@ -124,6 +134,8 @@ public class DrawerMainActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         // Initialize the SDK before executing any other operations,
         // especially, if you're using Facebook UI elements.
+
+
 
         org.undp_iwomen.iwomen.utils.Utils.onActivityCreateSetTheme(this);
         setContentView(R.layout.main_drawer_material);
@@ -153,12 +165,14 @@ public class DrawerMainActivity extends AppCompatActivity {
         mDrawerList = (ListView) findViewById(R.id.left_drawer_lv);
         txt_user_name = (TextView) findViewById(R.id.txt_user_name);
         txt_sing_out = (CustomTextView) findViewById(R.id.menu_sing_out);
-        menu_user_post_count = (TextView)findViewById(R.id.menu_user_post_count);
+        menu_user_post_count = (TextView) findViewById(R.id.menu_user_post_count);
 
-        ly_menu_profile_area = (LinearLayout)findViewById(R.id.menu_profile_area_ly);
+        ly_menu_profile_area = (LinearLayout) findViewById(R.id.menu_profile_area_ly);
 
         drawer_profilePic_rounded = (RoundedImageView) findViewById(R.id.drawer_profilePic_rounded);
         drawer_progressBar_profile_item = (ProgressBar) findViewById(R.id.drawer_progressBar_profile_item);
+
+        btn_play_game = (Button)findViewById(R.id.drawer_btn_take_challenge);
         // set a custom shadow that overlays the main content when the drawer opens
         drawerLayoutt.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
@@ -193,8 +207,8 @@ public class DrawerMainActivity extends AppCompatActivity {
 
         currentUser = ParseUser.getCurrentUser();
 
-
-
+        //TODO WHEN DRAWER ACTIVITY START CALLING for check
+        LoadDrawerCustomData();
 
         if (currentUser != null) {
             // User clicked to log out.
@@ -238,6 +252,10 @@ public class DrawerMainActivity extends AppCompatActivity {
                     user_name = mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null);
                     user_obj_id = mSharedPreferencesUserInfo.getString(CommonConfig.USER_OBJ_ID, null);
 
+                    //TODO 1
+                    getCompetitionQuestion();
+
+
                     txt_user_name.setText(user_name);
 
                     if (mstrUserfbId != null) {
@@ -247,8 +265,8 @@ public class DrawerMainActivity extends AppCompatActivity {
                     Log.e("1st userprofile_Image_path", "==>" + currentUser.get("user_profile_img"));
 
                     //TODO 1st priority if update image case
-                    if(currentUser.get("userImgPath")!= null && currentUser.get("userImgPath") != "null"){
-                        userprofile_Image_path =  currentUser.get("userImgPath").toString();
+                    if (currentUser.get("userImgPath") != null && currentUser.get("userImgPath") != "null") {
+                        userprofile_Image_path = currentUser.get("userImgPath").toString();
 
                         if (userprofile_Image_path != null) {
 
@@ -296,7 +314,7 @@ public class DrawerMainActivity extends AppCompatActivity {
                             }
 
                         }
-                    }else {//TODO very first time upload image case
+                    } else {//TODO very first time upload image case
                         if (currentUser.get("user_profile_img") != null && currentUser.get("user_profile_img") != "null") {
 
 
@@ -378,14 +396,22 @@ public class DrawerMainActivity extends AppCompatActivity {
 
                     //TODO FONT DRAWERMAIN
                     mstr_lang = sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
+
+
+
                     getUserPostCount();
 
+                    LoadDrawerCustomData();
                     showRefreshInfoDialog();
+
 
                 } else {
                     user_name = mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null);
                     user_obj_id = mSharedPreferencesUserInfo.getString(CommonConfig.USER_OBJ_ID, null);
                     //Toast.makeText(this, "2ndTime(PaymentActivity) You are login as \n " + mSharedPreferencesUserInfo.getString(CommonConfig.USER_NAME, null) + "\n" + sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG), Toast.LENGTH_LONG).show();
+
+                    //TODO 2
+                    getCompetitionQuestion();
 
                     mstrUserfbId = mSharedPreferencesUserInfo.getString(CommonConfig.USER_FBID, null);
                     //2nd Login==== > user Info parse﹕ GuzTg3T1aWParse :Su:mstrUserfbId >>null
@@ -395,6 +421,8 @@ public class DrawerMainActivity extends AppCompatActivity {
                     //TODO FONT DRAWERMAIN
                     mstr_lang = sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
                     getUserPostCount();
+
+                    //LoadDrawerCustomData();
 
 
                     userprofile_Image_path = mSharedPreferencesUserInfo.getString(CommonConfig.USER_IMAGE_PATH, null);
@@ -447,7 +475,6 @@ public class DrawerMainActivity extends AppCompatActivity {
                 }
 
 
-
                 if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)) {
 
                     txt_sing_out.setText("Sign Out");
@@ -455,15 +482,36 @@ public class DrawerMainActivity extends AppCompatActivity {
                 } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG)) {
                     txt_sing_out.setText("ထ\u103Cက္ရန္");
                     txt_sing_out.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
+                    String languageToLoad  = "mm"; // your language
+                    Locale locale = new Locale(languageToLoad);
+                    Locale.setDefault(locale);
+                    Configuration config = new Configuration();
+                    config.locale = locale;
+                    getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+
                 } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG_UNI)) {
                     txt_sing_out.setText("ထ\u103Cက္ရန္");
                     //txt_sing_out.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
+                    String languageToLoad  = "mm"; // your language
+                    Locale locale = new Locale(languageToLoad);
+                    Locale.setDefault(locale);
+                    Configuration config = new Configuration();
+                    config.locale = locale;
+                    getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+
                 } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG_DEFAULT)) {
                     txt_sing_out.setText("ထ\u103Cက္ရန္");
                     //txt_sing_out.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
+                    String languageToLoad  = "mm"; // your language
+                    Locale locale = new Locale(languageToLoad);
+                    Locale.setDefault(locale);
+                    Configuration config = new Configuration();
+                    config.locale = locale;
+                    getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+
                 }
 
-                LoadDrawerCustomData();
+
                 selectItem(0);
                 drawerLayoutt.openDrawer(mDrawerLinearLayout);
 
@@ -533,20 +581,19 @@ public class DrawerMainActivity extends AppCompatActivity {
     private void getUserPostCount() {
 
 
-
         if (Connection.isOnline(getApplicationContext())) {
 
             UserPostAPI.getInstance().getService().getPostCount(0, 1, "{\"postUploadName\":\"" + user_name + "\"}", new Callback<String>() {
                 @Override
                 public void success(String s, Response response) {
-                    try{
+                    try {
                         JSONObject whole_body = new JSONObject(s);
                         JSONArray result = whole_body.getJSONArray("results");
 
                         post_count = whole_body.getString("count");
-                        menu_user_post_count.setText( post_count + " Post") ;
+                        menu_user_post_count.setText(post_count + " Post");
 
-                    }catch (JSONException ex){
+                    } catch (JSONException ex) {
                         ex.printStackTrace();
                     }
 
@@ -554,7 +601,7 @@ public class DrawerMainActivity extends AppCompatActivity {
 
                 @Override
                 public void failure(RetrofitError error) {
-                    Log.e("///Count Error//","==>" +error.toString());
+                    Log.e("///Count Error//", "==>" + error.toString());
 
                 }
             });
@@ -562,13 +609,12 @@ public class DrawerMainActivity extends AppCompatActivity {
         } else {
 
             if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)) {
-                org.undp_iwomen.iwomen.utils.Utils.doToastEng(getApplicationContext(), "Internet Connection need!");
+                org.undp_iwomen.iwomen.utils.Utils.doToastEng(getApplicationContext(), getResources().getString(R.string.open_internet_warning_eng));
             } else {
 
                 org.undp_iwomen.iwomen.utils.Utils.doToastMM(getApplicationContext(), getResources().getString(R.string.open_internet_warning_mm));
             }
         }
-
 
 
     }
@@ -591,7 +637,11 @@ public class DrawerMainActivity extends AppCompatActivity {
     public void LoadDrawerCustomData() {
 
         /*DrawerListName = new String[]
-                {"Stories",  "Resources", "Setting","AboutUs"};*/
+                {"Stories
+                ",  "Resources", "Setting","AboutUs"};*/
+
+        //TODO FONT DRAWERMAIN
+        mstr_lang = sharePrefLanguageUtil.getString(Utils.PREF_SETTING_LANG, Utils.ENG_LANG);
 
         //TODO FONT DRAWERMAIN
         if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)) {
@@ -634,7 +684,7 @@ public class DrawerMainActivity extends AppCompatActivity {
             mDrawerList.setAdapter(drawer_adapter);
             mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
             setListViewHeightBasedOnChildren(mDrawerList);
-        }else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG_UNI)) {
+        } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG_UNI)) {
             DrawerListName = new String[]
                     {"စိတ္ဓာတ္ခ\u103Cန္အား\u107Fဖည္ ့ရန္", "ဗဟုုသုုတရရန္", "ေပ\u102Bင္းစည္းေဆာင္ရ\u103Cက္ရန္", "ေမး\u107Fမန္းေဆ\u103Cးေ\u108F\u103Cးရန္", "\u107Fပင္ဆင္ရန္", "က\u103C\u103A\u108Fုုပ္တိုု ့အေ\u107Eကာင္း", " Sister Apps"};
 
@@ -654,7 +704,7 @@ public class DrawerMainActivity extends AppCompatActivity {
             mDrawerList.setAdapter(drawer_adapter);
             mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
             setListViewHeightBasedOnChildren(mDrawerList);
-        }else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG_DEFAULT)) {
+        } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG_DEFAULT)) {
             DrawerListName = new String[]
                     {"စိတ္ဓာတ္ခ\u103Cန္အား\u107Fဖည္ ့ရန္", "ဗဟုုသုုတရရန္", "ေပ\u102Bင္းစည္းေဆာင္ရ\u103Cက္ရန္", "ေမး\u107Fမန္းေဆ\u103Cးေ\u108F\u103Cးရန္", "\u107Fပင္ဆင္ရန္", "က\u103C\u103A\u108Fုုပ္တိုု ့အေ\u107Eကာင္း", " Sister Apps"};
 
@@ -676,7 +726,7 @@ public class DrawerMainActivity extends AppCompatActivity {
             mDrawerList.setAdapter(drawer_adapter);
             mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
             setListViewHeightBasedOnChildren(mDrawerList);
-        }else {
+        } else {
             DrawerListName = new String[]
                     {"စိတ္ဓာတ္ခ\u103Cန္အား\u107Fဖည္ ့ရန္", "ဗဟုုသုုတရရန္", "ေပ\u102Bင္းစည္းေဆာင္ရ\u103Cက္ရန္", "ေမး\u107Fမန္းေဆ\u103Cးေ\u108F\u103Cးရန္", "\u107Fပင္ဆင္ရန္", "က\u103C\u103A\u108Fုုပ္တိုု ့အေ\u107Eကာင္း", " Sister Apps"};
 
@@ -787,8 +837,20 @@ public class DrawerMainActivity extends AppCompatActivity {
                 setTitle(DrawerListName[position]);
                 break;
             case 5:
-                Intent intent2 = new Intent(this, AboutUsWebActivity.class);
-                startActivity(intent2);
+
+                if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)){
+
+                    Intent intent2 = new Intent(this, AboutUsWebActivity.class);
+                    intent2.putExtra("ActivityName","DrawerMainActivity");
+                    intent2.putExtra("URL","file:///android_asset/tos/About-Us-Eng.html");
+                    startActivity(intent2);
+                }else{
+                    Intent intent2 = new Intent(this, AboutUsWebActivity.class);
+                    intent2.putExtra("ActivityName","DrawerMainActivity");
+                    intent2.putExtra("URL","file:///android_asset/tos/About-Us-MM.html");
+                    startActivity(intent2);
+                }
+
                 break;
             case 6:
                 fragmentManager.beginTransaction().replace(R.id.content_frame, sisterAppFragment).commit();
@@ -850,7 +912,7 @@ public class DrawerMainActivity extends AppCompatActivity {
         }
     }
 
-    private void showRefreshInfoDialog(){
+    private void showRefreshInfoDialog() {
         MaterialDialog dialog = new MaterialDialog.Builder(DrawerMainActivity.this)
                 .title("")//Title
                 .customView(R.layout.custom_refresh_dialog, true)
@@ -878,25 +940,27 @@ public class DrawerMainActivity extends AppCompatActivity {
                 .build();
 
         dialog.show();
-        CustomTextView txt_dialog_head = (CustomTextView)dialog.findViewById(R.id.dialog_refresh_title);
-        TextView txt_dialog_content = (TextView)dialog.findViewById(R.id.dialog_refresh_content);
+        CustomTextView txt_dialog_head = (CustomTextView) dialog.findViewById(R.id.dialog_refresh_title);
+        TextView txt_dialog_content = (TextView) dialog.findViewById(R.id.dialog_refresh_content);
 
         //TODO FONT DRAWERMAIN
         if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.ENG_LANG)) {
             txt_dialog_head.setText(R.string.app_name);
             txt_dialog_content.setText(R.string.dialog_refresh_msg_eng);
-        }else if(mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG)) { //Zawygi
+
+            //btn_play_game.setText(R.string.competition_play_game);
+        } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG)) { //Zawygi
 
             txt_dialog_head.setText(R.string.app_name_mm);
             txt_dialog_content.setText(R.string.dialog_refresh_msg_mm);
 
             txt_dialog_head.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
             txt_dialog_content.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
-        }else if(mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG_UNI)) {
+        } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG_UNI)) {
 
             txt_dialog_head.setText(R.string.app_name_mm);
             txt_dialog_content.setText(R.string.dialog_refresh_msg_mm);
-        }else {//DEFAULT
+        } else {//DEFAULT
 
             txt_dialog_head.setText(R.string.app_name_mm);
             txt_dialog_content.setText(R.string.dialog_refresh_msg_mm);
@@ -921,6 +985,58 @@ public class DrawerMainActivity extends AppCompatActivity {
 
         }
     }
+    private void getCompetitionQuestion(){
+        Log.e("Drawing Game calling===>","===>");
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Loading...");
+        dialog.show();
+        NetworkEngine.getInstance().getCompetitionQuestion("", user_obj_id, new Callback<CompetitionQuestion>() {
 
+            @Override
+            public void failure(RetrofitError arg0) {
+                // TODO Auto-generated method stub
+                dialog.dismiss();
+                if(arg0.getResponse() != null){
+                    switch (arg0.getResponse().getStatus()) {
+                        case 403:
+                            startActivity(new Intent(getApplicationContext(), GameOverActivity.class));
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void success(final CompetitionQuestion arg0, Response arg1) {
+                // TODO Auto-generated method stub
+                if(arg0.getCorrectAnswer() == null){
+                    btn_play_game.setText(getResources().getString(R.string.competition_play_game));
+                    btn_play_game.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            // TODO Auto-generated method stub
+                            startActivity(new Intent(getApplicationContext(), CompetitionNewGameActivity.class).putExtra("competition_question", new Gson().toJson(arg0)));
+                        }
+                    });
+
+                }else{
+                    btn_play_game.setText(getResources().getString(R.string.competition_discover_winner));
+                    btn_play_game.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            // TODO Auto-generated method stub
+                            startActivity(new Intent(getApplicationContext(), CompetitionWinnerGroupActivity.class).putExtra("competition_question", new Gson().toJson(arg0)));
+                        }
+                    });
+
+                }
+                dialog.dismiss();
+            }
+        });
+    }
 
 }

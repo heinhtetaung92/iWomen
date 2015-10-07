@@ -151,9 +151,15 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
                     /* Toast.makeText(getActivity().getApplicationContext(),
                     "Please Open Internet Connection!",
                     Toast.LENGTH_LONG).show();*/
-                Utils.doToastMM(mContext, getActivity().getResources().getString(R.string.open_internet_warning_mm));
+                // Utils.doToastMM(mContext, getActivity().getResources().getString(R.string.open_internet_warning_mm));
 
 
+                if (mstr_lang.equals(Utils.ENG_LANG)) {
+                    Utils.doToastEng(mContext, getResources().getString(R.string.open_internet_warning_eng));
+                } else {
+
+                    Utils.doToastMM(mContext, getActivity().getResources().getString(R.string.open_internet_warning_mm));
+                }
             }
         }
 
@@ -214,12 +220,11 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
         if (getActivity().getApplicationContext() != null) {
 
 
-
             //TODO ADMIN ACCOUNT POST FILTER
-            String selections = TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID + "=?";
-            String[] selectionargs = {"P8Q6mhIfOG"};
+            /*String selections = TableAndColumnsName.PostUtil.POST_CONTENT_USER_ID + "=?";
+            String[] selectionargs = {"P8Q6mhIfOG"};*/
 
-            Cursor cursor = getActivity().getContentResolver().query(IwomenProviderData.PostProvider.CONTETN_URI, null, selections, selectionargs," post_likes DESC " );//BaseColumns._ID + " DESC"
+            Cursor cursor = getActivity().getContentResolver().query(IwomenProviderData.PostProvider.CONTETN_URI, null, null, null, " post_likes DESC ");//BaseColumns._ID + " DESC"
 
 
             ArrayList<FeedItem> feedItemArrayList = new ArrayList<>();
@@ -269,10 +274,10 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
                         post_content_title_mm = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_TITLE_MM));
 
                         //TODO TableColumnUpdate 6
-                        author_id =cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ID));
+                        author_id = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ID));
                         author_role = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.POST_CONTENT_AUTHOR_ROLE));
 
-                        like_status   = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.LIKE_STATUS));
+                        like_status = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.LIKE_STATUS));
                         status = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.STATUS));
                         created_at = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.CREATED_DATE));
                         updated_at = cursor.getString(cursor.getColumnIndex(TableAndColumnsName.PostUtil.UPDATED_DATE));
@@ -334,7 +339,7 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
                     progress.setVisibility(View.INVISIBLE);
                 }
 
-            }catch (IllegalStateException ex){
+            } catch (IllegalStateException ex) {
                 ex.printStackTrace();
             }
 
@@ -505,7 +510,7 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
                 Log.e("Offset Range Count", "==>" + offsetlimit + "/" + skipLimit);
                 mProgressDialog.show();//{"isAllow": true}
                 String sCondition = "{\"isAllow\": true}";
-                UserPostAPI.getInstance().getService().getIWomenPost("createdAt",offsetlimit, skipLimit, sCondition, new Callback<String>() {
+                UserPostAPI.getInstance().getService().getIWomenPost("createdAt", offsetlimit, skipLimit, sCondition, new Callback<String>() {
                     @Override
                     public void success(String s, Response response) {
                         Log.e("success", "==" + s);
@@ -593,13 +598,32 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
                                     if (!postimgjsonObject.isNull("url")) {
                                         cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, postimgjsonObject.getString("url"));
                                     } else {
-                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+                                        //cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                        if (!each_object.isNull("postUploadUserImgPath")) {
+
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, each_object.getString("postUploadUserImgPath"));
+
+                                        } else {
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                        }
 
                                     }
 
 
                                 } else {
-                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+                                    //cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+
+                                    if (!each_object.isNull("postUploadUserImgPath")) {
+
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, each_object.getString("postUploadUserImgPath"));
+
+                                    } else {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                    }
 
                                 }
 
@@ -666,7 +690,6 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
                                 }
 
 
-
                                 if (!each_object.isNull("postUploadedDate")) {
 
                                     JSONObject postUploadedDate = each_object.getJSONObject("postUploadedDate");
@@ -718,7 +741,7 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
 
                 String sCondition = "{\"isAllow\": true}";
 
-                UserPostAPI.getInstance().getService().getIWomenPost("createdAt",offsetlimit, skipLimit, sCondition, new Callback<String>() {
+                UserPostAPI.getInstance().getService().getIWomenPost("createdAt", offsetlimit, skipLimit, sCondition, new Callback<String>() {
                     @Override
                     public void success(String s, Response response) {
                         Log.e("success", "==" + s);
@@ -808,13 +831,32 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
                                     if (!postimgjsonObject.isNull("url")) {
                                         cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, postimgjsonObject.getString("url"));
                                     } else {
-                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+                                        //cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                        if (!each_object.isNull("postUploadUserImgPath")) {
+
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, each_object.getString("postUploadUserImgPath"));
+
+                                        } else {
+                                            cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                        }
 
                                     }
 
 
                                 } else {
-                                    cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+                                    //cv.put(TableAndColumnsName.UserPostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+
+                                    if (!each_object.isNull("postUploadUserImgPath")) {
+
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, each_object.getString("postUploadUserImgPath"));
+
+                                    } else {
+                                        cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_USER_IMG_PATH, "");
+
+                                    }
 
                                 }
 
@@ -929,7 +971,7 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
             //Utils.doToast(mContext, "Internet Connection need!");
 
             if (mstr_lang.equals(Utils.ENG_LANG)) {
-                Utils.doToastEng(mContext, "Internet Connection need!");
+                Utils.doToastEng(mContext, getResources().getString(R.string.open_internet_warning_eng));
             } else {
 
                 Utils.doToastMM(mContext, getActivity().getResources().getString(R.string.open_internet_warning_mm));
@@ -1060,7 +1102,7 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
                                         }
                                         if (post.get("content_mm") != null) {
                                             cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_MM, post.getString("content_mm"));
-                                        }else{
+                                        } else {
                                             cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_MM, "");
 
                                         }
@@ -1183,7 +1225,7 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
                                 }
                                 if (post.get("content_mm") != null) {
                                     cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_MM, post.getString("content_mm"));
-                                }else{
+                                } else {
                                     cv.put(TableAndColumnsName.PostUtil.POST_CONTENT_MM, "");
 
                                 }
@@ -1214,9 +1256,9 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
 
         } else {
 
-            if(mstr_lang.equals(Utils.ENG_LANG)) {
-                Utils.doToastEng(mContext, "Internet Connection need!");
-            }else {
+            if (mstr_lang.equals(Utils.ENG_LANG)) {
+                Utils.doToastEng(mContext, getResources().getString(R.string.open_internet_warning_eng));
+            } else {
 
                 Utils.doToastMM(mContext, getActivity().getResources().getString(R.string.open_internet_warning_mm));
             }
