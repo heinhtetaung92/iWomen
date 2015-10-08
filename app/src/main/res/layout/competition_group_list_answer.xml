@@ -19,9 +19,9 @@
             android:id="@+id/img_competition_user_photo"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:src="@drawable/competition_user_photo" />
+            android:src="@drawable/blank_profile" />
 
-        <TextView
+        <org.undp_iwomen.iwomen.ui.widget.CustomTextView
             android:id="@+id/txt_competition_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
             android:text="Su Su"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <TextView
+        <org.undp_iwomen.iwomen.ui.widget.CustomTextView
             android:id="@+id/txt_competition_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,17 +47,19 @@
 
         <ImageView
             android:id="@+id/img_competition_user_phone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="36dp"
+            android:layout_marginRight="48dp"
+            android:src="@drawable/phone"
             android:background="@drawable/competition_user_phone" />
 
         <ImageView
             android:id="@+id/img_competition_user_viber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_alignParentRight="true"
+            android:src="@drawable/viber"
             android:background="@drawable/competition_user_viber" />
 
         <LinearLayout
@@ -66,7 +68,7 @@
             android:layout_marginTop="36dp"
             android:orientation="vertical" >
 
-            <TextView
+            <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                 android:id="@+id/txt_competition_answer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

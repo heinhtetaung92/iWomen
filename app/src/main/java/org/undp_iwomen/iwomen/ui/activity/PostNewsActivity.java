@@ -2,17 +2,18 @@ package org.undp_iwomen.iwomen.ui.activity;
 
 import android.content.ContentValues;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.smk.iwomen.BaseActionBarActivity;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.database.TableAndColumnsName;
 import org.undp_iwomen.iwomen.provider.IwomenProviderData;
 import org.undp_iwomen.iwomen.utils.Utils;
 
-public class PostNewsActivity extends ActionBarActivity implements View.OnClickListener {
+public class PostNewsActivity extends BaseActionBarActivity implements View.OnClickListener {
 
     EditText et_postid, et_post_title, et_post_content,
             et_post_imgpath, et_post_contenttype, et_userid,

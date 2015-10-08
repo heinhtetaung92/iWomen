@@ -23,7 +23,7 @@
         android:layout_marginLeft="16dp"
         android:orientation="vertical" >
 
-        <TextView
+        <org.undp_iwomen.iwomen.ui.widget.CustomTextView
             android:id="@+id/txt_competition_sub_answer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

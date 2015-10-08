@@ -1,14 +1,15 @@
 package org.undp_iwomen.iwomen.ui.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.smk.iwomen.BaseActionBarActivity;
 
 import org.undp_iwomen.iwomen.R;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends BaseActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

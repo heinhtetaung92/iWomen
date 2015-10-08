@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical" >
 
-            <TextView
+            <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                 android:id="@+id/txt_competition_question"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/competition_text" />
 
-            <TextView
+            <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                 android:id="@+id/txt_competition_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/competition_text" />
 
-            <EditText
+            <org.undp_iwomen.iwomen.ui.widget.CustomEditText
                 android:id="@+id/edt_competition_answer_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,9 +50,9 @@
                 android:hint="@string/competition_answer_hit_1"
                 android:inputType="textMultiLine"
                 android:lines="3" >
-            </EditText>
+            </org.undp_iwomen.iwomen.ui.widget.CustomEditText>
 
-            <EditText
+            <org.undp_iwomen.iwomen.ui.widget.CustomEditText
                 android:id="@+id/edt_competition_answer_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                 android:inputType="textMultiLine"
                 android:lines="3" />
 
-            <EditText
+            <org.undp_iwomen.iwomen.ui.widget.CustomEditText
                 android:id="@+id/edt_competition_answer_3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical" >
 
-                    <Button
+                    <org.undp_iwomen.iwomen.ui.widget.CustomButton
                         android:id="@+id/btn_competition_answer_save"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
                         android:text="@string/competition_save"
                         android:textColor="@color/competition_text" />
 
-                    <TextView
+                    <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -111,7 +111,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical" >
 
-                    <Button
+                    <org.undp_iwomen.iwomen.ui.widget.CustomButton
                         android:id="@+id/btn_competition_answer_submit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -119,7 +119,7 @@
                         android:text="@string/competition_submit"
                         android:textColor="@color/competition_text" />
 
-                    <TextView
+                    <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -134,7 +134,7 @@
                     android:orientation="vertical"
                     android:visibility="gone" >
 
-                    <Button
+                    <org.undp_iwomen.iwomen.ui.widget.CustomButton
                         android:id="@+id/btn_competition_group_answers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -142,7 +142,7 @@
                         android:text="@string/competition_group_answer"
                         android:textColor="@color/competition_text" />
 
-                    <TextView
+                    <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"

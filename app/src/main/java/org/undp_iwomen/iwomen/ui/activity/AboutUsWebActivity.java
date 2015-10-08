@@ -4,13 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
+import com.smk.iwomen.BaseActionBarActivity;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
@@ -18,7 +18,7 @@ import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 import org.undp_iwomen.iwomen.utils.Utils;
 
 
-public class AboutUsWebActivity extends AppCompatActivity {
+public class AboutUsWebActivity extends BaseActionBarActivity {
 
     private WebView mWebView;
     SharedPreferences sharePrefLanguageUtil;
@@ -54,8 +54,8 @@ public class AboutUsWebActivity extends AppCompatActivity {
         mWebView = (WebView) findViewById(R.id.tos_webview);
 
         //For Responsive UI and Zoom In Out effect
-        mWebView.getSettings().setUseWideViewPort(true);
-        mWebView.getSettings().setLoadWithOverviewMode(true);
+        /*mWebView.getSettings().setUseWideViewPort(true);
+        mWebView.getSettings().setLoadWithOverviewMode(true);*/
 
         //mWebView.setWebViewClient(new MyWebClient());
         mWebView.getSettings().setSupportZoom(true);

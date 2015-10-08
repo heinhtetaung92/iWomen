@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.makeramen.RoundedImageView;
+import com.smk.iwomen.BaseActionBarActivity;
 import com.squareup.picasso.Picasso;
 
 import org.undp_iwomen.iwomen.R;
@@ -22,7 +22,7 @@ import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 import org.undp_iwomen.iwomen.utils.Utils;
 
 
-public class ResourceDetailActivity extends AppCompatActivity {
+public class ResourceDetailActivity extends BaseActionBarActivity {
 
 
     private CustomTextView textViewTitle;

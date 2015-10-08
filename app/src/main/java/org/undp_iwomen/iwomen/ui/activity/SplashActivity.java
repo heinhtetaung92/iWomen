@@ -5,18 +5,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.widget.TextView;
 
 import com.parse.CommonConfig;
+import com.smk.iwomen.BaseActionBarActivity;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.ui.widget.ProgressWheel;
 import org.undp_iwomen.iwomen.utils.SharePrefUtils;
 
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActionBarActivity {
     private static final String LOG_TAG = SplashActivity.class.getSimpleName();
 
     SharePrefUtils sharePrefUtils;

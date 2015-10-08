@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -61,13 +60,13 @@ public class ResourcesFragment extends Fragment implements AbsListView.OnScrollL
     private StorageUtil storageUtil;
 
 
-    public int index = 1;
+    /*public int index = 1;
     public int skipcount = 5;//10 , 20
     public int skipLimit = 0;
     public int countlimit = -1;
     private boolean isloading = false;
     private int TOTAL_ITEMS = 0;//100
-    View footer;
+    View footer;*/
 
 
     public ResourcesFragment() {
@@ -96,7 +95,7 @@ public class ResourcesFragment extends Fragment implements AbsListView.OnScrollL
         storageUtil = StorageUtil.getInstance(mContext);
 
         LayoutInflater footerinflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        footer = (View) inflater.inflate(R.layout.loading_layout, null);
+        //footer = (View) inflater.inflate(R.layout.loading_layout, null);
 
         init(rootView);
 
@@ -117,7 +116,7 @@ public class ResourcesFragment extends Fragment implements AbsListView.OnScrollL
 
         Log.e("ResourceItems size", "===>" + ResourceItems.size());
 
-        lvResouces.addFooterView(footer);
+        //lvResouces.addFooterView(footer);
         lvResouces.setOnScrollListener(this);
         if (ResourceItems.size() > 0) {
             adapter = new ResourcesListViewAdapter(getActivity().getApplicationContext(), ResourceItems, mstr_lang);
@@ -155,13 +154,13 @@ public class ResourcesFragment extends Fragment implements AbsListView.OnScrollL
     private void getResourceDataFromSever() {
         if (Connection.isOnline(mContext)) {
 
-            skipLimit = skipcount * (index - 1); // 5
+            //skipLimit = skipcount * (index - 1); // 5
 
-            Log.e("getServerData","===>" + skipLimit + "/count/" + skipcount);
+            //Log.e("getServerData","===>" + skipLimit + "/count/" + skipcount);
 
             String sCondition = "{\"isAllow\": true}";
             mProgressDialog.show();
-            ResourceAPI.getInstance().getService().getResourceList("createdAt", skipLimit, skipcount, sCondition,  new Callback<String>() {
+            ResourceAPI.getInstance().getService().getResourceList("createdAt", 10, 0, sCondition,  new Callback<String>() {
                 @Override
                 public void success(String s, Response response) {
 
@@ -230,7 +229,7 @@ public class ResourcesFragment extends Fragment implements AbsListView.OnScrollL
                                 adapter = new ResourcesListViewAdapter(getActivity().getApplicationContext(), ResourceItems, mstr_lang);
                                 lvResouces.setAdapter(adapter);
 
-                                if (adapter.getCount() == TOTAL_ITEMS || ResourceItems.size() == TOTAL_ITEMS) {
+                                /*if (adapter.getCount() == TOTAL_ITEMS || ResourceItems.size() == TOTAL_ITEMS) {
                                     //header.setText("All " + adapter.getCount() + " Items are loaded.");
                                     lvResouces.setOnScrollListener(null);
                                     lvResouces.removeFooterView(footer);
@@ -241,7 +240,7 @@ public class ResourcesFragment extends Fragment implements AbsListView.OnScrollL
                                 }else{
                                     isloading = false;
                                 }
-                                index++;
+                                index++;*/
 
                             } catch (NullPointerException ex) {
                                 ex.printStackTrace();
@@ -310,8 +309,8 @@ public class ResourcesFragment extends Fragment implements AbsListView.OnScrollL
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         int loadedItems = firstVisibleItem + visibleItemCount;
-        Log.e("///ON Scroll//", "==>" + loadedItems + "/" + totalItemCount + isloading + index + "/" + countlimit);
-        if (!isloading) {
+        //Log.e("///ON Scroll//", "==>" + loadedItems + "/" + totalItemCount + isloading + index + "/" + countlimit);
+        /*if (!isloading) {
             if ((loadedItems >= totalItemCount) && index <= countlimit && index != 1) {
 
                 Log.e("///ON Scroll Load Query//", "==>" + loadedItems + "/" + totalItemCount + isloading + index + "/" + countlimit);
@@ -322,7 +321,7 @@ public class ResourcesFragment extends Fragment implements AbsListView.OnScrollL
                 //setQueryTripArrayList(strDate, FromLocationList, ToLocationList);
 
             }
-        }
+        }*/
     }
 
     /**

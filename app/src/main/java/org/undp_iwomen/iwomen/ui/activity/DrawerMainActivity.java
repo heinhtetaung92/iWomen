@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
@@ -35,10 +34,12 @@ import com.parse.ParseUser;
 import com.parse.ui.ParseLoginBuilder;
 import com.parse.utils.Utils;
 import com.smk.clientapi.NetworkEngine;
+import com.smk.iwomen.BaseActionBarActivity;
 import com.smk.iwomen.CompetitionNewGameActivity;
 import com.smk.iwomen.CompetitionWinnerGroupActivity;
 import com.smk.iwomen.GameOverActivity;
 import com.smk.model.CompetitionQuestion;
+import com.smk.skalertmessage.SKToastMessage;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -74,7 +75,7 @@ import retrofit.client.Response;
  */
 
 
-public class DrawerMainActivity extends AppCompatActivity {
+public class DrawerMainActivity extends BaseActionBarActivity {
     private DrawerLayout drawerLayoutt;
     private LinearLayout mDrawerLinearLayout;
     private ListView mDrawerList;
@@ -115,6 +116,7 @@ public class DrawerMainActivity extends AppCompatActivity {
 
     LinearLayout ly_menu_profile_area;
     private Button btn_play_game;
+    private LinearLayout layout_play_game;
 
     @Override
     protected void onStart() {
@@ -172,6 +174,7 @@ public class DrawerMainActivity extends AppCompatActivity {
         drawer_profilePic_rounded = (RoundedImageView) findViewById(R.id.drawer_profilePic_rounded);
         drawer_progressBar_profile_item = (ProgressBar) findViewById(R.id.drawer_progressBar_profile_item);
 
+        layout_play_game = (LinearLayout) findViewById(R.id.ly2);
         btn_play_game = (Button)findViewById(R.id.drawer_btn_take_challenge);
         // set a custom shadow that overlays the main content when the drawer opens
         drawerLayoutt.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -274,6 +277,7 @@ public class DrawerMainActivity extends AppCompatActivity {
                             mEditorUserInfo.putString(CommonConfig.USER_IMAGE_PATH, userprofile_Image_path);
 
                             mEditorUserInfo.commit();
+                            drawer_progressBar_profile_item.setVisibility(View.VISIBLE);
                             try {
                                 drawer_profilePic_rounded.setVisibility(View.VISIBLE);
                                 userProfilePicture.setVisibility(View.GONE);
@@ -330,6 +334,7 @@ public class DrawerMainActivity extends AppCompatActivity {
                                 mEditorUserInfo.putString(CommonConfig.USER_IMAGE_PATH, userprofile_Image_path);
 
                                 mEditorUserInfo.commit();
+                                drawer_progressBar_profile_item.setVisibility(View.VISIBLE);
                                 try {
                                     drawer_profilePic_rounded.setVisibility(View.VISIBLE);
                                     userProfilePicture.setVisibility(View.GONE);
@@ -1001,6 +1006,10 @@ public class DrawerMainActivity extends AppCompatActivity {
                         case 403:
                             startActivity(new Intent(getApplicationContext(), GameOverActivity.class));
                             break;
+                        case 400:
+                            String error = (String) arg0.getBodyAs(String.class);
+                            SKToastMessage.showMessage(DrawerMainActivity.this, error ,SKToastMessage.ERROR);
+                            layout_play_game.setVisibility(View.GONE);
 
                         default:
                             break;
@@ -1011,6 +1020,7 @@ public class DrawerMainActivity extends AppCompatActivity {
             @Override
             public void success(final CompetitionQuestion arg0, Response arg1) {
                 // TODO Auto-generated method stub
+                layout_play_game.setVisibility(View.VISIBLE);
                 if(arg0.getCorrectAnswer() == null){
                     btn_play_game.setText(getResources().getString(R.string.competition_play_game));
                     btn_play_game.setOnClickListener(new View.OnClickListener() {

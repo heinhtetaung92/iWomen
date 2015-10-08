@@ -137,6 +137,8 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
 
     private CheckBox mIAgreeCheckBox;
     private CheckBox mIamTLGCheckBox;
+
+    private static boolean isTlgmember= false;
     private TextView mTosTextView;
     private TextView mTlgmemberText;
     private TextView mTownshipLbl;
@@ -327,8 +329,10 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     spnFrom.setEnabled(true);
+                    isTlgmember = true;
                 } else {
                     spnFrom.setEnabled(false);
+                    isTlgmember = false;
                 }
             }
         });
@@ -808,6 +812,13 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
                         user.put("email", user_fb_email);
                     }
 
+                    user.put("isTlgTownshipExit",isTlgmember);
+
+                    if(isTlgmember){
+                        user.put("tlg_city_address",mFromCityName);
+
+                    }
+
                     loadingStart();
                     user.signUpInBackground(new SignUpCallback() {
 
@@ -886,6 +897,12 @@ public class ParseSignupFragment extends ParseLoginFragmentBase implements OnCli
             }
             if (user_fb_email != null && user_fb_email != "") {
                 user.put("email", user_fb_email);
+            }
+
+            user.put("isTlgTownshipExit",isTlgmember);
+            if(isTlgmember){
+                user.put("tlg_city_address",mFromCityName);
+
             }
 
             loadingStart();

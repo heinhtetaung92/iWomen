@@ -2,10 +2,11 @@ package org.undp_iwomen.iwomen.ui.activity;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.smk.iwomen.BaseActionBarActivity;
 
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.model.MyTypeFace;
@@ -13,7 +14,7 @@ import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 import org.undp_iwomen.iwomen.ui.widget.ResizableImageView;
 
 
-public class AboutUsmmActivity extends AppCompatActivity {
+public class AboutUsmmActivity extends BaseActionBarActivity {
 
 
     private ResizableImageView img_about_us;

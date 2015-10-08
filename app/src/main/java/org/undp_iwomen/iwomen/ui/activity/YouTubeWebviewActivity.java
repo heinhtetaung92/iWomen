@@ -2,7 +2,6 @@ package org.undp_iwomen.iwomen.ui.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -10,12 +9,14 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
+import com.smk.iwomen.BaseActionBarActivity;
+
 import org.undp_iwomen.iwomen.R;
 import org.undp_iwomen.iwomen.ui.widget.VideoEnabledWebChromeClient;
 import org.undp_iwomen.iwomen.ui.widget.VideoEnabledWebView;
 
 
-public class YouTubeWebviewActivity extends ActionBarActivity {
+public class YouTubeWebviewActivity extends BaseActionBarActivity {
     private VideoEnabledWebView webView;
     private VideoEnabledWebChromeClient webChromeClient;
     private ProgressBar Pbar;

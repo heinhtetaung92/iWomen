@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -13,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.smk.iwomen.BaseActionBarActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +35,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
-public class TLGListActivity extends AppCompatActivity {
+public class TLGListActivity extends BaseActionBarActivity {
 
 
     private CustomTextView textViewTitle;

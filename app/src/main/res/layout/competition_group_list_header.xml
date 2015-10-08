@@ -19,7 +19,7 @@
             android:layout_marginRight="100dp"
             android:orientation="vertical" >
 
-            <TextView
+            <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                 android:id="@+id/txt_competition_question"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/competition_text" />
 
-            <TextView
+            <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                 android:id="@+id/txt_competition_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
             android:gravity="center"
             android:orientation="vertical" >
 
-            <TextView
+            <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                 android:id="@+id/txt_competition_group_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
             android:gravity="center"
             android:orientation="vertical" >
 
-            <TextView
+            <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                 android:id="@+id/txt_count_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/competition_primary" />
 
-            <TextView
+            <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -94,7 +94,7 @@
             android:gravity="center"
             android:orientation="vertical" >
 
-            <TextView
+            <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                 android:id="@+id/txt_count_hour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/competition_primary" />
 
-            <TextView
+            <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -118,7 +118,7 @@
             android:gravity="center"
             android:orientation="vertical" >
 
-            <TextView
+            <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                 android:id="@+id/txt_count_minutes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/competition_primary" />
 
-            <TextView
+            <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -141,7 +141,7 @@
             android:gravity="center"
             android:orientation="vertical" >
 
-            <TextView
+            <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                 android:id="@+id/txt_count_second"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -149,7 +149,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/competition_primary" />
 
-            <TextView
+            <org.undp_iwomen.iwomen.ui.widget.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -158,7 +158,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
+    <org.undp_iwomen.iwomen.ui.widget.CustomTextView
         android:id="@+id/txt_competition_complete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -188,7 +188,7 @@
             android:progress="80"
             android:progressDrawable="@drawable/competition_progressbar" />
 
-        <TextView
+        <org.undp_iwomen.iwomen.ui.widget.CustomTextView
             android:id="@+id/txt_competition_progress_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

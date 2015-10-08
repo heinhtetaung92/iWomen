@@ -55,6 +55,7 @@ import com.parse.ParseACL;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
+import com.smk.iwomen.BaseActionBarActivity;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -93,7 +94,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class TLGUserPostDetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class TLGUserPostDetailActivity extends BaseActionBarActivity implements View.OnClickListener {
 
     CustomTextView mPostTile;
 

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.makeramen.RoundedImageView;
+import com.smk.iwomen.BaseActionBarActivity;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -33,7 +34,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
-public class AuthorDetailActivity extends AppCompatActivity {
+public class AuthorDetailActivity extends BaseActionBarActivity {
 
 
     private CustomTextView textViewTitle;

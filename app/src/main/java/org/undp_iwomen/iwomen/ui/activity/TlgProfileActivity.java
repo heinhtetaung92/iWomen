@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -16,6 +15,7 @@ import android.widget.ProgressBar;
 
 import com.makeramen.RoundedImageView;
 import com.parse.utils.Utils;
+import com.smk.iwomen.BaseActionBarActivity;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -32,7 +32,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
-public class TlgProfileActivity extends AppCompatActivity implements View.OnClickListener {
+public class TlgProfileActivity extends BaseActionBarActivity implements View.OnClickListener {
 
     public CustomTextView textViewTitle;
     SharedPreferences sharePrefLanguageUtil;

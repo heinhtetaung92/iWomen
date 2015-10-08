@@ -1,5 +1,6 @@
 package com.smk.clientapi;
 
+import com.smk.model.APKVersion;
 import com.smk.model.CompetitionQuestion;
 import com.smk.model.GroupUser;
 
@@ -43,7 +44,11 @@ public interface INetworkEngine {
 			@Field("question_id") Integer question_id,
 			@Field("group_user_id") Integer group_user_id,
 			Callback<String> callback);
-	
+
+	@GET("/api-v1/app")
+	void getAPKVersion(
+			@Query("access_token") String access_token,
+			Callback<APKVersion> callback);
 	
 	
 	

@@ -5,13 +5,16 @@ public class Download {
 	private Integer totalSize;
 	private Integer finishedSize;
 	private Integer downloadPercent;
+	private String filePath;
+	
 	public Download(Boolean status, Integer totalSize, Integer finishedSize,
-			Integer downloadPercent) {
+			Integer downloadPercent, String filePath) {
 		super();
 		this.status = status;
 		this.totalSize = totalSize;
 		this.finishedSize = finishedSize;
 		this.downloadPercent = downloadPercent;
+		this.filePath = filePath;
 	}
 	public Boolean getStatus() {
 		return status;
@@ -37,7 +40,12 @@ public class Download {
 	public void setDownloadPercent(Integer downloadPercent) {
 		this.downloadPercent = downloadPercent;
 	}
-	
+	public String getFilePath() {
+		return filePath;
+	}
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
 	
 	
 }
