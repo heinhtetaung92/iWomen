@@ -18,6 +18,7 @@
     <string name="competition_answer_hit_2">၂) ဒီေနရာမွာ အေျဖျဖည့္ပါ။</string>
     <string name="competition_answer_hit_3">၃) ဒီေနရာမွာ အေျဖျဖည့္ပါ။</string>
     <string name="competition_go_to_answer">မိမိ၏ အျဖည့္သို႕</string>
+    <string name="competition_enter_the_answer">အေျဖမ်ား ျဖည့္ရန္</string>
     <string name="competition_compelete">ဂုဏ္ယူပါတယ္ဗ်ာ...ကံေကာင္းပါေစ။</string>
     <string name="competition_day">ရက္</string>
     <string name="competition_hour">နာရီ</string>
@@ -37,4 +38,13 @@
     <string name="competition_play_game">စ ၿပိဳင္ပါမည္</string>
     <string name="competition_discover_winner">ဘယ္သူ ႏိုုင္လဲ</string>
 
+    <string name="edit_profile_btn_cancel">ၿပင္ဆင္မွုုမၿပဳလုုပ္ပါ</string>
+    <string name="edit_profile_btn_next_tlg_edit">TLG or SRG အခ်က္အလက္ၿပင္ဆင္ရန္ဒိေနရာကိုုႏွိပ္ပါ။!</string>
+
+
+    <string name="edit_profile_tlg_township">မိဳ ့နယ္ေရြးမည္</string>
+
+    <string name="signup_tlg_member_exit">TLG (သိုု့) SRG အဖြဲ ့၀င္ၿဖစ္လ်င္အမွန္ၿခစ္ လုုပ္ပါ</string>
+
+    <string name="com_parse_ui_signup_township_lbl_eng"></string>
 </resources>

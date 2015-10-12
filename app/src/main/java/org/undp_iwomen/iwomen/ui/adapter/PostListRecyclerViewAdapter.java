@@ -179,7 +179,7 @@ public class PostListRecyclerViewAdapter extends RecyclerView.Adapter<PostListRe
             viewHolder.profile_item_progressBar.setVisibility(View.GONE);
         }
 
-        // Feed image
+        //// Feed image
         if (item.getPost_img_path() != null && !item.getPost_img_path().isEmpty()) {
             try {
                 viewHolder.postIMg.setVisibility(View.VISIBLE);

@@ -489,7 +489,7 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
         cv.put(TableAndColumnsName.UserUtil.STATUS, "0");
         cv.put(TableAndColumnsName.UserUtil.CREATED_DATE, "01-06-2015");
         cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, "01-06-2015");
-        Log.e("saveUserLocal : ", "= = = = = = = : " + cv.toString());
+        //Log.e("saveUserLocal : ", "= = = = = = = : " + cv.toString());
 
         getActivity().getContentResolver().insert(IwomenProviderData.UserProvider.CONTENT_URI, cv);
 
@@ -791,7 +791,7 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
                                 cv.put(TableAndColumnsName.PostUtil.UPDATED_DATE, each_object.get("updatedAt").toString());
 
 
-                                Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
+                                //Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
 
 
                                 getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);
@@ -1074,7 +1074,7 @@ public class StoriesRecentFragment extends Fragment implements View.OnClickListe
                                 cv.put(TableAndColumnsName.PostUtil.UPDATED_DATE, each_object.get("updatedAt").toString());
 
 
-                                Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
+                                //Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
 
 
                                 getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);

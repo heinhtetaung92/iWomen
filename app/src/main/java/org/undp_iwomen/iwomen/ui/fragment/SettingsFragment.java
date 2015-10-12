@@ -197,6 +197,10 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
                     config.locale = locale;
                     getActivity().getBaseContext().getResources().updateConfiguration(config, getActivity().getBaseContext().getResources().getDisplayMetrics());
 
+                    SharedPreferences.Editor fontEditor = getActivity().getSharedPreferences("mLanguage", Activity.MODE_PRIVATE).edit();
+                    fontEditor.putString("lang", "mm");
+                    fontEditor.commit();
+
                     setMyanmarFont();
 
                 }
@@ -211,6 +215,9 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
                     config.locale = locale;
                     getActivity().getBaseContext().getResources().updateConfiguration(config, getActivity().getBaseContext().getResources().getDisplayMetrics());
 
+                    SharedPreferences.Editor fontEditor = getActivity().getSharedPreferences("mLanguage", Activity.MODE_PRIVATE).edit();
+                    fontEditor.putString("lang", "mm");
+                    fontEditor.commit();
 
                     setMyanmarFontUni();
 
@@ -225,6 +232,9 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
                     config.locale = locale;
                     getActivity().getBaseContext().getResources().updateConfiguration(config, getActivity().getBaseContext().getResources().getDisplayMetrics());
 
+                    SharedPreferences.Editor fontEditor = getActivity().getSharedPreferences("mLanguage", Activity.MODE_PRIVATE).edit();
+                    fontEditor.putString("lang", "mm");
+                    fontEditor.commit();
 
                     setMyanmarFontDefault();
 

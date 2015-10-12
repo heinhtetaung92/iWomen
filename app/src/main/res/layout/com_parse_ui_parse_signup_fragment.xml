@@ -28,8 +28,8 @@
                 android:id="@+id/facebook_login_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/keyline_2_minus_16dp"
-                android:layout_marginRight="@dimen/keyline_2_minus_16dp">
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp">
 
                 <com.facebook.login.widget.LoginButton
                     android:id="@+id/facebook_login"
@@ -60,20 +60,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/facebook_login_container"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
                 android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:layout_gravity="center">
-                <!--<org.undp_iwomen.iwomen.ui.widget.ResizableImageView
-                    android:id="@+id/register_profilePic_resizable"
-                    android:layout_width="@dimen/feed_item_profile_pic"
-                    android:layout_height="@dimen/feed_item_profile_pic"
-                    android:scaleType="fitCenter"
-                    android:layout_marginBottom="@dimen/abc_list_item_padding_horizontal_material"
-                    android:layout_marginTop="@dimen/abc_list_item_padding_horizontal_material"
-                    android:gravity="center"
-                    android:src="@drawable/camera_icon"
-                    android:visibility="visible"
-                    ></org.undp_iwomen.iwomen.ui.widget.ResizableImageView>-->
+                android:orientation="vertical">
+
                 <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/register_profilePic_rounded"
                     android:layout_width="@dimen/feed_item_profile_pic"
@@ -95,6 +86,7 @@
                     app:riv_corner_radius="30dip"
                     app:riv_mutate_background="true"
                     app:riv_oval="true"></com.makeramen.RoundedImageView>
+
                 <ProgressBar
                     android:id="@+id/register_profilePic_progressBar"
                     style="?android:attr/progressBarStyle"
@@ -131,6 +123,7 @@
                     android:id="@+id/signup_username_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="15sp"
                     android:inputType="textCapWords"
                     android:nextFocusDown="@+id/signup_email_input"
                     android:nextFocusForward="@+id/signup_email_input" />
@@ -147,6 +140,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
+                    android:textSize="15sp"
                     android:inputType="textPassword"
                     android:nextFocusDown="@+id/signup_confirm_password_input"
                     android:nextFocusForward="@+id/signup_confirm_password_input"
@@ -167,6 +161,7 @@
                     android:inputType="textPassword"
                     android:nextFocusDown="@+id/signup_ph_input"
                     android:nextFocusForward="@+id/signup_ph_input"
+                    android:textSize="15sp"
                     android:selectAllOnFocus="true" />
 
             </android.support.design.widget.TextInputLayout>
@@ -183,6 +178,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:inputType="phone"
+                    android:textSize="15sp"
                     android:nextFocusDown="@+id/singup_tlg_checkbox"
                     android:nextFocusForward="@+id/singup_tlg_checkbox"
                     android:selectAllOnFocus="true" />
@@ -212,9 +208,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
+                android:orientation="horizontal"
 
-                android:orientation="horizontal">
+                android:paddingTop="8dp">
 
                 <CheckBox
                     android:id="@+id/singup_tlg_checkbox"
@@ -227,8 +223,8 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:fontFamily="sans-serif"
-                    android:textSize="18sp"
-                    android:text="@string/signup_tlg_member_exit_mm" />
+                    android:text="@string/signup_tlg_member_exit_mm"
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -236,34 +232,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/signup_lbl_township"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/com_parse_ui_horizontal_margin"
+                    android:fontFamily="sans-serif"
                     android:paddingBottom="@dimen/com_parse_ui_horizontal_margin"
                     android:paddingLeft="3dp"
-                    android:textSize="18sp"
-                    android:fontFamily="sans-serif"
+                    android:paddingTop="@dimen/com_parse_ui_horizontal_margin"
                     android:text="Township"
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                    />
+                    android:textSize="15sp" />
 
                 <Spinner
                     android:id="@+id/signup_spn_township"
                     style="@style/Spinner.TownshipInfo"
-                    android:enabled="false"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:text="@string/com_parse_ui_signup_township_lbl_eng"/>
+
+                    android:enabled="false"
+                    android:text="@string/com_parse_ui_signup_township_lbl_eng" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
+                android:orientation="horizontal"
                 android:paddingBottom="8dp"
-                android:orientation="horizontal">
+                android:paddingTop="8dp">
 
                 <CheckBox
                     android:id="@+id/i_agree_checkbox"
@@ -275,9 +272,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:textSize="18sp"
                     android:fontFamily="sans-serif"
-                    android:text="@string/i_agree_mm" />
+                    android:text="@string/i_agree_mm"
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -302,9 +299,9 @@
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:paddingBottom="20dp"
         android:paddingLeft="@dimen/keyline_1"
         android:paddingRight="@dimen/keyline_1"
-        android:paddingBottom="20dp"
         android:paddingTop="40dp">
 
         <LinearLayout
@@ -312,14 +309,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <Button
+            <org.undp_iwomen.iwomen.ui.widget.CustomButton
                 android:id="@+id/create_account"
                 style="@style/ParseLoginUI.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:text="@string/com_parse_ui_create_account_button_label_mm"
-                android:textSize="20dp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -337,7 +334,7 @@
                 android:enabled="false"
                 android:text="@string/com_parse_ui_edit_account_button_label_mm"
 
-                android:textSize="20dp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <!--<TextView

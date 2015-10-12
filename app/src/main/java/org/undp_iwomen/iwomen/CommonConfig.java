@@ -42,6 +42,7 @@ public class CommonConfig {
     public static final String RESOURCE_URL = "/classes/Resources";
 
 
+    public static final String SISTERAPP_URL = "/classes/SisterDownloadApp";
 
     public static final String SUB_RESOURCE_URL = "/classes/SubResourceDetail";
 

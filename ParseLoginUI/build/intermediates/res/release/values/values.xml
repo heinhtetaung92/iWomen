@@ -748,10 +748,10 @@
     <string name="show_on_map">Show on Maps</string>
     <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/res/values/strings.xml -->
     <eat-comment/>
-    <string name="signup_tlg_member_exit_eng">I am TLG member</string>
-    <string name="signup_tlg_member_exit_mm">TLG အဖြဲ ့၀င္ၿဖစ္လ်င္အမွန္ၿခစ္ လုုပ္ပါ</string>
-    <string name="signup_tlg_township_choose_eng">Choose TLG Township</string>
-    <string name="signup_tlg_township_choose_mm">TLG ၿမိဳ့နယ္တည္ေနရာေရြးခ်ယ္ပါ</string>
+    <string name="signup_tlg_member_exit_eng">I am a TLG or SRG member</string>
+    <string name="signup_tlg_member_exit_mm">TLG (သိုု့) SRG အဖြဲ ့၀င္ၿဖစ္လ်င္အမွန္ၿခစ္ လုုပ္ပါ</string>
+    <string name="signup_tlg_township_choose_eng">Choose Your Township</string>
+    <string name="signup_tlg_township_choose_mm"> ၿမိဳ့နယ္တည္ေနရာေရြးခ်ယ္ပါ</string>
     <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/exploded-aar/me.villani.lorenzo.android/android-cropimage/1.0.2/res/values/values.xml -->
     <eat-comment/>
     <string name="slide_show">Slideshow</string>
@@ -1836,7 +1836,7 @@
     </style>
     <style name="ParseLoginUI.TextView" parent="@android:style/Widget.TextView">
         <item name="android:textColor">@color/com_parse_ui_parse_login_display_text</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">15sp</item>
     </style>
     <!-- From: file:/Users/khinsandar/Documents/VipPro/UNDP/Application/iwomen/ParseLoginUI/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>

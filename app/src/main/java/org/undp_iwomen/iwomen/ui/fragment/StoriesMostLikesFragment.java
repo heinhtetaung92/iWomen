@@ -143,15 +143,8 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
                 //getPostDataOrderByLikesDate();
                 getIWomenPostByLimit();
             } else {
-                //scrollview.setVisibility(View.INVISIBLE);
-                //connectionerrorview.setVisibility(View.VISIBLE);
-                //            product_arrayList = (ArrayList<ProductsModel>) storageUtil.ReadArrayListFromSD("HomeProductsList");
 
                 progress.setVisibility(View.INVISIBLE);
-                    /* Toast.makeText(getActivity().getApplicationContext(),
-                    "Please Open Internet Connection!",
-                    Toast.LENGTH_LONG).show();*/
-                // Utils.doToastMM(mContext, getActivity().getResources().getString(R.string.open_internet_warning_mm));
 
 
                 if (mstr_lang.equals(Utils.ENG_LANG)) {
@@ -164,7 +157,7 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
         }
 
 
-        //setupAdapter();
+
 
 
         mRecyclerView.addOnItemTouchListener(new RecyclerOnItemClickListener(getActivity(), new RecyclerOnItemClickListener.OnItemClickListener() {
@@ -462,7 +455,7 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
         cv.put(TableAndColumnsName.UserUtil.STATUS, "0");
         cv.put(TableAndColumnsName.UserUtil.CREATED_DATE, "01-06-2015");
         cv.put(TableAndColumnsName.UserUtil.UPDATED_DATE, "01-06-2015");
-        Log.e("saveUserLocal : ", "= = = = = = = : " + cv.toString());
+        //Log.e("saveUserLocal : ", "= = = = = = = : " + cv.toString());
 
         getActivity().getContentResolver().insert(IwomenProviderData.UserProvider.CONTENT_URI, cv);
 
@@ -488,7 +481,7 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
         cv.put(TableAndColumnsName.PostUtil.CREATED_DATE, "Sun Aug 02 18:07:00 GMT+06:30 2015");
         cv.put(TableAndColumnsName.PostUtil.UPDATED_DATE, "Sun Aug 02 18:07:00 GMT+06:30 2015");
 
-        Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
+        //Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
 
         getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);
 
@@ -711,7 +704,7 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
                                 cv.put(TableAndColumnsName.PostUtil.UPDATED_DATE, each_object.get("updatedAt").toString());
 
 
-                                Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
+                                //Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
 
 
                                 getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);
@@ -940,7 +933,7 @@ public class StoriesMostLikesFragment extends Fragment implements View.OnClickLi
                                 cv.put(TableAndColumnsName.PostUtil.UPDATED_DATE, each_object.get("updatedAt").toString());
 
 
-                                Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
+                                //Log.e("savePostLocal : ", "= = = = = = = : " + cv.toString());
 
 
                                 getActivity().getContentResolver().insert(IwomenProviderData.PostProvider.CONTETN_URI, cv);

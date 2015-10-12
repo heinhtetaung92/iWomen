@@ -72,7 +72,7 @@ public class CompetitionNewGameActivity extends ActionBarActivity {
 		if(langRef.getString("lang","").equals("mm")){
 			txt_question.setText(competitionQuestion.getQuestionMm());
 			txt_question_desc.setText(competitionQuestion.getDescriptionMm());
-			txt_instruction_desc.setText(competitionQuestion.getInstructionAboutGame());
+			txt_instruction_desc.setText(competitionQuestion.getInstructionAboutGameMm());
 		}else{
 			txt_question.setText(competitionQuestion.getQuestion());
 			txt_question_desc.setText(competitionQuestion.getDescription());

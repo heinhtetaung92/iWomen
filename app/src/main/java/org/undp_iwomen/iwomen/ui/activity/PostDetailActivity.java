@@ -12,7 +12,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.BaseColumns;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Spannable;
@@ -1977,24 +1976,6 @@ public class PostDetailActivity extends BaseActionBarActivity implements View.On
         listView.requestLayout();
     }
 
-    /*private void setEmojiconFragment(boolean useSystemDefault) {
-
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.emojicons, EmojiconsFragment.newInstance(useSystemDefault))
-                .commit();
-    }*/
-
-    /*@Override
-    public void onEmojiconClicked(Emojicon emojicon) {
-        EmojiconsFragment.input(et_comment, emojicon);
-    }
-
-    @Override
-    public void onEmojiconBackspaceClicked(View v) {
-        EmojiconsFragment.backspace(et_comment);
-    }*/
 
     //Share URL
     // Method to share either text or URL.

@@ -16,6 +16,10 @@ public class TableAndColumnsName {
         String USER_POST = "user_post";
         String COMMENT= "comment";
 
+        String RESOURCE= "resource";
+        String SUBRESOURCE= "sub_resource";
+        String SISTERAPP= "sisterapp";
+
         String PROJECT_USER = "project_user";
         String FORM = "form";
     }
@@ -207,25 +211,101 @@ public class TableAndColumnsName {
 
     }
 
+    public interface ResourceUtil{
+        String RESOURCE_OBJ_ID ="resource_obj_id";
+        String RESOURCE_TITLE_MM ="resource_title_mm";
+        String RESOURCE_TITLE_ENG = "resource_title_eng";
+        String RESOURCE_LOGO_IMG_PATH = "resource_icon_img";
 
-    /*public interface ProjectUtil{
-        String PROJECT_ID = "project_id";
-        String PRO_DESCRIPTION ="project_description";
         String STATUS = "status";
         String CREATED_DATE ="created_at";
         String UPDATED_DATE = "updated_at";
 
-        String CREATE_PROJECT_TABLE = "Create Table If Not Exists " + TableNames.PROJECT + "(" +
+        String CREATE_RESOURCE_TABLE = "Create Table If Not Exists " + TableNames.RESOURCE + "(" +
                 BaseColumns._ID + " Integer Primary Key Autoincrement," +
-                PROJECT_ID + " Text Not Null ," +
-                UserUtil.USER_ID + " Text Not Null," +
-                PRO_DESCRIPTION + " Text Not Null,"+
 
+                RESOURCE_OBJ_ID + " Text Not Null," +
+                RESOURCE_TITLE_MM + " Text Not Null," +
+                RESOURCE_TITLE_ENG + " Text Not Null," +
+                RESOURCE_LOGO_IMG_PATH + " Text Not Null," +
 
                 STATUS + " Text Not Null," +
-                CREATED_DATE + " Text Not Null," +
-                UPDATED_DATE + " Text Not Null);";
-    }*/
+                CREATED_DATE + " Date Not Null," +
+                UPDATED_DATE + " DateTime Not Null,"+
+                " UNIQUE ("+ RESOURCE_OBJ_ID+") On Conflict Ignore);";
+
+    }
+
+    public interface SubResourceUtil{
+        String SUB_RESOURCE_OBJ_ID ="sub_resource_obj_id";
+
+        String SUB_RESOURCE_AUTHOR_NAME ="authorName";
+        String SUB_RESOURCE_AUTHOR_ID ="author_id";
+        String SUB_RESOURCE_AUTHOR_IMG_PATH ="author_img_url";
+        String SUB_RESOURCE_TITLE_MM ="sub_resource_title_mm";
+        String SUB_RESOURCE_TITLE_ENG = "sub_resource_title_eng";
+        String SUB_RESOURCE_CONTENT_MM ="sub_resouce_content_mm";
+        String SUB_RESOURCE_CONTENT_ENG ="sub_resouce_content_eng";
+        String SUB_RESOURCE_LOGO_IMG_PATH = "sub_res_icon_img_url";
+        String SUB_RESOURCE_POSTED_DATE = "sub_res_posted_date";
+
+        String STATUS = "status";
+        String CREATED_DATE ="created_at";
+        String UPDATED_DATE = "updated_at";
+
+        String CREATE_SUB_RESOURCE_TABLE = "Create Table If Not Exists " + TableNames.SUBRESOURCE + "(" +
+                BaseColumns._ID + " Integer Primary Key Autoincrement," +
+
+                SUB_RESOURCE_OBJ_ID + " Text Not Null," +
+                SUB_RESOURCE_AUTHOR_NAME+ " Text Not Null," +
+                SUB_RESOURCE_AUTHOR_ID+ " Text Not Null," +
+                SUB_RESOURCE_AUTHOR_IMG_PATH+ " Text Not Null," +
+
+                SUB_RESOURCE_CONTENT_MM+ " Text Not Null," +
+                SUB_RESOURCE_CONTENT_ENG+ " Text Not Null," +
+
+                SUB_RESOURCE_TITLE_MM + " Text Not Null," +
+                SUB_RESOURCE_TITLE_ENG + " Text Not Null," +
+                SUB_RESOURCE_LOGO_IMG_PATH + " Text Not Null," +
+
+                SUB_RESOURCE_POSTED_DATE+ " Date Not Null," +
+
+                STATUS + " Text Not Null," +
+                CREATED_DATE + " Date Not Null," +
+                UPDATED_DATE + " DateTime Not Null,"+
+                " UNIQUE ("+ SUB_RESOURCE_OBJ_ID+") On Conflict Ignore);";
+
+    }
+
+    public interface SisterAppUtil{
+        String SISTER_APP_OBJ_ID ="sister_app_obj_id";
+        String SISTER_APP_NAME ="app_name";
+        String SISTER_APP_LINK = "app_link";
+        String SISTER_APP_PACKAGE_NAME = "app_package_name";
+        String SISTER_APP_LOGO_IMG_PATH = "app_img";
+
+        String STATUS = "status";
+        String CREATED_DATE ="created_at";
+        String UPDATED_DATE = "updated_at";
+
+        String CREATE_SISTERAPP_TABLE = "Create Table If Not Exists " + TableNames.SISTERAPP + "(" +
+                BaseColumns._ID + " Integer Primary Key Autoincrement," +
+
+                SISTER_APP_OBJ_ID + " Text Not Null," +
+                SISTER_APP_NAME + " Text Not Null," +
+                SISTER_APP_LINK + " Text Not Null," +
+                SISTER_APP_PACKAGE_NAME + " Text Not Null," +
+                SISTER_APP_LOGO_IMG_PATH + " Text Not Null," +
+
+                STATUS + " Text Not Null," +
+                CREATED_DATE + " Date Not Null," +
+                UPDATED_DATE + " DateTime Not Null,"+
+                " UNIQUE ("+ SISTER_APP_OBJ_ID+") On Conflict Ignore);";
+
+    }
+
+
+
 
     public interface ParseUtil {
         String PARSE_ID = "parseId";

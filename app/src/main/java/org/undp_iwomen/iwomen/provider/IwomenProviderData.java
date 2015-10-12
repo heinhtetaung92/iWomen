@@ -21,6 +21,9 @@ public class IwomenProviderData {
     private static final String  POST_PATH = "post";
     private static final String  USER_POST_PATH = "user_post";
     private static final String  COMMENT_PATH = "comment";
+    private static final String  RESOURCE_PATH = "resource";
+    private static final String  SUB_RESOURCE_PATH = "sub_resource";
+    private static final String  SISTERAPP_PATH = "sisterapp";
 
 
 
@@ -77,6 +80,50 @@ public class IwomenProviderData {
 
 
     }
+
+
+    public static class ResourceProvider implements TableAndColumnsName.ResourceUtil{
+        public static final Uri CONTETN_URI = BASE_CONTENT_URI.buildUpon().appendEncodedPath(RESOURCE_PATH).build();
+
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.org.undp_iwomen.resource";
+
+        public static Uri buildContentUri(String id){
+            return CONTETN_URI.buildUpon().appendPath(id).build();
+        }
+
+
+
+
+    }
+
+    public static class SubResourceProvider implements TableAndColumnsName.SubResourceUtil{
+        public static final Uri CONTETN_URI = BASE_CONTENT_URI.buildUpon().appendEncodedPath(SUB_RESOURCE_PATH).build();
+
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.org.undp_iwomen.sub_resource";
+
+        public static Uri buildContentUri(String id){
+            return CONTETN_URI.buildUpon().appendPath(id).build();
+        }
+
+
+
+
+    }
+
+    public static class SisterAppProvider implements TableAndColumnsName.SubResourceUtil{
+        public static final Uri CONTETN_URI = BASE_CONTENT_URI.buildUpon().appendEncodedPath(SISTERAPP_PATH).build();
+
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.org.undp_iwomen.sisterapp";
+
+        public static Uri buildContentUri(String id){
+            return CONTETN_URI.buildUpon().appendPath(id).build();
+        }
+
+
+
+
+    }
+
 
 
 

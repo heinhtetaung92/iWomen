@@ -103,9 +103,10 @@
     <string name="i_agree_mm">မွတ္ပံုုတင္အခ်က္ အလက္မ်ားကိုုသေဘာတူပါသည္ <a href="https://www.facebook.com/UndpMyanmar"></a></string>
 
 
-    <string name="signup_tlg_member_exit_mm">TLG အဖြဲ ့၀င္ၿဖစ္လ်င္အမွန္ၿခစ္ လုုပ္ပါ</string>
-    <string name="signup_tlg_member_exit_eng">I am TLG member</string>
+    <string name="signup_tlg_member_exit_mm">TLG (သိုု့) SRG အဖြဲ ့၀င္ၿဖစ္လ်င္အမွန္ၿခစ္ လုုပ္ပါ</string>
+    <string name="signup_tlg_member_exit_eng">I am a TLG or SRG member</string>
 
+    <string name="signup_tlg_member_exit">I am a TLG or SRG member</string>
     <string name="success">Success</string>
     <string name="successfully_posted_post">Post ID: %1$s</string>
     <string name="error">Error</string>
@@ -210,7 +211,8 @@
     <string name="competition_answer_hit_1">Type your answer 1 here</string>
     <string name="competition_answer_hit_2">Type your answer 2 here</string>
     <string name="competition_answer_hit_3">Type your answer 3 here</string>
-    <string name="competition_go_to_answer">Go to My Answers</string>
+    <string name="competition_go_to_answer">Enter My Answers</string>
+    <string name="competition_enter_the_answer">Go to My Ansers</string>
     <string name="competition_compelete">Congratulation, Have a good luck!</string>
     <string name="competition_day">Days</string>
     <string name="competition_hour">Hours</string>
@@ -225,5 +227,10 @@
     <string name="title_activity_competition_submit_answer">Competition Submit Answer</string>
     <string name="title_activity_competition_group_user">CompetitionGroupUserActivity</string>
     <string name="title_activity_game_over">GameOverActivity</string>
+
+    <string name="edit_profile_btn_cancel">CANCEL</string>
+    <string name="edit_profile_btn_next_tlg_edit">To edit a TLG or SRG info!</string>
+
+    <string name="edit_profile_tlg_township">Township</string>
 
 </resources>

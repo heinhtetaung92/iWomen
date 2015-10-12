@@ -1,6 +1,7 @@
 package com.smk.clientapi;
 
 import com.smk.model.APKVersion;
+import com.smk.model.Answer;
 import com.smk.model.CompetitionQuestion;
 import com.smk.model.GroupUser;
 
@@ -11,6 +12,7 @@ import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.Path;
 import retrofit.http.Query;
 
 public interface INetworkEngine {
@@ -49,6 +51,11 @@ public interface INetworkEngine {
 	void getAPKVersion(
 			@Query("access_token") String access_token,
 			Callback<APKVersion> callback);
+
+	@GET("/api-v1/competitionanswer/{id}")
+	void getUserAnswer(
+			@Path("id") Integer id,
+			Callback<List<Answer>> callback);
 	
 	
 	

@@ -1,6 +1,7 @@
 package org.undp_iwomen.iwomen.ui.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,7 @@ public class ResourcesListViewAdapter extends BaseAdapter
         inflater = LayoutInflater.from(mContext);
         this.ResourceItems = resourceItems;
         mstr_lang = typeFaceName;
-        //Log.e("BrowseGridviewAdapter Constructor", "" + listCountry.size() +listCountry.toString());
+        //Log.e("ResourcesListViewAdapter ", "" + resourceItems.size() + typeFaceName);
 
     }
 

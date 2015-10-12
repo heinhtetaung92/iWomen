@@ -23,6 +23,9 @@ private String descriptionMm;
 @SerializedName("instruction_about_game")
 @Expose
 private String instructionAboutGame;
+@SerializedName("instruction_about_game_mm")
+@Expose
+private String instructionAboutGameMm;
 @SerializedName("start_date")
 @Expose
 private String startDate;
@@ -161,6 +164,24 @@ return instructionAboutGame;
 */
 public void setInstructionAboutGame(String instructionAboutGame) {
 this.instructionAboutGame = instructionAboutGame;
+}
+
+/**
+* 
+* @return
+* The instructionAboutGame
+*/
+public String getInstructionAboutGameMm() {
+return instructionAboutGameMm;
+}
+
+/**
+* 
+* @param instructionAboutGame
+* The instruction_about_game
+*/
+public void setInstructionAboutGameMm(String instructionAboutGameMm) {
+this.instructionAboutGameMm = instructionAboutGameMm;
 }
 
 /**

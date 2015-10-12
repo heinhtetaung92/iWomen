@@ -305,30 +305,21 @@ public class TLGUserStoriesRecentFragment extends Fragment implements View.OnCli
 
                 cursor.close();
 
-                //lost_data_list, lost_data_id_list, lost_data_obj_id_list ,lost_data_img_url_list
-                //storageUtil.SaveArrayListToSD("lost_data_list", lost_data_list);
+
+                mPostListRecyclerViewAdapter = new TLGUserPostListRecyclerViewAdapter(getActivity().getApplicationContext(), feedItems, mstr_lang);
+                mRecyclerView.setAdapter(mPostListRecyclerViewAdapter);
+                mProgressDialog.dismiss();
+                progress.setVisibility(View.INVISIBLE);
 
 
-                if (mstr_lang.equals(com.parse.utils.Utils.ENG_LANG)) {
-                    mPostListRecyclerViewAdapter = new TLGUserPostListRecyclerViewAdapter(getActivity().getApplicationContext(), feedItems, mstr_lang);
-                    mRecyclerView.setAdapter(mPostListRecyclerViewAdapter);
-                    mProgressDialog.dismiss();
-                    progress.setVisibility(View.INVISIBLE);
-                } else {
-                    mPostListRecyclerViewAdapter = new TLGUserPostListRecyclerViewAdapter(getActivity().getApplicationContext(), feedItems, mstr_lang);
-                    mRecyclerView.setAdapter(mPostListRecyclerViewAdapter);
-                    mProgressDialog.dismiss();
-                    progress.setVisibility(View.INVISIBLE);
-                }
 
             } catch (IllegalStateException ex) {
                 ex.printStackTrace();
             }
 
 
-            //Utils.doToast(getActivity(), String.valueOf(feedItems.size()));
         } else {
-            Log.e("LostListFragment", "Activity Null Case");
+            Log.e("TLGuserFragment", "Activity Null Case");
         }
 
     }
@@ -604,16 +595,11 @@ public class TLGUserStoriesRecentFragment extends Fragment implements View.OnCli
                                 cv.put(TableAndColumnsName.UserPostUtil.LIKE_STATUS, "0");
 
                                 cv.put(TableAndColumnsName.UserPostUtil.STATUS, "0");
-
-                                /*"postUploadedDate": {
-                "__type": "Date",
-                "iso": "2014-03-14T12:01:00.000Z"
-            },*/
                                 cv.put(TableAndColumnsName.UserPostUtil.CREATED_DATE, each_object.get("createdAt").toString());// post.get("postUploadedDate").toString() //post.getCreatedAt().toString()
                                 cv.put(TableAndColumnsName.UserPostUtil.UPDATED_DATE, each_object.get("updatedAt").toString());
 
 
-                                Log.e("saveUserPostLocal : ", "= = = = = = = : " + cv.toString());
+                                //Log.e("saveUserPostLocal : ", "= = = = = = = : " + cv.toString());
 
 
                                 getActivity().getContentResolver().insert(IwomenProviderData.UserPostProvider.CONTETN_URI, cv);
@@ -804,7 +790,7 @@ public class TLGUserStoriesRecentFragment extends Fragment implements View.OnCli
                                 cv.put(TableAndColumnsName.UserPostUtil.UPDATED_DATE, each_object.get("updatedAt").toString());
 
 
-                                Log.e("saveUserPostLocal : ", "= = = = = = = : " + cv.toString());
+                                //Log.e("saveUserPostLocal : ", "= = = = = = = : " + cv.toString());
 
 
                                 getActivity().getContentResolver().insert(IwomenProviderData.UserPostProvider.CONTETN_URI, cv);

@@ -484,6 +484,18 @@ public class DrawerMainActivity extends BaseActionBarActivity {
 
                     txt_sing_out.setText("Sign Out");
                     txt_sing_out.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.NORMAL));
+
+                    String languageToLoad  = "eng"; // your language
+                    Locale locale = new Locale(languageToLoad);
+                    Locale.setDefault(locale);
+                    Configuration config = new Configuration();
+                    config.locale = locale;
+                    getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+
+                    SharedPreferences.Editor editor = getSharedPreferences("mLanguage", MODE_PRIVATE).edit();
+                    editor.putString("lang", "eng");
+                    editor.commit();
+
                 } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG)) {
                     txt_sing_out.setText("ထ\u103Cက္ရန္");
                     txt_sing_out.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
@@ -494,6 +506,9 @@ public class DrawerMainActivity extends BaseActionBarActivity {
                     config.locale = locale;
                     getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 
+                    SharedPreferences.Editor editor = getSharedPreferences("mLanguage", MODE_PRIVATE).edit();
+                    editor.putString("lang", "mm");
+                    editor.commit();
                 } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG_UNI)) {
                     txt_sing_out.setText("ထ\u103Cက္ရန္");
                     //txt_sing_out.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
@@ -504,6 +519,9 @@ public class DrawerMainActivity extends BaseActionBarActivity {
                     config.locale = locale;
                     getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 
+                    SharedPreferences.Editor editor = getSharedPreferences("mLanguage", MODE_PRIVATE).edit();
+                    editor.putString("lang", "mm");
+                    editor.commit();
                 } else if (mstr_lang.equals(org.undp_iwomen.iwomen.utils.Utils.MM_LANG_DEFAULT)) {
                     txt_sing_out.setText("ထ\u103Cက္ရန္");
                     //txt_sing_out.setTypeface(MyTypeFace.get(getApplicationContext(), MyTypeFace.ZAWGYI));
@@ -514,6 +532,9 @@ public class DrawerMainActivity extends BaseActionBarActivity {
                     config.locale = locale;
                     getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 
+                    SharedPreferences.Editor editor = getSharedPreferences("mLanguage", MODE_PRIVATE).edit();
+                    editor.putString("lang", "mm");
+                    editor.commit();
                 }
 
 
