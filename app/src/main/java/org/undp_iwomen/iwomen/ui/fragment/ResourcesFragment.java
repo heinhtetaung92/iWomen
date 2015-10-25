@@ -62,7 +62,7 @@ public class ResourcesFragment extends Fragment  {
     private StorageUtil storageUtil;
 
 
-    private int offsetlimit = 2;
+    private int offsetlimit = 3;
     private int skipLimit = 0;
 
 

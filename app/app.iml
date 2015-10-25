@@ -124,5 +124,6 @@
     <orderEntry type="module" module-name="ParseLoginUI" exported="" />
     <orderEntry type="module" module-name="sKAlertMessage" exported="" />
     <orderEntry type="module" module-name="emojiicon" exported="" />
+    <orderEntry type="module" module-name="shimmerTextView" exported="" />
   </component>
 </module>

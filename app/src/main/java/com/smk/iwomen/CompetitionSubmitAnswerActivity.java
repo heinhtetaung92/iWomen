@@ -4,7 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,7 +23,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class CompetitionSubmitAnswerActivity extends ActionBarActivity {
+public class CompetitionSubmitAnswerActivity extends BaseActionBarActivity {
 
 	private TextView txt_question;
 	private TextView txt_description;
@@ -38,6 +38,7 @@ public class CompetitionSubmitAnswerActivity extends ActionBarActivity {
 	private Integer answer1Id;
 	private AnswerList AnswerList;
 	private int groupUserId;
+	private Button btn_go_back;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +57,11 @@ public class CompetitionSubmitAnswerActivity extends ActionBarActivity {
 		
 		SharedPreferences langRef = getSharedPreferences("mLanguage", MODE_PRIVATE); 
 		if(langRef.getString("lang","").equals("mm")){
-			txt_question.setText(competitionQuestion.getQuestionMm());
-			txt_description.setText(competitionQuestion.getDescriptionMm());
+			txt_question.setText(Html.fromHtml(competitionQuestion.getQuestionMm()));
+			txt_description.setText(Html.fromHtml(competitionQuestion.getAnswerSubmitDescriptionMm()));
 		}else{
-			txt_question.setText(competitionQuestion.getQuestion());
-			txt_description.setText(competitionQuestion.getDescription());
+			txt_question.setText(Html.fromHtml(competitionQuestion.getQuestion()));
+			txt_description.setText(Html.fromHtml(competitionQuestion.getAnswerSubmitDescription()));
 		}
 		
 		
@@ -70,6 +71,7 @@ public class CompetitionSubmitAnswerActivity extends ActionBarActivity {
 		
 		btn_save = (Button) findViewById(R.id.btn_competition_answer_save);
 		btn_submit = (Button) findViewById(R.id.btn_competition_answer_submit);
+		btn_go_back = (Button) findViewById(R.id.btn_go_back);
 		
 		
 		String answer1 = StoreUtil.getInstance().selectFrom("answer1_XBUQ7yk8Ig");
@@ -117,6 +119,7 @@ public class CompetitionSubmitAnswerActivity extends ActionBarActivity {
 		
 		btn_save.setOnClickListener(clickListener);
 		btn_submit.setOnClickListener(clickListener);
+		btn_go_back.setOnClickListener(clickListener);
 	}
 	
 	private View.OnClickListener clickListener = new View.OnClickListener() {
@@ -135,10 +138,14 @@ public class CompetitionSubmitAnswerActivity extends ActionBarActivity {
 					StoreUtil.getInstance().saveTo("answer3_XBUQ7yk8Ig", edt_answer_3.getText().toString());
 				}
 				SKToastMessage.showMessage(CompetitionSubmitAnswerActivity.this, "Successfully saved", SKToastMessage.SUCCESS);
+
 			}
 			
 			if(arg0 == btn_submit){
 				postCompetitionAnswer();
+			}
+			if(arg0 == btn_go_back){
+				onBackPressed();
 			}
 		}
 	};

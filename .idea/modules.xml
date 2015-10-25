@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/iwomen.iml" filepath="$PROJECT_DIR$/iwomen.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
       <module fileurl="file://$PROJECT_DIR$/sKAlertMessage/sKAlertMessage.iml" filepath="$PROJECT_DIR$/sKAlertMessage/sKAlertMessage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shimmerTextView/shimmerTextView.iml" filepath="$PROJECT_DIR$/shimmerTextView/shimmerTextView.iml" />
     </modules>
   </component>
 </project>

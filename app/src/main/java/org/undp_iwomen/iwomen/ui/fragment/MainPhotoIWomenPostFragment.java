@@ -85,7 +85,7 @@ public class MainPhotoIWomenPostFragment extends Fragment implements ImageChoose
     String crop_absolute_path;
     String str_report_type;
 
-    private int maxCharacterCount = 400;
+    private int maxCharacterCount = 1000;
     private TextView characterCountTextView;
     private Button postButton;
 
@@ -491,7 +491,9 @@ public class MainPhotoIWomenPostFragment extends Fragment implements ImageChoose
             postParse.setLikes(0);
             postParse.setCommentCount(0);
             postParse.setShareCount(0);
-            postParse.setPostUploadUserImgPath(userprofile_Image_path);
+            if(userprofile_Image_path != null) {
+                postParse.setPostUploadUserImgPath(userprofile_Image_path);
+            }
             postParse.setContentTypes("Story");
             postParse.setPostUploadedDate(new Date());
 
@@ -521,9 +523,9 @@ public class MainPhotoIWomenPostFragment extends Fragment implements ImageChoose
             postParse.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
-                    if (getActivity().isFinishing()) {
+                    /*if (getActivity().isFinishing()) {
                         return;
-                    }
+                    }*/
                     if (e == null) {
                         progress_wheel.setVisibility(View.INVISIBLE);
                         progressbackground.setVisibility(View.INVISIBLE);
@@ -587,7 +589,10 @@ public class MainPhotoIWomenPostFragment extends Fragment implements ImageChoose
             postParse.setCommentCount(0);
             postParse.setShareCount(0);
             postParse.setContentTypes("Story");
-            postParse.setPostUploadUserImgPath(userprofile_Image_path);
+
+            if(userprofile_Image_path != null) {
+                postParse.setPostUploadUserImgPath(userprofile_Image_path);
+            }
             postParse.setPostUploadedDate(new Date());
 
             postParse.setPostUploadAuthorName(user_name);

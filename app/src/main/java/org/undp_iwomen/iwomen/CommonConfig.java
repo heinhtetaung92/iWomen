@@ -52,7 +52,7 @@ public class CommonConfig {
     public static final String STICKERS_URL = "/classes/StickerStore";
 
 
-    public static final String SHARE_URL ="https://www.facebook.com/testingmobileapp";
+    public static final String SHARE_URL ="https://www.facebook.com/iwomenApp";
     public int getPostMaxCharacterCount () {
         int value = 140;
         return value;

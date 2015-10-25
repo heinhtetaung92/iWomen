@@ -1,6 +1,7 @@
 package org.undp_iwomen.iwomen.ui.fragment;
 
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -99,33 +100,35 @@ public class SisterAppFragment extends Fragment {
         Linkify.addLinks(txt_undp_link, Linkify.WEB_URLS);
 
 
-
-
         sisterAppItemList = (ArrayList<SisterAppItem>) storageUtil.ReadArrayListFromSD("SisterAppArrayList");
         Log.e("sisterAppItemList size", "===>" + sisterAppItemList.size());
-        if(sisterAppItemList.size() >0 ){
+        if (sisterAppItemList.size() > 0) {
             sisterAppListAdapter = new SisterAppListAdapter(mContext, sisterAppItemList);
             lv_sister.setAdapter(sisterAppListAdapter);
             View padding = new View(getActivity().getApplicationContext());
             padding.setMinimumHeight(20);
             lv_sister.addFooterView(padding);
             Helper.getListViewSize(lv_sister);
-        }else {
+        } else {
             getSisterAppListFromServer();
         }
         lv_sister.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                if(sisterAppItemList.get(i).get_app_package_name()!= null && !sisterAppItemList.get(i).get_app_package_name().isEmpty() ) {
+                try {
+                    if (sisterAppItemList.get(i).get_app_package_name() != null && !sisterAppItemList.get(i).get_app_package_name().isEmpty()) {
 
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + sisterAppItemList.get(i).get_app_package_name())));
-                }else{
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + sisterAppItemList.get(i).get_app_package_name())));
+                    } else {
 
-                    Intent intent2 = new Intent(getActivity().getApplicationContext(), AboutUsWebActivity.class);
-                    intent2.putExtra("ActivityName","PostDetailActivity");
-                    intent2.putExtra("URL",sisterAppItemList.get(i).get_app_down_link());
-                    startActivity(intent2);
+                        Intent intent2 = new Intent(getActivity().getApplicationContext(), AboutUsWebActivity.class);
+                        intent2.putExtra("ActivityName", "PostDetailActivity");
+                        intent2.putExtra("URL", sisterAppItemList.get(i).get_app_down_link());
+                        startActivity(intent2);
+
+                    }
+                } catch (ActivityNotFoundException e) {
 
                 }
             }
@@ -133,7 +136,6 @@ public class SisterAppFragment extends Fragment {
 
 
     }
-
 
 
     private void getSisterAppListFromServer() {
@@ -211,9 +213,6 @@ public class SisterAppFragment extends Fragment {
                         }
 
 
-
-
-
                         if (sisterAppItemList.size() == 0) {
                             if (mstr_lang.equals(Utils.ENG_LANG)) {
                                 Utils.doToastEng(mContext, getResources().getString(R.string.resource_coming_soon_eng));
@@ -221,7 +220,7 @@ public class SisterAppFragment extends Fragment {
 
                                 Utils.doToastMM(mContext, getResources().getString(R.string.resource_coming_soon_mm));
                             }
-                        }else {
+                        } else {
                             storageUtil.SaveArrayListToSD("SisterAppArrayList", sisterAppItemList);
                             sisterAppListAdapter = new SisterAppListAdapter(mContext, sisterAppItemList);
                             lv_sister.setAdapter(sisterAppListAdapter);
@@ -231,7 +230,6 @@ public class SisterAppFragment extends Fragment {
                             Helper.getListViewSize(lv_sister);
                         }
                         mProgressDialog.dismiss();
-
 
 
                     } catch (JSONException e) {

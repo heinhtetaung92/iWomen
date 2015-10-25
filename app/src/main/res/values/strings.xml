@@ -86,7 +86,10 @@
     <string name="post_detail_share_post_mm">ရွဲမွ်ေ၀ပါသည္။</string>
     <string name="post_detail_share_post_eng">Share This Post</string>
 
-    <string name="post_detail_like_post_mm">ကိဳက္ႏွစ္သက္ပါသည္။ </string>
+
+    <string name="post_detail_share_post">Share This Post</string>
+
+    <string name="post_detail_like_post_mm">ၾကိဳက္ႏွစ္သက္ပါသည္</string>
     <string name="post_detail_like_post_eng">Like This Post</string>
 
 
@@ -199,7 +202,7 @@
     <string name="competition_congratulation">CONGRATULATIONS!!!</string>
     <string name="competition_winner">WINNER</string>
     <string name="competition_winning_answer">Winning Answers</string>
-    <string name="competition_answer_1">Answer 1</string>
+    <string name="competition_answer_1">Answer: </string>
     <string name="competition_answer_2">Answer 2</string>
     <string name="competition_answer_3">Answer 3</string>
     <string name="competition_save">Save</string>
@@ -211,9 +214,10 @@
     <string name="competition_answer_hit_1">Type your answer 1 here</string>
     <string name="competition_answer_hit_2">Type your answer 2 here</string>
     <string name="competition_answer_hit_3">Type your answer 3 here</string>
-    <string name="competition_go_to_answer">Enter My Answers</string>
-    <string name="competition_enter_the_answer">Go to My Ansers</string>
-    <string name="competition_compelete">Congratulation, Have a good luck!</string>
+    <string name="competition_go_to_answer">GO TO MY ANSWERS</string>
+    <string name="competition_enter_the_answer">ENTER MY ANSWERS</string>
+    <string name="competition_go_to_group_answer">GO TO MY GROUP</string>
+    <string name="competition_compelete">CONGRATULATIONS! Good luck!</string>
     <string name="competition_day">Days</string>
     <string name="competition_hour">Hours</string>
     <string name="competition_minute">Minutes</string>
@@ -222,6 +226,7 @@
     <string name="competition_finished">Finished</string>
     <string name="competition_play_game">Ready To Play ?</string>
     <string name="competition_discover_winner">Discover Who is the WINNER</string>
+    <string name="competition_how_to_play_game">How to Play The Game</string>
     <string name="title_activity_competition_new_game">CompetitionNewGameActivity</string>
     <string name="title_activity_competition_winner_group">Competition Winner Group</string>
     <string name="title_activity_competition_submit_answer">Competition Submit Answer</string>

@@ -1,7 +1,9 @@
 package com.smk.iwomen;
 
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
@@ -9,7 +11,9 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.WindowManager;
 
+import com.nullwire.trace.ExceptionHandler;
 import com.path.android.jobqueue.JobManager;
 import com.smk.application.DownloadManager;
 import com.smk.clientapi.NetworkEngine;
@@ -35,7 +39,7 @@ public class BaseActionBarActivity extends AppCompatActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-
+		ExceptionHandler.register(this, "http://128.199.70.154/api-v1/error_report");
 		// TODO it is for non application market.
 		if( !isCheckedVersion ){
 			checkAPKVersion();
@@ -47,7 +51,7 @@ public class BaseActionBarActivity extends AppCompatActivity{
 		NetworkEngine.getInstance().getAPKVersion("", new Callback<APKVersion>() {
 			
 			@Override
-			public void success(APKVersion arg0, Response arg1) {
+			public void success(final APKVersion arg0, Response arg1) {
 				// TODO Auto-generated method stub
 				try {
 					isCheckedVersion = true;
@@ -57,13 +61,46 @@ public class BaseActionBarActivity extends AppCompatActivity{
 
 						if (arg0.getVersionId() > versionCode) {
 							//TODO
+							try {
+								//Dialog True 4
+								//Dialog False dismisss ---
+								AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BaseActionBarActivity.this);
 
-							//Dialog True 4
-							//Dialog False dismisss ---
-							EventBus.getDefault().register(BaseActionBarActivity.this);
-							JobManager jobManager = MainApplication.getInstance().getJobManager();
-							DownloadManager downloadManager = new DownloadManager("http://api.shopyface.com/apk/" + arg0.getName(), arg0.getName());
-							jobManager.addJob(downloadManager);
+								// set title
+								alertDialogBuilder.setTitle("New Version "+arg0.getVersionName());
+
+								// set dialog message
+								alertDialogBuilder
+										.setMessage("Do you download new version?")
+										.setCancelable(true)
+										.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+											public void onClick(DialogInterface dialog,int id) {
+												EventBus.getDefault().register(BaseActionBarActivity.this);
+												JobManager jobManager = MainApplication.getInstance().getJobManager();
+												DownloadManager downloadManager = new DownloadManager("http://128.199.70.154/apk/" + arg0.getName(), arg0.getName());
+												jobManager.addJob(downloadManager);
+											}
+										})
+										.setNegativeButton("No",new DialogInterface.OnClickListener() {
+											public void onClick(DialogInterface dialog,int id) {
+												// if this button is clicked, just close
+												// the dialog box and do nothing
+												dialog.cancel();
+											}
+										});
+
+								// create alert dialog
+								AlertDialog alertDialog = alertDialogBuilder.create();
+
+								// show it
+								alertDialog.show();
+							}catch (WindowManager.BadTokenException e){
+								e.printStackTrace();
+								isCheckedVersion = false;
+							}
+
+
+
 						}
 					}
 				} catch (NameNotFoundException e) {
@@ -86,7 +123,7 @@ public class BaseActionBarActivity extends AppCompatActivity{
 	// This is processing when downloading file.
 	public void onEventMainThread(final Download download) {
 		// the posted event can be processed in the main thread
-		Log.i("","Hello downloading precent is : "+ download.getDownloadPercent());
+		Log.i("", "Hello downloading precent is : " + download.getDownloadPercent());
 		int id = 1;
 		mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		mBuilder = new Builder(this);

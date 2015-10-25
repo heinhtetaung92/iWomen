@@ -91,7 +91,7 @@ public class ResourceDetailActivity extends BaseActionBarActivity {
         strLang = sharePrefLanguageUtil.getString(com.parse.utils.Utils.PREF_SETTING_LANG, com.parse.utils.Utils.ENG_LANG);
         if(strLang.equals(Utils.ENG_LANG)){
 
-            textViewTitle.setText(R.string.leadership_eng);
+            textViewTitle.setText(mstrTitleEng);
             txtBody.setText(mstrContentEng);
             txtName.setText(mstrTitleEng);
 
@@ -102,7 +102,7 @@ public class ResourceDetailActivity extends BaseActionBarActivity {
             txtBody.setTypeface(MyTypeFace.get(mContext, MyTypeFace.NORMAL));
         }else //FOR ALl MM FONT
         {
-            textViewTitle.setText(R.string.leadership_mm);
+            textViewTitle.setText(mstrTitleMm);
             txtBody.setText(mstrContentMm);
             txtName.setText(mstrTitleEng);
 
@@ -123,7 +123,7 @@ public class ResourceDetailActivity extends BaseActionBarActivity {
         profileImg.setAdjustViewBounds(true);
         profileImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        if(mstrAuthorImgPath != null && mstrAuthorImgPath != "") {
+        if(mstrAuthorImgPath != null && mstrAuthorImgPath != "" && !mstrAuthorImgPath.isEmpty() && mstrAuthorImgPath != "null") {
 
             try {
 

@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -37,9 +36,7 @@ import com.smk.clientapi.NetworkEngine;
 import com.smk.iwomen.BaseActionBarActivity;
 import com.smk.iwomen.CompetitionNewGameActivity;
 import com.smk.iwomen.CompetitionWinnerGroupActivity;
-import com.smk.iwomen.GameOverActivity;
 import com.smk.model.CompetitionQuestion;
-import com.smk.skalertmessage.SKToastMessage;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -57,6 +54,7 @@ import org.undp_iwomen.iwomen.ui.fragment.ResourcesFragment;
 import org.undp_iwomen.iwomen.ui.fragment.SettingsFragment;
 import org.undp_iwomen.iwomen.ui.fragment.SisterAppFragment;
 import org.undp_iwomen.iwomen.ui.fragment.TLGUserStoriesRecentFragment;
+import org.undp_iwomen.iwomen.ui.widget.AnimateCustomTextView;
 import org.undp_iwomen.iwomen.ui.widget.CustomTextView;
 import org.undp_iwomen.iwomen.ui.widget.ProfilePictureView;
 import org.undp_iwomen.iwomen.utils.Connection;
@@ -115,7 +113,7 @@ public class DrawerMainActivity extends BaseActionBarActivity {
     TextView menu_user_post_count;
 
     LinearLayout ly_menu_profile_area;
-    private Button btn_play_game;
+    private AnimateCustomTextView btn_play_game;
     private LinearLayout layout_play_game;
 
     @Override
@@ -175,7 +173,7 @@ public class DrawerMainActivity extends BaseActionBarActivity {
         drawer_progressBar_profile_item = (ProgressBar) findViewById(R.id.drawer_progressBar_profile_item);
 
         layout_play_game = (LinearLayout) findViewById(R.id.ly2);
-        btn_play_game = (Button)findViewById(R.id.drawer_btn_take_challenge);
+        btn_play_game = (AnimateCustomTextView)findViewById(R.id.drawer_btn_take_challenge);
         // set a custom shadow that overlays the main content when the drawer opens
         drawerLayoutt.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
@@ -1025,13 +1023,13 @@ public class DrawerMainActivity extends BaseActionBarActivity {
                 if(arg0.getResponse() != null){
                     switch (arg0.getResponse().getStatus()) {
                         case 403:
-                            startActivity(new Intent(getApplicationContext(), GameOverActivity.class));
+                            //startActivity(new Intent(getApplicationContext(), GameOverActivity.class));
                             break;
                         case 400:
-                            String error = (String) arg0.getBodyAs(String.class);
-                            SKToastMessage.showMessage(DrawerMainActivity.this, error ,SKToastMessage.ERROR);
+                            //String error = (String) arg0.getBodyAs(String.class);
+                            //SKToastMessage.showMessage(DrawerMainActivity.this, error ,SKToastMessage.ERROR);
                             layout_play_game.setVisibility(View.GONE);
-
+                            break;
                         default:
                             break;
                     }
@@ -1042,7 +1040,7 @@ public class DrawerMainActivity extends BaseActionBarActivity {
             public void success(final CompetitionQuestion arg0, Response arg1) {
                 // TODO Auto-generated method stub
                 layout_play_game.setVisibility(View.VISIBLE);
-                if(arg0.getCorrectAnswer() == null){
+                if(arg0.getCorrectAnswer().size() == 0){
                     btn_play_game.setText(getResources().getString(R.string.competition_play_game));
                     btn_play_game.setOnClickListener(new View.OnClickListener() {
 

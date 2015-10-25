@@ -115,8 +115,8 @@ public class SubResourceListActivity extends BaseActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(mContext, ResourceDetailActivity.class);
-                intent.putExtra("TitleEng", SubResourceItems.get(i).getSub_resource_title_eng());
-                intent.putExtra("TitleMM", SubResourceItems.get(i).getSub_resource_title_mm());//mCatNames.get((Integer)view.getTag()).toString()
+                intent.putExtra("TitleEng",mTitleEng);//SubResourceItems.get(i).getSub_resource_title_mm()
+                intent.putExtra("TitleMM", mTitleMM);//mCatNames.get((Integer)view.getTag()).toString()
 
 
                 intent.putExtra("ContentEng", SubResourceItems.get(i).getSub_resouce_content_eng());
@@ -139,7 +139,8 @@ public class SubResourceListActivity extends BaseActionBarActivity {
         if (Connection.isOnline(mContext)) {
 
             mProgressDialog.show();
-            SubResourceAPI.getInstance().getService().getSubResourceByResourceId("{\"resource_id\":{\"__type\":\"Pointer\",\"className\":\"Resources\",\"objectId\":\"" + id + "\"}}", "createdAt", new Callback<String>() {
+            String sCondition = "{\"isAllow\": true}";
+            SubResourceAPI.getInstance().getService().getSubResourceByResourceId(sCondition,"{\"resource_id\":{\"__type\":\"Pointer\",\"className\":\"Resources\",\"objectId\":\"" + id + "\"}}", "createdAt", new Callback<String>() {
                 @Override
                 public void success(String s, Response response) {
 

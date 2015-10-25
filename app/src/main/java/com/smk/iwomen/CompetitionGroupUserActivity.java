@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,7 +37,7 @@ import java.util.List;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class CompetitionGroupUserActivity extends ActionBarActivity {
+public class CompetitionGroupUserActivity extends BaseActionBarActivity {
 
 	private ExpandableListView lst_group_user;
 	private CompetitionQuestion competitionQuestion;
@@ -90,12 +90,12 @@ public class CompetitionGroupUserActivity extends ActionBarActivity {
 		lst_group_user.addHeaderView(groupHeader);
 		SharedPreferences langRef = getSharedPreferences("mLanguage", MODE_PRIVATE); 
 		if(langRef.getString("lang","").equals("mm")){
-			txt_question.setText(competitionQuestion.getQuestionMm());
-			txt_question_desc.setText(competitionQuestion.getDescriptionMm());
+			txt_question.setText(Html.fromHtml(competitionQuestion.getQuestionMm()));
+			txt_question_desc.setText(Html.fromHtml(competitionQuestion.getGroupDescriptionMm()));
 			txt_group_name.setText(competitionGroupUserList.getGroupUsers().get(0).getGroupName());
 		}else{
-			txt_question.setText(competitionQuestion.getQuestion());
-			txt_question_desc.setText(competitionQuestion.getDescription());
+			txt_question.setText(Html.fromHtml(competitionQuestion.getQuestion()));
+			txt_question_desc.setText(Html.fromHtml(competitionQuestion.getGroupDescription()));
 			txt_group_name.setText(competitionGroupUserList.getGroupUsers().get(0).getGroupName());
 		}
 		
