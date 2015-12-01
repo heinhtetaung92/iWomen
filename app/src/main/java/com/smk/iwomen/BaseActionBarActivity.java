@@ -41,9 +41,9 @@ public class BaseActionBarActivity extends AppCompatActivity{
 		super.onCreate(savedInstanceState);
 		ExceptionHandler.register(this, "http://128.199.70.154/api-v1/error_report");
 		// TODO it is for non application market.
-		if( !isCheckedVersion ){
-			checkAPKVersion();
-		}
+
+		checkAPKVersion();
+
 	}
 	
 	private void checkAPKVersion(){
@@ -95,8 +95,7 @@ public class BaseActionBarActivity extends AppCompatActivity{
 								// show it
 								alertDialog.show();
 							}catch (WindowManager.BadTokenException e){
-								e.printStackTrace();
-								isCheckedVersion = false;
+
 							}
 
 
@@ -104,8 +103,7 @@ public class BaseActionBarActivity extends AppCompatActivity{
 						}
 					}
 				} catch (NameNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+
 				}catch (NullPointerException ex){
 					//ex.printStackTrace();
 				}
