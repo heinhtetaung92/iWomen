@@ -13,7 +13,7 @@ public class NetworkEngine {
 		  public void intercept(RequestFacade request) {
 			System.setProperty("http.keepAlive", "false");
 			request.addHeader("Connection", "close");
-			request.addHeader("Accept-Language", "en-US,en;q=0.8");
+			request.addHeader("Accept-Language", git "en-US,en;q=0.8");
 		    request.addHeader("Accept-Encoding", "gzip, deflate, sdch");
 		    
 		  }
